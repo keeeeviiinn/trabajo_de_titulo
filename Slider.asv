@@ -96,8 +96,8 @@ end
 % --- Executes during object creation, after setting all properties.
 function axes1_CreateFcn(hObject, eventdata, handles)
 
-%%%%%%%%%%%%%%%%%%%AQUI COMIENZA EL CODIGO%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%AQUI COMIENZA EL
+%%%%%%%%%%%%%%%%%%%CODIGO%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
     %%Codigo para ingresar cantidad de agentes 
