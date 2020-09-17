@@ -291,7 +291,7 @@ open(vidObj);
 
 for i = 2:q
     
-  if xss(i) < xss(i-1)
+  if xss(i) < xss(i-1) %Debiera eliminar la sobreescripcion de los agentes en la parte de la cola, pero no entra al if
    plot(x1(xi(i),xss2(i):1:xss(i)),x2(xi(i),xss2(i):1:xss(i)),'Color','white','-','MarkerSize',8)  
   else
          
