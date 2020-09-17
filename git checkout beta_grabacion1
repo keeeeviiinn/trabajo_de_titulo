@@ -1,0 +1,27 @@
+[33m4c47c1a[m[33m ([m[1;36mHEAD -> [m[1;32mbeta_grabacion1[m[33m)[m HEAD@{0}: checkout: moving from master to beta_grabacion1
+[33m60c4382[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{1}: checkout: moving from beta_grabacion1 to master
+[33m4c47c1a[m[33m ([m[1;36mHEAD -> [m[1;32mbeta_grabacion1[m[33m)[m HEAD@{2}: commit: beta_grabacion1
+[33md24b3db[m HEAD@{3}: commit: beta_avance_sin_grabacion
+[33mbf81040[m HEAD@{4}: checkout: moving from master to beta_grabacion1
+[33m60c4382[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{5}: checkout: moving from beta_grabacion1 to master
+[33mbf81040[m HEAD@{6}: commit: beta_grabacion1
+[33m41914d3[m HEAD@{7}: checkout: moving from master to beta_grabacion1
+[33m60c4382[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{8}: checkout: moving from beta_grabacion1 to master
+[33m41914d3[m HEAD@{9}: commit: beta_grabacion1
+[33m68c1c4c[m HEAD@{10}: checkout: moving from master to beta_grabacion1
+[33m60c4382[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{11}: checkout: moving from beta_grabacion1 to master
+[33m68c1c4c[m HEAD@{12}: checkout: moving from master to beta_grabacion1
+[33m60c4382[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{13}: commit: master
+[33mec71833[m HEAD@{14}: checkout: moving from beta_grabacion1 to master
+[33m68c1c4c[m HEAD@{15}: checkout: moving from master to beta_grabacion1
+[33mec71833[m HEAD@{16}: checkout: moving from beta_grabacion1 to master
+[33m68c1c4c[m HEAD@{17}: commit: beta_grabacion1
+[33mba2812e[m HEAD@{18}: checkout: moving from master to beta_grabacion1
+[33mec71833[m HEAD@{19}: checkout: moving from beta_grabacion1 to master
+[33mba2812e[m HEAD@{20}: checkout: moving from beta_grabacion1 to beta_grabacion1
+[33mba2812e[m HEAD@{21}: checkout: moving from master to beta_grabacion1
+[33mec71833[m HEAD@{22}: checkout: moving from beta_grabacion1 to master
+[33mba2812e[m HEAD@{23}: commit: prueba
+[33mec71833[m HEAD@{24}: checkout: moving from master to beta_grabacion1
+[33mec71833[m HEAD@{25}: checkout: moving from master to master
+[33mec71833[m HEAD@{26}: commit (initial): version1

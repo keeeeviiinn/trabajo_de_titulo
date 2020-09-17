@@ -2,7 +2,7 @@ function varargout = Slider(varargin)
 % SLIDER MATLAB code for Slider.fig
 %      SLIDER, by itself, creates a new SLIDER or raises the existing
 %      singleton*.
-%
+% holaaa mundo
 %      H = SLIDER returns the handle to a new SLIDER or the handle to
 %      the existing singleton*.
 %
@@ -13,7 +13,7 @@ function varargout = Slider(varargin)
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before Slider_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      kkk.  All inputs are passed to Slider_OpeningFcn via varargin.
+%      stop.  All inputs are passed to Slider_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 03-Sep-2020 19:59:41
+% Last Modified by GUIDE v2.5 15-Sep-2020 20:11:40
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -96,12 +96,25 @@ end
 % --- Executes during object creation, after setting all properties.
 function axes1_CreateFcn(hObject, eventdata, handles)
 
+%%%%%%%%%%%%%%%%%%%AQUI COMIENZA EL CODIGO%%%%%%%%%%%%%%%%%%%%%
 
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
+    %%Codigo para ingresar cantidad de agentes 
+% npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
+% nppp   = str2double(npp); %el valor de npp se convierte en un numero
+% if nppp <= 1
+%     set(handles.text6,'String','Ingrese valor mayor a 3')
+% elseif isnan (nppp)
+%     set(handles.text6,'String','Ingrese valor numerico')
+% else
+% set(handles.text6,'String','')
+%%%%%%%
 % close all
 % clc
 %function [value,th]=consensus3(gamma0,lambda0)
+set(handles.text8,'String','')
+set(handles.radiobutton8,'Value',0)
 global np ndim sigma K beta pp flag alpha M zdes
 flagcolision=0;
 tic
@@ -117,6 +130,7 @@ alpha=1.1;
 alpha1=10;
 pp=2;
 np=3; %number of agents
+% np=nppp;
 ti=0;
 tf=40;
 dt=.001;
@@ -180,6 +194,7 @@ Lambdap=1/(2*np^2)*Lambdap;
 
 % SQUARE
 np=4;
+% np=nppp;
 modv=1;
 side=2;
 
@@ -217,85 +232,94 @@ for i=1:np
     end
 end
 
-DD(1)=dd;
-% Theta(1)=theta;
-Gamma(1)=gamma0;
-Lambda(1)=lambda0;
+        DD(1)=dd;
+        % Theta(1)=theta;
+        Gamma(1)=gamma0;
+        Lambda(1)=lambda0;
 
-VB(1,:)=vbar0;
+        VB(1,:)=vbar0;
 
-%energy
-Ec=zeros(1,length(0:dt:tf));
-Ep=zeros(1,length(0:dt:tf));
-Ec(1)=Ec0p/2;
-Ep(1)=Ep0;
-DD=zeros(1,length(0:dt:tf));
-DD(1)=D0;
-xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2)];
-[t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt);
-X=X';
-ftime=length(t);
-x1=X(1:np,:);
-x2=X(2*np+1:3*np,:);
-v1=X(np+1:2*np,:);
-v2=X(3*np+1:4*np,:);
+        %energy
+        Ec=zeros(1,length(0:dt:tf));
+        Ep=zeros(1,length(0:dt:tf));
+        Ec(1)=Ec0p/2;
+        Ep(1)=Ep0;
+        DD=zeros(1,length(0:dt:tf));
+        DD(1)=D0;
+        xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2)];
+        [t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt);
+        X=X';
+        ftime=length(t);
+        x1=X(1:np,:);
+        x2=X(2*np+1:3*np,:);
+        v1=X(np+1:2*np,:);
+        v2=X(3*np+1:4*np,:);
 
-col = jet(1);
-hold on
-d=1;
-ip=1;
-dd=1;
-sss=0;
-while dd==1
-% if p==1
-s= get(handles.slider2,'Value');
-ss=round(s);
-if ss==0
-ss=1
+        col = jet(1);
+        hold on
+        d=1;
+        ip=1;
+        ipp=1;
+        dd=0;
+        sss=0;
+
+while   dd==0
+
+        s= get(handles.slider2,'Value');
+        s2=get(handles.slider7,'Value');
+        dd= get(handles.radiobutton8,'Value');%Guardar valor del boton pausa
+        ss=round(s);%ss es la variable que se genera con el slider y se redondea
+        ss2=round(s2);
+        
+if      ss==0
+        ss=1;
+        
 end
-set(handles.text2,'String',ss);
-if sss~=ss
- 
-% y= -1*ss 
-% plot(ss,y,'Marker','x')
-if d~=1
 
-if ss~=sss  
-   ip=sss; 
-   %ss=sss;
+if      ss2==0
+        ss2=1;
 end
-end
-cla
-hold on
-    plot(x1(1,1:ss),x2(1,1:ss),'Marker','.','Color','black')
-    plot(x1(2,1:ss),x2(2,1:ss),'Marker','.','Color','green')
-    plot(x1(3,1:ss),x2(3,1:ss),'Marker','.','Color','red')
-    plot(x1(4,1:ss),x2(4,1:ss),'Marker','.','Color','blue')
-    pause(0.001)
-hold off
 
-% pause(0.001)
-sss=ss;
-d=0
+if  sss~=ss | sss2~=ss2
+   if  d~=1
+      if  ss~=sss  
+          ip=sss; 
+
 end
-%     plot(x1(1,ss),x2(1,ss),'Marker','x','Color','red')
-%     plot(x1(2,ss),x2(2,ss),'Marker','x','Color','green')
-%     plot(x1(3,ss),x2(3,ss),'Marker','x','Color','blue')
-%     plot(x1(4,ss),x2(4,ss),'Marker','x','Color','black')
+
+if      ss2~=sss2 
+        ip=sss2;
+    
+end
+    end
+        cla%borra lo que se genera anteriormente de los plot, y asi no se sobre escriben y se optimiza
+        hold on
+
+for     i=1:np
+        q = q+1;
+        xss2(q) = ss2 ;
+        xss(q)  = ss;
+        xi(q) = i;
+    
+
+        plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'.','MarkerSize',8)
+        plot(x1(i,ss),x2(i,ss),'o','MarkerSize',8)
    
-pause(0.01)
+        axis([-2 2 -2 2])
 
-
-% for i=1:np
-%     plot(x1(i,:),x2(i,:),'Color',col(i,:))
-%     plot(x1(i,1),x2(i,1),'Color',col(i,:),'Marker','x','MarkerSize',10)
-%     plot(x1(i,ftime),x2(i,ftime),'Color',col(i,:),'Marker','square','MarkerSize',10)
-% end
-
-% a=get(gca,'xlim');b=get(gca,'ylim');
-%  a=a+[-2 2];b=b+[-2 2];
-% title('Trajectories')
+  
+        sss=ss;
+        sss2=ss2;
+        d=0;
 end
+end
+        pause(0.01)
+
+
+end
+
+
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -335,3 +359,176 @@ function play_Callback(hObject, eventdata, handles)
 % --- Executes on button press in pausa.
 function pausa_Callback(hObject, eventdata, handles)
 p=get(handles.pausa,'Value');
+
+
+% --- Executes on slider movement.
+function slider3_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function slider3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function text6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to text6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes on button press in stop.
+function stop_Callback(hObject, eventdata, handles)
+set(handles.slider2,'Value',0)
+set(handles.slider7,'Value',0)
+set(handles.radiobutton8,'Value',1)
+set(handles.text8,'String','Ingrese nuevos valores')
+clc
+
+
+
+% --- Executes on button press in radiobutton8.
+function radiobutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton8
+
+
+% --- Executes during object creation, after setting all properties.
+function text8_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to text8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes on slider movement.
+function slider7_Callback(hObject, eventdata, handles)
+% hObject    handle to slider7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function slider7_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function text9_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to text9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% --------------------------------------------------------------------
+function nosotros_Callback(hObject, eventdata, handles)
+% hObject    handle to nosotros (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function archivo_Callback(hObject, eventdata, handles)
+% hObject    handle to archivo (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function grabar_Callback(hObject, eventdata, handles)
+% hObject    handle to grabar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function Untitled_1_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function Untitled_2_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function natural_Callback(hObject, eventdata, handles)
+
+
+
+% --------------------------------------------------------------------
+function personalizado_Callback(hObject, eventdata, handles)
+
+
+% --- Executes on button press in descargar.
+function descargar_Callback(hObject, eventdata, handles)
