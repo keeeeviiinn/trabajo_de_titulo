@@ -296,10 +296,7 @@ end
         hold on
 
 for     i=1:np
-        q = q+1;
-        xss2(q) = ss2 ;
-        xss(q)  = ss;
-        xi(q) = i;
+        
     
 
         plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'.','MarkerSize',8)
