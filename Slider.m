@@ -16,7 +16,7 @@ function varargout = Slider(varargin)
 %      stop.  All inputs are passed to Slider_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
+%      instance to run (singleton)".k
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
