@@ -305,9 +305,9 @@ for     i=1:np
         plot(x1(i,ss),x2(i,ss),'o','MarkerSize',8)
         plot(x1(i,ss2),x2(i,ss2),'o','MarkerSize',8)
         
-        z = get(handles.slider10,'Value');
-        z=z*0.1;
-        axis([-z z -z z])
+        z = get(handles.slider10,'Value')
+        z=z
+        axis([-z*0.1 z*0.1 -z*0.1 z*0.1])
 
   
         sss=ss;
