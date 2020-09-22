@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 21-Sep-2020 21:39:00
+% Last Modified by GUIDE v2.5 21-Sep-2020 22:18:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -115,6 +115,9 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 %function [value,th]=consensus3(gamma0,lambda0)
 set(handles.text8,'String','')
 set(handles.radiobutton8,'Value',0)
+
+movimiento = 0%Movimiento automatico de los agentes mediante boton
+
 global np ndim sigma K beta pp flag alpha M zdes
 flagcolision=0;
 tic
@@ -264,9 +267,19 @@ end
         sss=0;
 
         
-        
+        movim = 1
 while   dd==0
-
+    
+if sss == 20000
+    movimiento = 0
+end
+    
+movimimiento= get(handles.radiobutton10,'Value')    
+if movimiento == 1
+    set(handles.slider2,'Value',movim)
+    movim = movim + 100
+    pause(0.01)
+end    
         s= get(handles.slider2,'Value');
         s2=get(handles.slider7,'Value');
         dd= get(handles.radiobutton8,'Value');%Guardar valor del boton pausa
@@ -654,3 +667,13 @@ function slider10_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+
+movimiento=0
+
+
+% --- Executes on button press in radiobutton10.
+function radiobutton10_Callback(hObject, eventdata, handles)
