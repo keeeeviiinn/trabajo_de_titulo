@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 22-Sep-2020 22:02:29
+% Last Modified by GUIDE v2.5 23-Sep-2020 20:04:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -115,6 +115,10 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 %function [value,th]=consensus3(gamma0,lambda0)
 set(handles.text8,'String','')
 set(handles.radiobutton8,'Value',0)
+set(handles.radiobutton11,'Value',0)
+set(handles.slider10,'Value',50)
+set(handles.pushbutton5,'String','Play')
+set(handles.pushbutton6,'String','Zoom Personal')
 
 movimiento = 0%Movimiento automatico de los agentes mediante boton
 
@@ -266,21 +270,18 @@ end
         dd=0;
         sss=0;
 
-        n = 1
-        movim = 1
-        ss = 1
+        n = 1;
+        movim = 1;
+        ss = 1;
 while   dd==0
     
     movimiento = get(handles.pushbutton5,'String');
     
-if movim == 10001
-   
+if movim == 20001
     movimiento = "no";
 end
     
-% movimimiento= get(handles.radiobutton10,'Value') 
-% n = str2double(movimiento);
-if movimiento == "ok"
+if movimiento == "Ok!"
     set(handles.slider2,'Value',movim)
     movim = movim + 100;
     pause(0.1)
@@ -317,7 +318,10 @@ end
 
 for     i=1:np
         
-    
+    %       ejey = get(handles.ejey,'Value');
+%           ejey = ejey*0.1
+%           ejex = get(handles.ejex,'Value');
+%           ejex = ejex*0.1
 
         plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'.','MarkerSize',8)
         plot(x1(i,ss),x2(i,ss),'o','MarkerSize',8)
@@ -326,19 +330,34 @@ for     i=1:np
         z = get(handles.slider10,'Value');
         z=z*0.1;
         
+        if z == z*0.1
+            xlim([x1(ejex)-z x1(ejex)+z])
+           ylim([x2(ejey)-z x2(ejey)+z]) 
+        end
+            
+
         zoom_agente = get(handles.pushbutton6,'String');
         
-        o = get(handles.popupmenu3,'Value');
-        if zoom_agente == "ok"
-            
-%             axis([x1(o,ss)-0.1 x1(o,ss)+0.1 x2(o,ss)-0.1 x1(o,ss)+0.1])
-            xlim([x1(o,ss)-z x1(o,ss)+z])
-            ylim([x2(o,ss)-z x2(o,ss)+z])
         
-     
+        o = get(handles.popupmenu3,'Value');% recibe el valor del menu de agente
+        front = get(handles.radiobutton11,'Value');
+        back = get(handles.radiobutton12,'Value');
+        
+        if zoom_agente == "Ok!" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+            
+            xlim([x1(o,ss)-z x1(o,ss)+z])
+            ylim([x2(o,ss)-z x2(o,ss)+z])%realiza el zoom de acercamiento al zoom en el menu desplegable
+            
+        elseif zoom_agente == "Ok!" & back == 1
+            xlim([x1(o,ss2)-z x1(o,ss2)+z])
+            ylim([x2(o,ss2)-z x2(o,ss2)+z])
+          
         else
-            axis([-z z -z z])
+            axis([-z z -z z]) %realiza el zoom en vista general mediante el slider
+        
 
+        
+        
         end
         sss=ss;
         sss2=ss2;
@@ -348,8 +367,8 @@ end
         pause(0.01)
         
 % Menu desplegable para zoom en un agente en especial
-a = [1:np]; 
-    set(handles.popupmenu3,'string',a)
+menu = [1:np]; 
+    set(handles.popupmenu3,'string',menu)
 end
 
 
@@ -365,13 +384,7 @@ function text2_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on slider movement.
 function slider2_Callback(hObject, eventdata, handles)
-% hObject    handle to slider2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
+% zoom_personal = set(handles.pushbutton6,'String',"Ok!")%es para el if, de seguimiento en la cabeza del agente
 
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
@@ -411,8 +424,6 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
-
 function edit1_Callback(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -433,6 +444,8 @@ function edit1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
 
 
 
@@ -471,7 +484,15 @@ set(handles.slider2,'Value',0)
 set(handles.slider7,'Value',0)
 set(handles.radiobutton8,'Value',1)
 set(handles.text8,'String','Ingrese nuevos valores')
+set(handles.pushbutton6,'Value',0)
+set(handles.pushbutton6,'String',"Stop")
+set(handles.pushbutton5,'Value',0)
+set(handles.pushbutton5,'String',"Stop")
+set(handles.popupmenu3,'visible','off')
+set(handles.text13,'visible','off')
+set(handles.uibuttongroup3,'visible','off')
 clc
+
 
 
 
@@ -493,10 +514,7 @@ function text8_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on slider movement.
 function slider7_Callback(hObject, eventdata, handles)
-% hObject    handle to slider7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+% set(handles.pushbutton6,'String',"Ok!")
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -686,9 +704,8 @@ end
 % --- Executes on button press in pushbutton5.
 function pushbutton5_Callback(hObject, eventdata, handles)
 
-set(handles.pushbutton5,'String',"ok")
-set(handles.slider10,'visible','on')
-set(handles.text11,'visible','on')
+set(handles.pushbutton5,'String',"Ok!")
+
 
 % --- Executes on button press in radiobutton10.
 function radiobutton10_Callback(hObject, eventdata, handles)
@@ -696,4 +713,61 @@ function radiobutton10_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in pushbutton6.
 function pushbutton6_Callback(hObject, eventdata, handles)
-set(handles.pushbutton6,'String',"ok")
+set(handles.pushbutton6,'String',"Ok!")
+set(handles.popupmenu3,'visible','on')
+set(handles.text13,'visible','on')
+set(handles.uibuttongroup3,'visible','on')
+
+
+
+% --- Executes on slider movement.
+function ejey_Callback(hObject, eventdata, handles)
+% hObject    handle to ejey (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function ejey_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ejey (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+function ejex_Callback(hObject, eventdata, handles)
+% hObject    handle to ejex (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function ejex_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ejex (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on button press in radiobutton11.
+function radiobutton11_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton11
