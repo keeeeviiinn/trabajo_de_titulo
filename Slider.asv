@@ -273,16 +273,16 @@ while   dd==0
     
     movimiento = get(handles.pushbutton5,'String');
     
-if movim == 10001
+if movim == 19000
    
-    movimiento = "no";
+    movimiento = "no"
 end
     
 % movimimiento= get(handles.radiobutton10,'Value') 
 % n = str2double(movimiento);
 if movimiento == "ok"
     set(handles.slider2,'Value',movim)
-    movim = movim + 100;
+    movim = movim + 1000
     pause(0.1)
 end    
         s= get(handles.slider2,'Value');
@@ -678,8 +678,7 @@ end
 function pushbutton5_Callback(hObject, eventdata, handles)
 
 set(handles.pushbutton5,'String',"ok")
-set(handles.slider10,'visible','on')
-set(handles.text11,'visible','on')
+
 
 % --- Executes on button press in radiobutton10.
 function radiobutton10_Callback(hObject, eventdata, handles)
