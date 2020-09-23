@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 21-Sep-2020 22:18:21
+% Last Modified by GUIDE v2.5 22-Sep-2020 22:02:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -325,9 +325,21 @@ for     i=1:np
         
         z = get(handles.slider10,'Value');
         z=z*0.1;
-        axis([-z z -z z])
+        
+        zoom_agente = get(handles.pushbutton6,'String');
+        
+        o = get(handles.popupmenu3,'Value');
+        if zoom_agente == "ok"
+            
+%             axis([x1(o,ss)-0.1 x1(o,ss)+0.1 x2(o,ss)-0.1 x1(o,ss)+0.1])
+            xlim([x1(o,ss)-z x1(o,ss)+z])
+            ylim([x2(o,ss)-z x2(o,ss)+z])
+        
+     
+        else
+            axis([-z z -z z])
 
-  
+        end
         sss=ss;
         sss2=ss2;
         d=0;
@@ -335,8 +347,8 @@ end
 end
         pause(0.01)
         
-% Menu desplegable para zoom
-a = [1:np];
+% Menu desplegable para zoom en un agente en especial
+a = [1:np]; 
     set(handles.popupmenu3,'string',a)
 end
 
@@ -609,12 +621,9 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 
 % --- Executes on selection change in popupmenu3.
 function popupmenu3_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+m=get(handles.popupmenu3,'Value')
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu3 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu3
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -683,3 +692,8 @@ set(handles.text11,'visible','on')
 
 % --- Executes on button press in radiobutton10.
 function radiobutton10_Callback(hObject, eventdata, handles)
+
+
+% --- Executes on button press in pushbutton6.
+function pushbutton6_Callback(hObject, eventdata, handles)
+set(handles.pushbutton6,'String',"ok")
