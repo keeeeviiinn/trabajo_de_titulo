@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 25-Sep-2020 00:11:41
+% Last Modified by GUIDE v2.5 25-Sep-2020 18:19:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -121,6 +121,7 @@ set(handles.pushbutton5,'String','Play')
 set(handles.pushbutton6,'String','Zoom Personal')
 set(handles.ejey,'Value',0)
 set(handles.ejex,'Value',0)
+set(handles.pushbutton9,'visible','on')
 movimiento = 0;%Movimiento automatico de los agentes mediante boton
 
 % datos = get(handles,uitable3,'Data');
@@ -156,14 +157,6 @@ lambda0=42.3;
 x00=zeros(np,ndim);
 v00=zeros(np,ndim);
 
-% if isempty (datos)
-%     datos{1,1} = alpha;
-%     datos{1,2} = beta ;
-% end
-
-% set(handles,uitable3,'Data',datos{1,1})
-% set(handles,uitable3,'Data',datos{1,2})
-%generate random ci
 for i=1:np
     for kk=1:ndim
         x00(i,kk)=2*rand-1;
@@ -428,6 +421,7 @@ set(handles.pushbutton5,'String',"Stop")
 set(handles.popupmenu3,'visible','off')
 set(handles.text13,'visible','off')
 set(handles.uibuttongroup3,'visible','off')
+set(handles.pushbutton9,'visible','off')
 clc
 %
 function radiobutton8_Callback(hObject, eventdata, handles)
@@ -523,7 +517,23 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
 end
 %
 function radiobutton11_Callback(hObject, eventdata, handles)
-%
+
+% --- Executes during object deletion, before destroying properties.
+function uitable7_DeleteFcn(hObject, eventdata, handles)
+% hObject    handle to uitable7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
 
-
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global np ndim sigma K beta pp flag alpha M zdes
+f = uifigure('Position', [100 100 300 250],'Color','White','Name','Obtención de datos');
+    t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp]);
+    t.FontSize = 10;%alpha beta flag M sigma K pp   ;'Alpha' ;'Beta' ; 'Flag';'M' ;'Sigma' ;'K' ;'PP'
+    t.ColumnName = {'Datos'};
+    t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP'};
+    t.Position = [50 50 195 190];
