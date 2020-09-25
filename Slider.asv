@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 25-Sep-2020 17:35:04
+% Last Modified by GUIDE v2.5 25-Sep-2020 20:46:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -278,14 +278,18 @@ end
         n = 1;
         movim = 1;
         ss = 1;
+        zz = 1;
+        ejexx=1;
+        ejeyy=1;
+        
 while   dd==0
-    
+    centrar = get(handles.pushbutton10,'String');
     movimiento = get(handles.pushbutton5,'String');
     
 if movim == 20001
     movimiento = "no";
 end
-    
+   
 if movimiento == "Ok!"
     set(handles.slider2,'Value',movim)
     movim = movim + 100;
@@ -297,6 +301,7 @@ end
         ss=round(s);%ss es la variable que se genera con el slider y se redondea
         ss2=round(s2);
         
+        
 if      ss==0;
         ss=1;
         
@@ -306,11 +311,11 @@ if      ss2==0;
         ss2=1;
 end
 
-if  sss~=ss | sss2~=ss2
+if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Ce"
    if  d~=1
       if  ss~=sss  
           ip=sss; 
-
+    
 end
 
 if      ss2~=sss2 
@@ -362,6 +367,9 @@ for     i=1:np
         sss=ss;
         sss2=ss2;
         d=0;
+        zz = get(handles.slider10,'Value');%% Estas variables son para realizar movimiento de zoom y ejes x e y de manera dinamica
+        ejexx = get(handles.ejex,'Value');
+        ejeyy = get(handles.ejey,'Value');
 end
 end
         pause(0.01)
@@ -531,9 +539,21 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global np ndim sigma K beta pp flag alpha M zdes
-f = uifigure('Position','Name','Obtención de datos');
+f = uifigure('Position', [100 100 300 250],'Color','White','Name','Obtención de datos');
     t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp]);
     t.FontSize = 10;%alpha beta flag M sigma K pp   ;'Alpha' ;'Beta' ; 'Flag';'M' ;'Sigma' ;'K' ;'PP'
     t.ColumnName = {'Datos'};
     t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP'};
-    t.Position = [10 20 200 190];
+    t.Position = [50 50 195 190];
+
+
+% --- Executes when figure1 is resized.
+function figure1_SizeChangedFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+set(handles.pushbutton10,'String',"Centrado")

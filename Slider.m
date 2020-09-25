@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 25-Sep-2020 18:19:34
+% Last Modified by GUIDE v2.5 25-Sep-2020 20:46:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -278,14 +278,19 @@ end
         n = 1;
         movim = 1;
         ss = 1;
+        zz = 1;
+        ejexx=1;
+        ejeyy=1;
+        
 while   dd==0
-    
+    centrar = get(handles.pushbutton10,'String');
     movimiento = get(handles.pushbutton5,'String');
     
 if movim == 20001
     movimiento = "no";
 end
-    
+
+%%% AQUI COMIENZA CODIGO PARA GENERAR MOVIMIENTO AUTOMATICO DE LOS AGENTES
 if movimiento == "Ok!"
     set(handles.slider2,'Value',movim)
     movim = movim + 100;
@@ -297,6 +302,7 @@ end
         ss=round(s);%ss es la variable que se genera con el slider y se redondea
         ss2=round(s2);
         
+        
 if      ss==0;
         ss=1;
         
@@ -306,13 +312,13 @@ if      ss2==0;
         ss2=1;
 end
 
-if  sss~=ss | sss2~=ss2
+if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Centrado"
    if  d~=1
       if  ss~=sss  
           ip=sss; 
-
-end
-
+    
+      end
+        
 if      ss2~=sss2 
         ip=sss2;
     
@@ -320,7 +326,12 @@ end
     end
         cla%borra lo que se genera anteriormente de los plot, y asi no se sobre escriben y se optimiza
         hold on
-
+        if centrar == "Centrado" % Realiza el centrado de los slider ejex y ejey
+            set(handles.ejex,'Value',0)
+            set(handles.ejey,'Value',0)
+            set(handles.pushbutton10,'String',"Centrar")
+        end
+        
 for     i=1:np
         
           ejey = get(handles.ejey,'Value');
@@ -362,6 +373,9 @@ for     i=1:np
         sss=ss;
         sss2=ss2;
         d=0;
+        zz = get(handles.slider10,'Value');%% Estas variables son para realizar movimiento de zoom y ejes x e y de manera dinamica
+        ejexx = get(handles.ejex,'Value');
+        ejeyy = get(handles.ejey,'Value');
 end
 end
         pause(0.01)
@@ -537,3 +551,15 @@ f = uifigure('Position', [100 100 300 250],'Color','White','Name','Obtención de 
     t.ColumnName = {'Datos'};
     t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP'};
     t.Position = [50 50 195 190];
+
+
+% --- Executes when figure1 is resized.
+function figure1_SizeChangedFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+set(handles.pushbutton10,'String',"Centrado")
