@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 25-Sep-2020 20:46:27
+% Last Modified by GUIDE v2.5 29-Sep-2020 23:08:53
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -122,6 +122,7 @@ set(handles.pushbutton6,'String','Zoom Personal')
 set(handles.ejey,'Value',0)
 set(handles.ejex,'Value',0)
 set(handles.pushbutton9,'visible','on')
+set(handles.pushbutton11,'String',"Vista general")
 movimiento = 0;%Movimiento automatico de los agentes mediante boton
 
 % datos = get(handles,uitable3,'Data');
@@ -298,6 +299,7 @@ end
 while   dd==0
     centrar = get(handles.pushbutton10,'String');
     movimiento = get(handles.pushbutton5,'String');
+    general = get(handles.pushbutton11,'String');
     
 if movim == 20001
     movimiento = "no";
@@ -306,7 +308,7 @@ end
 %%% AQUI COMIENZA CODIGO PARA GENERAR MOVIMIENTO AUTOMATICO DE LOS AGENTES
 if movimiento == "Ok!"
     set(handles.slider2,'Value',movim)
-    movim = movim + 100;
+    movim = movim + 200;
     pause(0.1)
 end    
 
@@ -326,7 +328,7 @@ if      ss2==0;
         ss2=1;
 end
 
-if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Centrado"
+if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Centrado" %| general == "Ok!" 
    if  d~=1
       if  ss~=sss  
           ip=sss; 
@@ -343,15 +345,19 @@ end
         if centrar == "Centrado" % Realiza el centrado de los slider ejex y ejey
             set(handles.ejex,'Value',0)
             set(handles.ejey,'Value',0)
+            set(handles.slider10,'Value',50)
             set(handles.pushbutton10,'String',"Centrar")
         end
+        
+        
+            
         
 for     i=1:np
         
           ejey = get(handles.ejey,'Value');
-          ejey = ejey*0.1;
+%           ejey = ejey);
           ejex = get(handles.ejex,'Value');
-          ejex = ejex*0.1;
+%           ejex = ejex;
           
           
 
@@ -360,7 +366,7 @@ for     i=1:np
         plot(x1(i,ss2),x2(i,ss2),'o','MarkerSize',8)
         
         z = get(handles.slider10,'Value');
-        z=z*0.1;
+%         z=z;
         
 
            
@@ -379,6 +385,9 @@ for     i=1:np
         elseif zoom_agente == "Zoom Personal" & back == 1
             xlim([x1(o,ss2)-z+ejex x1(o,ss2)+z+ejex])
             ylim([x2(o,ss2)-z+ejey x2(o,ss2)+z+ejey])
+         
+          %% Inicio de boton para un zoom general
+%         elseif general == "Ok!"
           
         else
             axis([-z+ejex z+ejex -z+ejey z+ejey]) %realiza el zoom en vista general mediante el slider
@@ -452,6 +461,7 @@ set(handles.popupmenu3,'visible','off')
 set(handles.text13,'visible','off')
 set(handles.uibuttongroup3,'visible','off')
 set(handles.pushbutton9,'visible','off')
+set(handles.pushbutton11,'String',"Stop")
 clc
 %
 function radiobutton8_Callback(hObject, eventdata, handles)
@@ -579,3 +589,11 @@ function figure1_SizeChangedFcn(hObject, eventdata, handles)
 % --- Executes on button press in pushbutton10.
 function pushbutton10_Callback(hObject, eventdata, handles)
 set(handles.pushbutton10,'String',"Centrado")
+
+
+% --- Executes on button press in pushbutton11.
+function pushbutton11_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.pushbutton11,'String',"Ok!")
