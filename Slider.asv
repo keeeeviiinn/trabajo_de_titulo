@@ -156,13 +156,10 @@ nsteps=length(t);
 end
 if deseado == 1
   recibido=get(handles.uitable10,'data');
-  n=size(recibido,1);
-  archivo = fopen ('datos.dat','w');
   
-  for i = 1:n
-      fprintf(archivo, '%s %s \n',recibido{i,:});
-  end
-  fclose(archivo)
+  
+   
+    
 end
 
 gamma0=14;
