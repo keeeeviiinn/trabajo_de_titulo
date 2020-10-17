@@ -134,25 +134,20 @@ flagcolision=0;
 tic
 original= get(handles.original,'Value');
 deseado= get(handles.deseado,'Value');
+
 if original == 1
 flag=0;
 M=50;
-
-ndim=2;
 %sigma=0 singular influence
 sigma=0;
 K=100;
 beta=0.4;
-alpha=1.1;
-alpha1=10;
-pp=2; % potencia a la que esta elevada
+alpha=1.1
+
+pp=2; %potencia a la que esta elevada
 % np=5; %number of agents
-np=nppp;
-ti=0;
-tf=20;
-dt=.001; 
-t=ti:dt:tf;
-nsteps=length(t);
+
+
 end
 if deseado == 1
   recibido=get(handles.uitable10,'data');
@@ -160,10 +155,36 @@ if deseado == 1
   archivo = fopen ('datos.dat','w');
   
   for i = 1:n
-      fprintf(archivo, '%s %s \n',recibido{i,:});
+      fprintf(archivo, '%s = %s \n',recibido{i,:}); % %s es formato string
   end
   fclose(archivo)
+  
+  v1 = recibido(1,2);
+  alpha = str2double(v1)
+  v2 = recibido(2,2);
+  beta = str2double(v2)
+  v3 = recibido(3,2);
+  sigma = str2double(v3)
+  v4 = recibido(4,2);
+  K = str2double(v4)
+  v5 = recibido(5,2);
+  pp = str2double(v5)
+  v6 = recibido(6,2);
+  flag = str2double(v6)
+  v7 = recibido(7,2);
+  M = str2double(v7)
+  
+  
 end
+
+ndim=2;
+np=nppp;
+alpha1=10;
+ti=0;
+tf=20;
+dt=.001; 
+t=ti:dt:tf;
+nsteps=length(t);
 
 gamma0=14;
 lambda0=42.3;
@@ -690,10 +711,13 @@ set(handles.uitable10,'Visible','off');
 
 % --- Executes on button press in deseado.
 function deseado_Callback(hObject, eventdata, handles)
+global np ndim sigma K beta pp flag alpha M zdes
 set(handles.uitable10,'Visible','on');
-A = {'Agentes';'Dimensión';'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Zdes'};
-variables = [A ];
+A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M'};
+B = {'';'';'';'';'';'';''};
+variables = [A B];
 set(handles.uitable10,'data',variables);
+
 
 
 % --- Executes when entered data in editable cell(s) in uitable10.
