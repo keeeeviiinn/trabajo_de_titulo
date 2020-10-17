@@ -129,7 +129,7 @@ movimiento = 0;%Movimiento automatico de los agentes mediante boton
 % datos(:,:) = [];
 % set(handles.uitable3,'Data',datos)
 
-global np ndim sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
+global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
 flagcolision=0;
 tic
 original= get(handles.original,'Value');
@@ -143,7 +143,7 @@ sigma=0;
 K=100;
 beta=0.4;
 alpha=1.1
-
+tf=20;
 pp=2; %potencia a la que esta elevada
 % np=5; %number of agents
 
@@ -161,19 +161,21 @@ if deseado == 1
   fclose(archivo)
   
   v1 = recibido(1,2);
-  alpha = str2double(v1)
+  alpha = str2double(v1);
   v2 = recibido(2,2);
-  beta = str2double(v2)
+  beta = str2double(v2);
   v3 = recibido(3,2);
-  sigma = str2double(v3)
+  sigma = str2double(v3);
   v4 = recibido(4,2);
-  K = str2double(v4)
+  K = str2double(v4);
   v5 = recibido(5,2);
-  pp = str2double(v5)
+  pp = str2double(v5);
   v6 = recibido(6,2);
-  flag = str2double(v6)
+  flag = str2double(v6);
   v7 = recibido(7,2);
-  M = str2double(v7)
+  M = str2double(v7);
+  v7 = recibido(8,2);
+  tf = str2double(v7)
   
   
 end
@@ -182,7 +184,7 @@ ndim=2;
 np=nppp;
 alpha1=10;
 ti=0;
-tf=20;
+
 dt=.001; 
 t=ti:dt:tf;
 nsteps=length(t);
@@ -468,13 +470,14 @@ for     i=1:np
             
             xlim([x1(o,ss)-z+ejex x1(o,ss)+z+ejex])
             ylim([x2(o,ss)-z+ejey x2(o,ss)+z+ejey])%realiza el zoom de acercamiento al zoom en el menu desplegable
+            plot(x1(o,ss),x2(o,ss),'*','MarkerSize',12)
+           
             
         elseif zoom_agente == "Zoom Personal" & back == 1
             xlim([x1(o,ss2)-z+ejex x1(o,ss2)+z+ejex])
             ylim([x2(o,ss2)-z+ejey x2(o,ss2)+z+ejey])
+            plot(x1(o,ss2),x2(o,ss2),'*','MarkerSize',12)
          
-          %% Inicio de boton para un zoom general
-%         elseif general == "Ok!"
           
         else
             axis([-z+ejex z+ejex -z+ejey z+ejey]) %realiza el zoom en vista general mediante el slider
@@ -772,8 +775,8 @@ set(handles.uitable10,'Visible','off');
 function deseado_Callback(hObject, eventdata, handles)
 global np ndim sigma K beta pp flag alpha M zdes
 set(handles.uitable10,'Visible','on');
-A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M'};
-B = {'';'';'';'';'';'';''};
+A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final'};
+B = {'';'';'';'';'';'';'';''};
 variables = [A B];
 set(handles.uitable10,'data',variables);
 
