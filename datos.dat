@@ -1,8 +1,8 @@
-Alpha = 50 
-Beta = 50 
-Sigma = 50 
-K = 50 
-PP = 50 
-Flag = 50 
-M = 50 
-Tiempo Final = 100 
+Alpha = 2 
+Beta = 0.4 
+Sigma = 0 
+K = 100 
+PP = 2 
+Flag = 0 
+M = 1000 
+Tiempo Final = 20 

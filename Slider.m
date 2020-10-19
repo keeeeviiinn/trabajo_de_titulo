@@ -122,7 +122,6 @@ set(handles.pushbutton6,'String','Zoom Personal')
 set(handles.ejey,'Value',0)
 set(handles.ejex,'Value',0)
 set(handles.pushbutton9,'visible','on')
-set(handles.pushbutton11,'String',"Vista general")
 movimiento = 0;%Movimiento automatico de los agentes mediante boton
 
 % datos = get(handles,uitable3,'Data');
@@ -142,7 +141,7 @@ M=50;
 sigma=0;
 K=100;
 beta=0.4;
-alpha=1.1
+alpha=1.1;
 tf=20;
 pp=2; %potencia a la que esta elevada
 % np=5; %number of agents
@@ -175,7 +174,7 @@ if deseado == 1
   v7 = recibido(7,2);
   M = str2double(v7);
   v7 = recibido(8,2);
-  tf = str2double(v7)
+  tf = str2double(v7);
   
   
 end
@@ -388,7 +387,7 @@ end
 while   dd==0
     centrar = get(handles.pushbutton10,'String');
     movimiento = get(handles.pushbutton5,'String');
-    general = get(handles.pushbutton11,'String');
+    
     
 if movim == 20001
     movimiento = "no";
@@ -417,7 +416,7 @@ if      ss2==0;
         ss2=1;
 end
 
-if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Centrado" %| general == "Ok!" 
+if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Centrado" 
    if  d~=1
       if  ss~=sss  
           ip=sss; 
@@ -471,6 +470,7 @@ for     i=1:np
             xlim([x1(o,ss)-z+ejex x1(o,ss)+z+ejex])
             ylim([x2(o,ss)-z+ejey x2(o,ss)+z+ejey])%realiza el zoom de acercamiento al zoom en el menu desplegable
             plot(x1(o,ss),x2(o,ss),'*','MarkerSize',12)
+            
            
             
         elseif zoom_agente == "Zoom Personal" & back == 1
@@ -554,7 +554,6 @@ set(handles.popupmenu3,'visible','off')
 set(handles.text13,'visible','off')
 set(handles.uibuttongroup3,'visible','off')
 set(handles.pushbutton9,'visible','off')
-set(handles.pushbutton11,'String',"Stop")
 % cuadrado = 0;
 % poligon = 0;
 % bandada = 0;
@@ -668,13 +667,13 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton9 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global np ndim sigma K beta pp flag alpha M zdes
-f = uifigure('Position', [100 100 300 250],'Color','White','Name','Obtención de datos');
-    t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp]);
+global np ndim sigma K beta pp flag alpha M zdes tf
+f = uifigure('Position', [100 100 300 265],'Color','White','Name','Obtención de datos');
+    t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp;tf]);
     t.FontSize = 10;%alpha beta flag M sigma K pp   ;'Alpha' ;'Beta' ; 'Flag';'M' ;'Sigma' ;'K' ;'PP'
     t.ColumnName = {'Datos'};
-    t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP'};
-    t.Position = [50 50 195 190];
+    t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP' 'Tiempo final'};
+    t.Position = [50 50 195 205];
 
 
 % --- Executes when figure1 is resized.
@@ -776,7 +775,7 @@ function deseado_Callback(hObject, eventdata, handles)
 global np ndim sigma K beta pp flag alpha M zdes
 set(handles.uitable10,'Visible','on');
 A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final'};
-B = {'';'';'';'';'';'';'';''};
+B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20'};
 variables = [A B];
 set(handles.uitable10,'data',variables);
 
