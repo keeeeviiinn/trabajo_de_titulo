@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 17-Oct-2020 19:05:00
+% Last Modified by GUIDE v2.5 20-Oct-2020 13:17:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -101,12 +101,17 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
     %%Codigo para ingresar cantidad de agentes 
+dimen = get(handles.edit10,'String');
+dimension = str2double(dimen);
+if dimension == 2
 npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
-nppp   = str2double(npp); %el valor de npp se convierte en un numero
+nppp   = str2double(npp); %el valor de npp se convierte en un numer
 if nppp <= 1
     set(handles.text8,'String','Ingrese valor mayor a 1')
 elseif isnan (nppp)
     set(handles.text8,'String','Ingrese valor numerico')
+
+
 else
 % set(handles.text8,'String',' ')
 %%%%%%%
@@ -128,11 +133,12 @@ movimiento = 0;%Movimiento automatico de los agentes mediante boton
 % datos(:,:) = [];
 % set(handles.uitable3,'Data',datos)
 
-global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
+global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir 
 flagcolision=0;
 tic
 original= get(handles.original,'Value');
 deseado= get(handles.deseado,'Value');
+
 
 if original == 1
 flag=0;
@@ -154,11 +160,7 @@ if deseado == 1
   n=size(recibido,1);
   archivo = fopen ('datos.dat','w');
   
-  for i = 1:n
-      fprintf(archivo, '%s = %s \n',recibido{i,:}); % %s es formato string
-  end
-  fclose(archivo)
-  
+%valores de la tabla
   v1 = recibido(1,2);
   alpha = str2double(v1);
   v2 = recibido(2,2);
@@ -179,7 +181,8 @@ if deseado == 1
   
 end
 
-ndim=2;
+
+ndim= dimension;
 np=nppp;
 alpha1=10;
 ti=0;
@@ -448,16 +451,13 @@ for     i=1:np
 %           ejex = ejex;
           
           
-
+ 
         plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'.','MarkerSize',8)
         plot(x1(i,ss),x2(i,ss),'o','MarkerSize',8)
         plot(x1(i,ss2),x2(i,ss2),'o','MarkerSize',8)
-        
-        z = get(handles.slider10,'Value');
-%         z=z;
-        
 
            
+        z = get(handles.slider10,'Value');
         zoom_agente = get(handles.pushbutton6,'String');
         
         
@@ -499,6 +499,14 @@ menu = [1:np];
 end
 
 end
+end
+
+%******** COMIENZO CODIGO 3D*************
+if dimension == 3
+
+end
+%******** FIN CODIGO 3D *****************
+
 
 
 
@@ -830,3 +838,312 @@ function popupmenu4_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function edit10_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function edit10_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton12.
+function pushbutton12_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton13.
+function pushbutton13_Callback(hObject, eventdata, handles)
+
+global np ndim sigma K beta pp flag alpha M zdes
+
+flagcolision=0;
+tic
+flag=0;
+M=50;
+tf=400; %simulation time
+ndim=3;
+sigma=0;
+K=10;
+beta=0.1;
+alpha=1.1;
+pp=4; 
+np=5; %number of agents
+alpha1=10;
+gamma0=5;
+lambda0=0.3;
+%generate random ic
+for i=1:np
+    for kk=1:ndim
+            x00(i,kk)=2*rand-1;
+            v00(i,kk)=2*rand-1;
+    end
+end
+vbar0=1/np*sum(v00,1);
+%make initial vbar=0  comment next 3 lines for vbar!=0
+v00(:,1)=-vbar0(1)+v00(:,1);
+v00(:,2)=-vbar0(2)+v00(:,2);
+v00(:,3)=-vbar0(3)+v00(:,3);
+vbar2=1/np*sum(v00,1);
+Gamma=0;
+Lambda=0;
+%scaling of ics for having gamma0 and lambda0
+for i=1:np
+    for j=1:np
+        Gamma=Gamma+norm(x00(i,:)-x00(j,:),2).^2;
+        Lambda=Lambda+norm(v00(i,:)-v00(j,:),2).^2;
+    end
+end
+
+Gamma=1/(2*np^2)*Gamma;
+Lambda=1/(2*np^2)*Lambda;
+
+x00=sqrt(gamma0/Gamma)*x00;
+v00=sqrt(lambda0/Lambda)*v00;
+
+
+
+ti=0;
+dt=0.1; %simulation step
+t=ti:dt:tf;
+nsteps=length(t);
+x=zeros(2*np,ndim,nsteps);
+% save('z000.mat','x00','v00')
+%load('z000.mat')
+x(:,:,1)=[x00;v00];
+x0=x00;
+v0=v00;
+
+beta2=0;
+distance=zeros(np,np);
+u=zeros(np,ndim,nsteps-1);
+vbar=zeros(1,2);
+i=0;
+p=0.1;
+q=0.9;
+
+Rad=0;
+theta=0; %formation acquisition 
+% 
+% for ii=1:np-1
+%     theta=theta+norm(x0(ii,:)-x0(ii+1,:)-zdes(ii,:),2).^2;
+% end
+dd=NaN; %collision detection
+for i=1:np
+    for j=1:np
+        if i~=j
+            dd=min(norm(x0(i,:)-x0(j,:),2).^2,dd);
+        end
+    end
+end
+
+DD(1)=dd;
+% Theta(1)=theta;
+Gamma(1)=gamma0;
+Lambda(1)=lambda0;
+
+VB(1,:)=vbar0;
+zdes=zeros(np-1,ndim);
+
+% FORMATION SHAPES
+% square shape 4 agents
+% zdes=[];
+% zdes(1,:)=[0 5];
+% zdes(2,:)=[5 0];
+% zdes(3,:)=[0 -5];
+
+% any number of agents - square grid shape
+%zdes=[];
+% ss=2;
+% ss1=0.5;
+% NN=ceil(sqrt(np));
+% kk=1;
+% tt=0;
+% flagg=1;
+% while kk<=np-1 
+%     if kk-tt<=NN
+%         zdes(kk,:)=flagg*[0 ss -1];
+%         kk=kk+1;
+%         if kk-tt==NN&&kk~=np
+%             zdes(kk,:)=[ss 0 -1];
+%             tt=tt+NN;
+%             flagg=-flagg;
+%             kk=kk+1;
+%            
+%         end
+%     end
+% end
+ 
+% any number of agents - regular poligon with agent at the center
+% zdes=[];
+% R=8;
+% NN=np-1;
+% theta1=2*pi/(NN);
+% phi=2*pi*rand(1)/8;
+% zdes(1,:)=-[R*cos(phi) R*sin(phi) 0];
+% zdes(2,:)=-[R*cos(phi+theta1) R*sin(phi+theta1) 0]+[R*cos(phi) R*sin(phi) 0];
+% 
+% for i=3:NN
+%     zdes(i,:)=[R*cos(phi+theta1*(i-2)) R*sin(phi+theta1*(i-2)) 0]-[R*cos(phi+theta1*(i-1)) R*sin(phi+theta1*(i-1)) 0]+[0 0 i];
+% end
+%     
+% bird-like flocking
+% vbardir=vbar0/norm(vbar0);
+% anglevbdir=atan2(vbardir(2),vbardir(1));
+% 
+% for i=1:floor(np/2)
+%     zdes(i,:)=-[2*cos(anglevbdir-10*2*pi/180) 2*sin(anglevbdir-10*2*pi/180)];
+% end
+% 
+% for i=floor(np/2)+1:np-1
+%     zdes(i,:)=[2*cos(anglevbdir+10*2*pi/180) 2*sin(anglevbdir+10*2*pi/180)];
+% end
+
+%olympic rings 2d
+Nr = np/5; % agents per ring
+angle = linspace(0,(Nr-1)*2*pi/Nr,Nr);
+
+xb = cos(angle) * 0.9;
+yb = sin(angle) * 0.9;
+
+xy = cos(angle+0.1) * 0.9 + 1;
+yy = sin(angle+0.1) * 0.9 - 1;
+
+xk = cos(angle+0.2) * 0.9 + 2;
+yk = sin(angle+0.2) * 0.9;
+
+xg = cos(angle+0.1) * 0.9 + 3;
+yg = sin(angle+0.1) * 0.9 - 1;
+
+xr = cos(angle+0.2) * 0.9 + 4;
+yr = sin(angle+0.2) * 0.9;
+zdes=[];
+%******REVISAR********
+zdes(1,:)=-[xb yb 0]+[xb yb 0];%xb(2) yb(2) 0]+[xb(1) yb(1) 0
+%*********************
+for i=2:np/5-1
+    zdes(i,:)=[xb(i) yb(i) 0]-[xb(i+1) yb(i+1) 0];
+end
+i=np/5;
+jj=1;
+zdes(i,:)=[xb(i) yb(i) 0]-[xy(jj) yy(jj) 0];
+for i=np/5+1:2*np/5-1
+    zdes(i,:)=[xy(jj) yy(jj) 0]-[xy(jj+1) yy(jj+1) 0];
+    jj=jj+1;
+end
+i=2*np/5;
+zdes(i,:)=[xy(jj) yy(jj) 0]-[xk(1) yk(1) 0];
+
+jj=1;
+for i=2*np/5+1:3*np/5-1
+    zdes(i,:)=[xk(jj) yk(jj) 0]-[xk(jj+1) yk(jj+1) 0];
+    jj=jj+1;
+end 
+i=3*np/5;
+zdes(i,:)=[xk(jj) yk(jj) 0]-[xr(1) yr(1) 0];
+
+jj=1;
+for i=3*np/5+1:4*np/5-1
+    zdes(i,:)=[xr(jj) yr(jj) 0]-[xr(jj+1) yr(jj+1) 0];
+    jj=jj+1;
+end 
+i=4*np/5;
+zdes(i,:)=[xr(jj) yr(jj) 0]-[xg(1) yg(1) 0];
+
+jj=1;
+for i=4*np/5+1:np-1
+    zdes(i,:)=[xg(jj) yg(jj) 0]-[xg(jj+1) yg(jj+1) 0];
+    jj=jj+1;
+end
+
+
+
+%RK
+for i=1:nsteps-1
+    %x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@cscdyn);
+    x(:,:,i+1)=RK43d(x(:,:,i),u(:,:,i),dt,@csdynshape3d);
+    x0=squeeze(x(1:np,:,i+1));
+    v0=squeeze(x(np+1:end,:,i+1));
+    
+%     for i=1:np
+%     distform(i,:)=sqrt(sum((repmat(x0(i,:),np,1)-x0-repmat(zdes,np,1)).^2,2));
+%     end
+    gamma=0;
+    lambda=0;
+    theta=0;
+    dd=NaN;
+    vbbb=0;
+    %lambda gamma theta and dd
+    for ii=1:np
+        for jj=1:np
+            gamma=gamma+norm(x0(ii,:)-x0(jj,:),2).^2;
+            lambda=lambda+norm(v0(ii,:)-v0(jj,:),2).^2;
+        end
+        if ii<np
+            %theta=theta+norm(x0(ii,:)-x0(ii+1,:)-zdes,2).^2;
+        end
+        if ii~=jj
+            dd=min(norm(x0(ii,:)-x0(jj,:),2).^2,dd);
+        end
+        
+    end
+   % Theta(i+1)=theta/(np-1);
+    Gamma(i+1)=1/(2*np^2)*gamma;
+    Lambda(i+1)=1/(2*np^2)*lambda;
+    %????
+    if dd<=1e-20 
+        flagcolision=1;
+    end
+    DD(i+1)=dd;
+    VB(i+1,:)=1/np*sum(v0,1);
+    % tests to stop if consensus is likely or unlikely to be achieved (for
+    % bench)
+%     if i>=501 
+%         test=sum(Lambda(i-150:i));
+%         test2=sum(Theta(i-150:i));
+%         if test<=1||test2>=1000
+%             break
+%             toc
+%         end
+%     end    
+    
+end
+toc
+
+value=Lambda(end);
+% th=Theta(end);
+
+%end
+%flagcolision
+%figure
+hold on
+tf=dt*i;
+termino=i;
+% for i=1:1
+%    plot(squeeze(x(i,1,:)),squeeze(x(i,2,:)),'LineWidth',2.0,'Color','red')
+% end
+
+N=np;
+col = jet(N);
+%trajectories with initial and final points highlighted. 
+for kk=1:np
+  %comment for removing trajectories
+  plot3(squeeze(x(kk,1,1:termino)),squeeze(x(kk,2,1:termino)),squeeze(x(kk,3,1:termino)),'Color',col(kk,:),'LineWidth',2,'LineStyle','-') 
+  plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
+  plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+end
+
+%a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim'); 
