@@ -103,7 +103,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     %%Codigo para ingresar cantidad de agentes 
 dimen = get(handles.edit10,'String');
 dimension = str2double(dimen);
-if dimension == 2
+if dimension ==2;
 npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
 nppp   = str2double(npp); %el valor de npp se convierte en un numer
 if nppp <= 1
@@ -157,8 +157,7 @@ end
 %OPCION DE PERSONALIZADO 
 if deseado == 1
   recibido=get(handles.uitable10,'data');
-  n=size(recibido,1);
-  archivo = fopen ('datos.dat','w');
+  
   
 %valores de la tabla
   v1 = recibido(1,2);
@@ -186,7 +185,6 @@ ndim= dimension;
 np=nppp;
 alpha1=10;
 ti=0;
-
 dt=.001; 
 t=ti:dt:tf;
 nsteps=length(t);
@@ -353,7 +351,8 @@ end
         % Theta(1)=theta;
         Gamma(1)=gamma0;
         Lambda(1)=lambda0;
-
+        
+       
         VB(1,:)=vbar0;
 
         %energy
@@ -386,7 +385,7 @@ end
         zz = 1;
         ejexx=1;
         ejeyy=1;
-        
+      
 while   dd==0
     centrar = get(handles.pushbutton10,'String');
     movimiento = get(handles.pushbutton5,'String');
@@ -420,17 +419,17 @@ if      ss2==0;
 end
 
 if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(handles.ejex,'Value') | ejeyy ~= get(handles.ejey,'Value') | centrar == "Centrado" 
-   if  d~=1
-      if  ss~=sss  
-          ip=sss; 
-    
-      end
-        
-if      ss2~=sss2 
-        ip=sss2;
-    
-end
-    end
+%    if  d~=1
+%       if  ss~=sss  
+%           ip=sss; 
+%     
+%       end
+%         
+% if      ss2~=sss2 
+%         ip=sss2;
+%     
+% end
+%     end
         cla%borra lo que se genera anteriormente de los plot, y asi no se sobre escriben y se optimiza
         hold on
         if centrar == "Centrado" % Realiza el centrado de los slider ejex y ejey
@@ -451,12 +450,13 @@ for     i=1:np
 %           ejex = ejex;
           
           
- 
+        
         plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'.','MarkerSize',8)
         plot(x1(i,ss),x2(i,ss),'o','MarkerSize',8)
         plot(x1(i,ss2),x2(i,ss2),'o','MarkerSize',8)
-
-           
+        
+        
+       
         z = get(handles.slider10,'Value');
         zoom_agente = get(handles.pushbutton6,'String');
         
@@ -500,6 +500,7 @@ end
 
 end
 end
+
 
 %******** COMIENZO CODIGO 3D*************
 if dimension == 3
@@ -867,22 +868,21 @@ function pushbutton12_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in pushbutton13.
 function pushbutton13_Callback(hObject, eventdata, handles)
-
 global np ndim sigma K beta pp flag alpha M zdes
-
 flagcolision=0;
 tic
 flag=0;
 M=50;
-tf=400; %simulation time
+
 ndim=3;
 sigma=0;
 K=10;
 beta=0.1;
 alpha=1.1;
-pp=4; 
-np=5; %number of agents
 alpha1=10;
+pp=4; 
+np=10; %number of agents
+
 gamma0=5;
 lambda0=0.3;
 %generate random ic
@@ -917,6 +917,7 @@ v00=sqrt(lambda0/Lambda)*v00;
 
 
 ti=0;
+tf=400; %simulation time
 dt=0.1; %simulation step
 t=ti:dt:tf;
 nsteps=length(t);
@@ -1031,9 +1032,8 @@ yg = sin(angle+0.1) * 0.9 - 1;
 xr = cos(angle+0.2) * 0.9 + 4;
 yr = sin(angle+0.2) * 0.9;
 zdes=[];
-%******REVISAR********
-zdes(1,:)=-[xb yb 0]+[xb yb 0];%xb(2) yb(2) 0]+[xb(1) yb(1) 0
-%*********************
+zdes(1,:)=-[xb(2) yb(2) 0]+[xb(1) yb(1) 0];
+
 for i=2:np/5-1
     zdes(i,:)=[xb(i) yb(i) 0]-[xb(i+1) yb(i+1) 0];
 end
@@ -1127,8 +1127,9 @@ value=Lambda(end);
 % th=Theta(end);
 
 %end
-%flagcolision
+flagcolision
 %figure
+axes(handles.axes1)
 hold on
 tf=dt*i;
 termino=i;
@@ -1141,9 +1142,11 @@ col = jet(N);
 %trajectories with initial and final points highlighted. 
 for kk=1:np
   %comment for removing trajectories
-  plot3(squeeze(x(kk,1,1:termino)),squeeze(x(kk,2,1:termino)),squeeze(x(kk,3,1:termino)),'Color',col(kk,:),'LineWidth',2,'LineStyle','-') 
-  plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
-  plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+ plot3(squeeze(x(kk,1,1:termino)),squeeze(x(kk,2,1:termino)),squeeze(x(kk,3,1:termino)),'Color',col(kk,:),'LineWidth',2,'LineStyle','-') 
+  %plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
+ % plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
 end
-
+%obtain range of trajectories to fix camera for animation
 %a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim'); 
+axis([a b c])
+view(-19,48)
