@@ -1141,37 +1141,11 @@ termino=i;
 N=np;
 col = jet(N);
 %trajectories with initial and final points highlighted. 
-d = 1;
-ip = 1;
-dd = 1;
-sss= 0;
-while dd ==1
-    s = get(handles.slider2,'Value');
-    ss = round(s);
-    if ss==0
-    ss=1
-    end
-    
-    if sss~=ss
-       if d~=1
-
-if ss~=sss  
-   ip=sss; 
-   %ss=sss;
-end
-       end
-%cla
-hold on
-%trajectories with initial and final points highlighted. 
 for kk=1:np
   %comment for removing trajectories
-  plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'LineWidth',2,'LineStyle','-') 
-%   plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
-%   plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+ plot3(squeeze(x(kk,1,1:termino)),squeeze(x(kk,2,1:termino)),squeeze(x(kk,3,1:termino)),'Color',col(kk,:),'LineWidth',2,'LineStyle','-') 
+  %plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
+ % plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
 end
-
-sss=ss;
-dd=0
-    end
-    
-end
+%obtain range of trajectories to fix camera for animation
+%a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim'); 
