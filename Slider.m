@@ -1133,7 +1133,7 @@ flagcolision;
 axes(handles.axes1)
 hold on
 tf=dt*i;
-termino=i;
+termino=i
 % for i=1:1
 %    plot(squeeze(x(i,1,:)),squeeze(x(i,2,:)),'LineWidth',2.0,'Color','red')
 % end
@@ -1143,35 +1143,48 @@ col = jet(N);
 %trajectories with initial and final points highlighted. 
 d = 1;
 ip = 1;
-dd = 1;
+ipp=1;
+dd = 0;
 sss= 0;
-while dd ==1
+cont=1;
+while dd ==0
     s = get(handles.slider2,'Value');
     ss = round(s);
     if ss==0
-    ss=1
+        ss=1;
     end
-    
-    if sss~=ss
-       if d~=1
+pause(0.01)    
+%figure
 
-if ss~=sss  
-   ip=sss; 
-   %ss=sss;
-end
-       end
-%cla
-hold on
+a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
+% set(gca,'nextplot','replacechildren');
+ if cont == 1   
+    axis([a b c])
+    view(-19,48) %fix perspective 
+   
+     a=a+[-2 2];b=b+[-2 2];c=c+[-2 2];
+     cont = 0;
+ end
+ if ss ~= sss
+     ss
+ end
+     
 %trajectories with initial and final points highlighted. 
+cla
+%for ss=1:1:200
 for kk=1:np
+    
   %comment for removing trajectories
   plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'LineWidth',2,'LineStyle','-') 
+ % hold on
 %   plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
 %   plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
 end
-
+ grid on
+  view(-19,48)
+axis([a b c])
 sss=ss;
-dd=0
-    end
+d=0;
     
+%end  
 end
