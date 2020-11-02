@@ -404,9 +404,9 @@ end
       
 while   dd==0
 
-    stop=get(handles.stop,'String')
+    stop=get(handles.stop,'String');
     if stop == "Stop."
-       dd=1
+       dd=1;
        continue
     end
             
@@ -820,12 +820,12 @@ view2=48;
 while dd ==0
 
 %el if stop detiene la simulacion en 3D   
-    stop=get(handles.stop,'String')
+    stop=get(handles.stop,'String');
     if stop == "Stop."
-       dd=1
+       dd=1;
        continue
     end
-    dd
+    
     view1=get(handles.slider15,'Value');
     view11=round(view1);
     view2=get(handles.slider16,'Value');
@@ -1545,10 +1545,10 @@ view2=48;
 while dd ==0
     stop=get(handles.stop,'Value')
     if stop == 1
-       dd=1
+       dd=1;
        continue
     end
-    dd
+    
     view1=get(handles.slider15,'Value');
     view11=round(view1);
     view2=get(handles.slider16,'Value');
