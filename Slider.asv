@@ -857,7 +857,7 @@ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
  ejex=get(handles.ejey,'Value')/10;
  ejey=get(handles.ejex,'Value')/10;
  zoom=get(handles.slider10,'Value')/10;
- a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+ a=[-zoom+ejex zoom+ejex];b=[-zoom+ zoom];c=[-zoom zoom];
  axis([a b c])
   grid on
 %  if ss ~= sss
