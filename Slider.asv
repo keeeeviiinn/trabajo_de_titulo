@@ -546,7 +546,6 @@ menu = [1:np];
 end
 
 end
-cla reset
 end
 
 
@@ -911,7 +910,7 @@ movim = 1;
     stop=get(handles.stop,'String');
     if stop == "Stop."
        dd=1;
-     continue
+       continue
     end
     
     centrar = get(handles.pushbutton10,'String');
@@ -1015,7 +1014,6 @@ view2=view1;
 end    
 
 end
-cla reset
 end
 %******** FIN CODIGO 3D *****************
 
@@ -1092,9 +1090,13 @@ set(handles.stop,'String','Stop.')
 % cla reset
 % pause(0.01)
 % end
-
+cont = 0;
+while cont <=2
+    cla reset
 cla reset
-
+pause(0.01)
+    
+end
 
 
 %
