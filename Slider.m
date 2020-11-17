@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 17-Nov-2020 12:26:21
+% Last Modified by GUIDE v2.5 17-Nov-2020 17:31:04
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -498,9 +498,10 @@ for     i=1:np
           
           
         
-        plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'.','MarkerSize',8)
-        plot(x1(i,ss),x2(i,ss),'o','MarkerSize',8)
-        plot(x1(i,ss2),x2(i,ss2),'o','MarkerSize',8)
+        plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'LineWidth',2,'LineStyle','-')
+%         plot(x1(i,ss),x2(i,ss),'.','MarkerSize',20)
+         plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(i,:))
+        plot(x1(i,ss2),x2(i,ss2),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(i,:))
         
         
        
@@ -552,12 +553,14 @@ end
 
 %******** COMIENZO CODIGO 3D*************
 if dimension == 3
-    
+
+set(handles.salir,'visible','off');
+set(handles.salir,'value',1);
 set(handles.cabeza,'visible','on');
 set(handles.cabeza,'String','Con cabeza');
 set(handles.cabezano,'String','Sin cabeza');
 set(handles.slider2,'MIN',0,'MAX',101);
-set(handles.slider7,'MIN',0,'MAX',10000);
+set(handles.slider7,'MIN',0,'MAX',101);
 set(handles.slider10,'MIN',1,'MAX',100);
 set(handles.ejey,'MIN',-100,'MAX',100);
 set(handles.ejex,'MIN',-100,'MAX',100); 
@@ -927,6 +930,8 @@ movim = 1;
     pause(0.01)
     end
     
+  
+        
     set(handles.slider2,'Value',1)
     movim = 1;
     
@@ -953,8 +958,14 @@ movim = 1;
     view22=round(view2);
     s = get(handles.slider2,'Value');
     ss = round(s);
+    s2=get(handles.slider7,'Value');
+    ss2=round(s2);
+    
     if ss==0
         ss=1;
+    end
+    if ss2==0
+        ss2=1;
     end
 pause(0.01)
 
@@ -980,8 +991,9 @@ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
  zoom=get(handles.slider10,'Value')/10;
  cabeza_agente = get(handles.cabeza,'String');
  cabeza_agente2 = get(handles.cabezano,'String');
- a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
- axis([a b c])
+ salir=get(handles.salir,'value');
+%  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+%  axis([a b c])
   grid on
 %  if ss ~= sss
 %      ss
@@ -990,6 +1002,15 @@ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 %trajectories with initial and final points highlighted. 
 cla
 hold on
+
+  if centrar == "Centrado"
+            set(handles.ejex,'Value',0)
+            set(handles.ejey,'Value',0)
+            set(handles.slider10,'Value',50)/10
+            set(handles.slider15,'Value',-38);
+            set(handles.slider16,'Value',29);
+            set(handles.pushbutton10,'String',"Centrar")
+    end
 %for ss=1:1:200
 if cabeza_agente == "Con cabeza"
 set(handles.cabeza,'visible','on'); 
@@ -997,9 +1018,47 @@ set(handles.cabezano,'visible','off');
 for kk=1:np
     
   %comment for removing trajectories
-
- plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'-','MarkerSize',8)
-
+  zoom_agente= get(handles.pushbutton6,'String');
+  o = get(handles.popupmenu3,'Value');% recibe el valor del menu de agente
+  front = get(handles.radiobutton11,'Value');
+  back = get(handles.radiobutton12,'Value');
+  
+  plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+  if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+     set(handles.salir,'visible','on');
+     set(handles.salir,'value',0);
+%       a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+%       axis([a b c])
+%       xlim([x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex])
+%       ylim([x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey])
+     
+     a=[x(o,1,ss)-zoom+ejey x(o,1,ss)+zoom+ejey];b=[x(o,1,ss)-zoom x(o,1,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
+     a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
+     a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
+     axis([a b c])
+     axis([a1 b1 c1])
+     axis([a2 b2 c2])
+%      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
+     
+  elseif zoom_agente == "Zoom Personal" & back == 1
+          set(handles.salir,'visible','on');
+          set(handles.salir,'value',0); 
+        a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
+%      a1=[x(o,2,ss)-zoom+ejey zoom+ejey];b1=[x(o,2,ss)-zoom zoom];c1=[x(o,2,ss)-zoom+ejex zoom+ejex];
+%      a2=[x(o,3,ss)-zoom+ejey zoom+ejey];b2=[x(o,3,ss)-zoom zoom];c2=[x(o,3,ss)-zoom+ejex zoom+ejex];
+       axis([a b c])
+%      axis([a1 b1 c1])
+%      axis([a2 b2 c2])
+       plot3(squeeze(x(o,1,ss2)),squeeze(x(o,2,ss2)),squeeze(x(o,3,ss2))) 
+            
+            
+  else
+ 
+ if salir == 1
+  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+  axis([a b c])
+ end   
+  end
 %   plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
 %   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
 % plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:))
@@ -1009,8 +1068,9 @@ if cabeza_agente == "ok"
 set(handles.cabeza,'visible','off'); 
 set(handles.cabezano,'visible','on');
  for  kk=1:np 
- plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'-','MarkerSize',8)
- plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'.','MarkerSize',15) 
+ plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'LineWidth',2','LineStyle','-')
+%  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)), '.','MarkerSize',15)
+ plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(kk,:))
 
  end
 end
@@ -1026,7 +1086,9 @@ axis([a b c])
 sss=ss;
 % d=0;
 view2=view1;    
-%end  
+%end
+menu = [1:np]; 
+    set(handles.popupmenu3,'string',menu)
 end    
 
 end
@@ -1078,6 +1140,7 @@ function text6_CreateFcn(hObject, eventdata, handles)
 function stop_Callback(hObject, eventdata, handles)
 global cuadrado bandada poligon
 
+set(handles.salir,'visible','off');
 set(handles.slider2,'Value',0)
 set(handles.slider7,'Value',0)
 set(handles.radiobutton8,'Value',1)
@@ -1491,3 +1554,21 @@ set(handles.cabeza,'String','ok');
 % --- Executes on button press in cabezano.
 function cabezano_Callback(hObject, eventdata, handles)
 set(handles.cabeza,'String','Con cabeza');
+
+
+% --- Executes on button press in ecuaciones.
+function ecuaciones_Callback(hObject, eventdata, handles)
+% hObject    handle to ecuaciones (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of ecuaciones
+
+
+% --- Executes on button press in salir.
+function salir_Callback(hObject, eventdata, handles)
+% hObject    handle to salir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of salir
