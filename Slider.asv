@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 02-Nov-2020 17:17:13
+% Last Modified by GUIDE v2.5 17-Nov-2020 12:14:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -546,14 +546,15 @@ menu = [1:np];
 end
 
 end
+cla reset
 end
 
 
 %******** COMIENZO CODIGO 3D*************
 if dimension == 3
     
-
-
+set(handles.cabeza,'visible','on');
+set(handles.cabeza,'String','Cabeza');
 set(handles.slider2,'MIN',0,'MAX',101);
 set(handles.slider7,'MIN',0,'MAX',10000);
 set(handles.slider10,'MIN',1,'MAX',100);
@@ -910,7 +911,7 @@ movim = 1;
     stop=get(handles.stop,'String');
     if stop == "Stop."
        dd=1;
-       continue
+     continue
     end
     
     centrar = get(handles.pushbutton10,'String');
@@ -976,6 +977,8 @@ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
  ejex=get(handles.ejey,'Value')/10;
  ejey=get(handles.ejex,'Value')/10;
  zoom=get(handles.slider10,'Value')/10;
+ cabeza_agente = get(handles.cabeza,'String');
+ cabeza_agente2 = get(handles.cabezano,'String');
  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
  axis([a b c])
   grid on
@@ -987,17 +990,27 @@ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 cla
 hold on
 %for ss=1:1:200
+if cabeza_agente == "Cabeza no"
 for kk=1:np
     
   %comment for removing trajectories
 
  plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'-','MarkerSize',8)
-  % plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'o') 
 
 %   plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
-%   plot3(squeeze(x(kk,1,termino)),squeeze(x(kk,2,termino)),squeeze(x(kk,3,termino)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+%   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+% plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:))
 end
+end
+if cabeza_agente == "ok"
+set(handles.cabeza,'visible','off'); 
+set(handles.cabezano,'visible','on');
+ for  kk=1:np 
+ plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'-','MarkerSize',8)
+ plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'.','MarkerSize',15) 
 
+ end
+end
 pause(0.01)
  
  
@@ -1014,6 +1027,7 @@ view2=view1;
 end    
 
 end
+cla reset
 end
 %******** FIN CODIGO 3D *****************
 
@@ -1081,6 +1095,8 @@ set(handles.text21,'Visible','off');
 % bandada = 0;
 
 set(handles.stop,'String','Stop.')
+set(handles.cabeza,'String','Cabeza');
+set(handles.cabeza,'visible','off');
 
 % a=get(gca,'xlim');b=get(gca,'ylim')
 % axis([a b])
@@ -1090,13 +1106,9 @@ set(handles.stop,'String','Stop.')
 % cla reset
 % pause(0.01)
 % end
-cont = 0;
-while cont <=2
-    cla reset
+
 cla reset
-pause(0.01)
-    
-end
+
 
 
 %
@@ -1210,6 +1222,7 @@ function uitable7_DeleteFcn(hObject, eventdata, handles)
 % hObject    handle to uitable7 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+function axes1_DeleteFcn(hObject, eventdata, handles)
 
 
 % --- Executes on button press in pushbutton9.
@@ -1463,3 +1476,28 @@ function pushbutton13_DeleteFcn(hObject, eventdata, handles)
 % hObject    handle to pushbutton13 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in cabeza.
+function cabeza_Callback(hObject, eventdata, handles)
+set(handles.cabeza,'String','ok');
+
+
+
+% cabeza_agente = get(handles.cabeza,'String')
+
+% function cabeza_Callback(hObject, eventdata, handles)
+% cabeza_agente = get(handles.cabeza,'String');
+% 
+% if cabeza_agente == "ok"
+%     set(handles.cabeza,'String',"Cabeza")
+% end
+
+
+
+
+
+
+% --- Executes on button press in pushbutton15.
+function pushbutton15_Callback(hObject, eventdata, handles)
+set(handles.cabezano,'String','ok');
