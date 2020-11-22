@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 17-Nov-2020 17:31:04
+% Last Modified by GUIDE v2.5 22-Nov-2020 14:04:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -569,13 +569,13 @@ set(handles.slider16,'Value',29);
 
 npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
 nppp   = str2double(npp); %el valor de npp se convierte en un numer
-if nppp <= 9
-    set(handles.text8,'String','Ingrese valor > o = a 10 agentes')
-elseif isnan (nppp)
-    set(handles.text8,'String','Ingrese valor numerico')
-
-
-else
+% if nppp <= 9
+%     set(handles.text8,'String','Ingrese valor > o = a 10 agentes')
+% elseif isnan (nppp)
+%     set(handles.text8,'String','Ingrese valor numerico')
+% 
+% 
+% else
 
 % set(handles.text8,'String',' ')
 %%%%%%%
@@ -721,12 +721,16 @@ zdes=zeros(np-1,ndim);
 % zdes(1,:)=[0 5];
 % zdes(2,:)=[5 0];
 % zdes(3,:)=[0 -5];
+% zdes(4,:)=[0 5];
+% zdes(5,:)=[5 0];
+% zdes(6,:)=[0 -5];
+% zdes(7,:)=[0 -5];
 
 % any number of agents - square grid shape
-%zdes=[];
+% zdes=[];
 % ss=2;
 % ss1=0.5;
-% NN=ceil(sqrt(np));
+% NN=ceil(sqrt(np)); % ceil redondea al numero entero mas cercano 
 % kk=1;
 % tt=0;
 % flagg=1;
@@ -735,7 +739,7 @@ zdes=zeros(np-1,ndim);
 %         zdes(kk,:)=flagg*[0 ss -1];
 %         kk=kk+1;
 %         if kk-tt==NN&&kk~=np
-%             zdes(kk,:)=[ss 0 -1];
+%             zdes(kk,:)=[ss 0 -2];
 %             tt=tt+NN;
 %             flagg=-flagg;
 %             kk=kk+1;
@@ -756,8 +760,8 @@ zdes=zeros(np-1,ndim);
 % for i=3:NN
 %     zdes(i,:)=[R*cos(phi+theta1*(i-2)) R*sin(phi+theta1*(i-2)) 0]-[R*cos(phi+theta1*(i-1)) R*sin(phi+theta1*(i-1)) 0]+[0 0 i];
 % end
-%     
-% bird-like flocking
+    
+% % bird-like flocking
 % vbardir=vbar0/norm(vbar0);
 % anglevbdir=atan2(vbardir(2),vbardir(1));
 % 
@@ -771,63 +775,96 @@ zdes=zeros(np-1,ndim);
 
 %olympic rings 2d
 % Nr = np/5; % agents per ring
-Nr = np/5;
-angle = linspace(0,(Nr-1)*2*pi/Nr,Nr);
+% Nr = np/5;
+% angle = linspace(0,(Nr-1)*2*pi/Nr,Nr);
+% 
+% xb = cos(angle) * 0.9;
+% yb = sin(angle) * 0.9;
+% 
+% xy = cos(angle+0.1) * 0.9 + 1;
+% yy = sin(angle+0.1) * 0.9 - 1;
+% 
+% xk = cos(angle+0.2) * 0.9 + 2;
+% yk = sin(angle+0.2) * 0.9;
+% 
+% xg = cos(angle+0.1) * 0.9 + 3;
+% yg = sin(angle+0.1) * 0.9 - 1;
+% 
+% xr = cos(angle+0.2) * 0.9 + 4;
+% yr = sin(angle+0.2) * 0.9;
+% zdes=[];
+% zdes(1,:)=-[xb(2) yb(2) 0]+[xb(1) yb(1) 0];
+% 
+% for i=2:np/5-1
+%     zdes(i,:)=[xb(i) yb(i) 0]-[xb(i+1) yb(i+1) 0];
+% end
+% i=np/5;
+% jj=1;
+% zdes(i,:)=[xb(i) yb(i) 0]-[xy(jj) yy(jj) 0];
+% for i=np/5+1:2*np/5-1
+%     zdes(i,:)=[xy(jj) yy(jj) 0]-[xy(jj+1) yy(jj+1) 0];
+%     jj=jj+1;
+% end
+% i=2*np/5;
+% zdes(i,:)=[xy(jj) yy(jj) 0]-[xk(1) yk(1) 0];
+% 
+% jj=1;
+% for i=2*np/5+1:3*np/5-1
+%     zdes(i,:)=[xk(jj) yk(jj) 0]-[xk(jj+1) yk(jj+1) 0];
+%     jj=jj+1;
+% end 
+% i=3*np/5;
+% zdes(i,:)=[xk(jj) yk(jj) 0]-[xr(1) yr(1) 0];
+% 
+% jj=1;
+% for i=3*np/5+1:4*np/5-1
+%     zdes(i,:)=[xr(jj) yr(jj) 0]-[xr(jj+1) yr(jj+1) 0];
+%     jj=jj+1;
+% end 
+% i=4*np/5;
+% zdes(i,:)=[xr(jj) yr(jj) 0]-[xg(1) yg(1) 0];
+% 
+% jj=1;
+% for i=4*np/5+1:np-1
+%     zdes(i,:)=[xg(jj) yg(jj) 0]-[xg(jj+1) yg(jj+1) 0];
+%     jj=jj+1;
+% end
 
-xb = cos(angle) * 0.9;
-yb = sin(angle) * 0.9;
+%cuadrado
+% zdes = [0 2 -1;0 2 -1;2 0 -2; 0 -2 1]; 
+% cubo
+% zdes = [-2 0 0;0 -2 0;2 0 0; 0 2 -3;-2 0 0;0 -2 0;2 0 0];
+% zdes=[];
 
-xy = cos(angle+0.1) * 0.9 + 1;
-yy = sin(angle+0.1) * 0.9 - 1;
 
-xk = cos(angle+0.2) * 0.9 + 2;
-yk = sin(angle+0.2) * 0.9;
-
-xg = cos(angle+0.1) * 0.9 + 3;
-yg = sin(angle+0.1) * 0.9 - 1;
-
-xr = cos(angle+0.2) * 0.9 + 4;
-yr = sin(angle+0.2) * 0.9;
-zdes=[];
-zdes(1,:)=-[xb(2) yb(2) 0]+[xb(1) yb(1) 0];
-
-for i=2:np/5-1
-    zdes(i,:)=[xb(i) yb(i) 0]-[xb(i+1) yb(i+1) 0];
+%%Paredes
+conta=1;
+contador=0;
+zdess = 0;
+while conta < np
+    if contador == 0
+        zdes(conta,:) = [-2 0 zdess];
+        contador=+1;
+        conta=conta+1;
+    elseif contador == 1
+        zdes(conta,:) = [0 -2 zdess];
+        conta=conta+1;
+        contador=contador+1;
+    elseif contador == 2
+        zdes(conta,:) = [2 0 zdess];
+        conta=conta+1;
+        contador=contador+1;
+    else
+        zdess=+1;    
+        zdes(conta,:) = [0 2 zdess];
+        conta=conta+1;
+        contador = 0;
+        zdess = 0;
+    end      
+pause(0.01)    
 end
-i=np/5;
-jj=1;
-zdes(i,:)=[xb(i) yb(i) 0]-[xy(jj) yy(jj) 0];
-for i=np/5+1:2*np/5-1
-    zdes(i,:)=[xy(jj) yy(jj) 0]-[xy(jj+1) yy(jj+1) 0];
-    jj=jj+1;
-end
-i=2*np/5;
-zdes(i,:)=[xy(jj) yy(jj) 0]-[xk(1) yk(1) 0];
 
-jj=1;
-for i=2*np/5+1:3*np/5-1
-    zdes(i,:)=[xk(jj) yk(jj) 0]-[xk(jj+1) yk(jj+1) 0];
-    jj=jj+1;
-end 
-i=3*np/5;
-zdes(i,:)=[xk(jj) yk(jj) 0]-[xr(1) yr(1) 0];
-
-jj=1;
-for i=3*np/5+1:4*np/5-1
-    zdes(i,:)=[xr(jj) yr(jj) 0]-[xr(jj+1) yr(jj+1) 0];
-    jj=jj+1;
-end 
-i=4*np/5;
-zdes(i,:)=[xr(jj) yr(jj) 0]-[xg(1) yg(1) 0];
-
-jj=1;
-for i=4*np/5+1:np-1
-    zdes(i,:)=[xg(jj) yg(jj) 0]-[xg(jj+1) yg(jj+1) 0];
-    jj=jj+1;
-end
-
-
-
+%%
 %RK
 for i=1:nsteps-1
     %x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@cscdyn);
@@ -1067,12 +1104,21 @@ end
 if cabeza_agente == "ok"
 set(handles.cabeza,'visible','off'); 
 set(handles.cabezano,'visible','on');
+%Menu2 es para mostrar en una lista las posiciones de los agentes
+menu2 = [1:np];
+    set(handles.popupmenu6,'string',menu2) 
+%Menu3 almacenara las posiciones espaciales de cada agente    
+menu3=[];
+
  for  kk=1:np 
- plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'LineWidth',2','LineStyle','-')
+%  plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'LineWidth',2','LineStyle','-')
 %  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)), '.','MarkerSize',15)
  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(kk,:))
-
+menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
+v=get(handles.popupmenu6,'Value');
+set(handles.text22,'string',ceil(menu3(v,1))+" "+ceil(menu3(v,2))+" "+ceil(menu3(v,3)))
+
 end
 pause(0.01)
  
@@ -1091,7 +1137,7 @@ menu = [1:np];
     set(handles.popupmenu3,'string',menu)
 end    
 
-end
+% end
 cla reset
 end
 %******** FIN CODIGO 3D *****************
@@ -1572,3 +1618,28 @@ function salir_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of salir
+
+
+
+
+% --- Executes on selection change in popupmenu6.
+function popupmenu6_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu6 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu6
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
