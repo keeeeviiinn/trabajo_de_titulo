@@ -878,15 +878,15 @@ cero5 = 0.5;
 dif = 0
 while conta < np
     if contador == 0
-        zdes(conta,:) = [uno 0 -cero5];
+        zdes(conta,:) = [uno+dif 0 -cero5];
         contador=+1;
         conta=conta+1;
     elseif contador == 1
-        zdes(conta,:) = [cero5 0 -uno];
+        zdes(conta,:) = [cero5+dif 0 -uno];
         conta=conta+1;
         contador=contador+1;
     elseif contador == 2
-        zdes(conta,:) = [-cero5 0 -uno];
+        zdes(conta,:) = [-cero5+dif 0 -uno];
         conta=conta+1;
         contador=contador+1; 
     elseif contador == 3
@@ -901,17 +901,13 @@ while conta < np
         zdes(conta,:) = [-cero5 0 uno];
         conta=conta+1;
         contador=contador+1;
-    elseif contador == 6
-        zdes(conta,:) = [cero5 0 uno];
-        conta=conta+1;
-        contador=contador+1;
     else
         zdess=+1;    
-        zdes(conta,:) = [ -3 0 uno];
+        zdes(conta,:) = [ cero5 0 uno];
         conta=conta+1;
         contador = 0;
         zdess = 0;
-        dif = dif +-3;
+        dif = dif +0.5;
     end      
 pause(0.01)    
 end
