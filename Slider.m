@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 22-Nov-2020 14:04:55
+% Last Modified by GUIDE v2.5 24-Nov-2020 13:18:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -101,8 +101,10 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
-% reestablece nombre boton stop
+ global paredes circulo triangulo  
+ % reestablece nombre boton stop
 set(handles.stop,'String',"Stop")
+
     %%Codigo para ingresar cantidad de agentes 
 dimen = get(handles.edit10,'String');
 dimension = str2double(dimen);
@@ -203,7 +205,7 @@ ndim= dimension;
 np=nppp;
 alpha1=10;
 ti=0;
-dt=.001; 
+dt=.001;%.001 
 t=ti:dt:tf;
 nsteps=length(t);
 
@@ -230,8 +232,90 @@ if elegir == 1;
     
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if triangulo == 1
+    
+    val1=0;
+    val2=5;
+    val3 = floor(np/2)
+    val4= vbar2(2), vbar2(1)
+    
+%     vbardir=vbar0/norm(vbar0);
+%     anglevbdir=atan2(vbardir(2),vbardir(1));
+% 
+% for i=1:floor(np/2)
+%     zdes(i,:)=-[2*cos(anglevbdir-10*2*pi/180) 2*sin(anglevbdir-10*2*pi/180)];
+% end
+% 
+% for i=floor(np/2)+1:np-1
+%     zdes(i,:)=[2*cos(anglevbdir+10*2*pi/180) 2*sin(anglevbdir+10*2*pi/180)];
+% end
+for i= 1:floor(np/2)
+    zdes(i,:) = [val1 val2]%forma una linea 
+end
 
+for i=1:floor(np/2)+1:np
+    zdes(i,:) = [-8 -8]
+end
+% for cont= 1 
+%     zdes(miti,:) = [-cont contador]
+% end
+end
 %%%%%%% bird-like flocking %%%%%%%%%%%%%%%
+if circulo == 1
+conta=1;
+contador=0;
+zdess = 0;
+uno = 3;%1
+cero5 = 1;%0.5
+dif = 0;
+while conta < np
+    if contador == 0
+%         zdes(conta,:) = [uno 0 -cero5];
+        zdes(conta,:) = [uno -cero5]
+        contador=+1;
+        conta=conta+1;
+        
+    elseif contador == 1
+%         zdes(conta,:) = [cero5 0 -uno];
+        zdes(conta,:) = [cero5 -uno];
+        conta=conta+1;
+        contador=contador+1;
+    elseif contador == 2
+%         zdes(conta,:) = [-cero5 0 -uno];
+        zdes(conta,:) = [-cero5 -uno];
+        conta=conta+1;
+        contador=contador+1; 
+    elseif contador == 3
+%         zdes(conta,:) = [-uno 0 -cero5];
+        zdes(conta,:) = [-uno -cero5];
+        conta=conta+1;
+        contador=contador+1;
+    elseif contador == 4
+%         zdes(conta,:) = [-uno 0 cero5];
+        zdes(conta,:) = [-uno cero5];
+        conta=conta+1;
+        contador=contador+1;
+    elseif contador == 5
+%         zdes(conta,:) = [-cero5 0 uno];
+        zdes(conta,:) = [-cero5 uno];
+        conta=conta+1;
+        contador=contador+1;
+    elseif contador == 6
+%         zdes(conta,:) = [cero5 0 uno];
+        zdes(conta,:) = [cero5 uno];
+        conta=conta+1;
+        contador=contador+1;
+    else
+        zdess=+1;    
+        zdes(conta,:) = [ -3 0 uno];
+%         zdes(conta,:) = [ -3 uno];
+        conta=conta+1;
+        contador = 0;
+        zdess = 0;
+        dif = dif +-3;
+    end 
+end
+end
 
 if bandada == 1;
 vbardir=vbar0/norm(vbar0);
@@ -254,7 +338,7 @@ zdes=[];
 R=4;
 NN=np-1;
 theta1=2*pi/(NN);
-phi=2*pi*rand(1)/8;
+phi=2*pi*rand(1)/8
 zdes(1,:)=-[R*cos(phi) R*sin(phi)];
 zdes(2,:)=-[R*cos(phi+theta1) R*sin(phi+theta1)]+[R*cos(phi) R*sin(phi)];
 
@@ -554,6 +638,7 @@ end
 %******** COMIENZO CODIGO 3D*************
 if dimension == 3
 
+
 set(handles.salir,'visible','off');
 set(handles.salir,'value',1);
 set(handles.cabeza,'visible','on');
@@ -729,27 +814,28 @@ zdes=zeros(np-1,ndim);
 % zdes(7,:)=[0 -5];
 
 % any number of agents - square grid shape
-% zdes=[];
-% ss=2;
-% ss1=0.5;
-% NN=ceil(sqrt(np)); % ceil redondea al numero entero mas cercano 
-% kk=1;
-% tt=0;
-% flagg=1;
-% while kk<=np-1 
-%     if kk-tt<=NN
-%         zdes(kk,:)=flagg*[0 ss -1];
-%         kk=kk+1;
-%         if kk-tt==NN&&kk~=np
-%             zdes(kk,:)=[ss 0 -2];
-%             tt=tt+NN;
-%             flagg=-flagg;
-%             kk=kk+1;
-%            
-%         end
-%     end
-% end
- 
+if cuadrado == 1
+zdes=[];
+ss=2;
+ss1=0.5;
+NN=ceil(sqrt(np)); % ceil redondea al numero entero mas cercano 
+kk=1;
+tt=0;
+flagg=1;
+while kk<=np-1 
+    if kk-tt<=NN
+        zdes(kk,:)=flagg*[0 ss -1];
+        kk=kk+1;
+        if kk-tt==NN&&kk~=np
+            zdes(kk,:)=[ss 0 -2];
+            tt=tt+NN;
+            flagg=-flagg;
+            kk=kk+1;
+           
+        end
+    end
+end
+end 
 % any number of agents - regular poligon with agent at the center
 % zdes=[];
 % R=8;
@@ -840,42 +926,44 @@ zdes=zeros(np-1,ndim);
 
 
 %%Paredes
-% conta=1;
-% contador=0;
-% zdess = 0;
-% while conta < np
-%     if contador == 0
-%         zdes(conta,:) = [-2 0 zdess];
-%         contador=+1;
-%         conta=conta+1;
-%     elseif contador == 1
-%         zdes(conta,:) = [0 -2 zdess];
-%         conta=conta+1;
-%         contador=contador+1;
-%     elseif contador == 2
-%         zdes(conta,:) = [2 0 zdess];
-%         conta=conta+1;
-%         contador=contador+1; 
-%     else
-%         zdess=+1;    
-%         zdes(conta,:) = [0 2 zdess];
-%         conta=conta+1;
-%         contador = 0;
-%         zdess = 0;
-%     end      
-% pause(0.01)    
-% end
-
+if paredes == 1
+conta=1;
+contador=0;
+zdess = 0;
+while conta < np
+    if contador == 0
+        zdes(conta,:) = [-2 0 zdess];
+        contador=+1;
+        conta=conta+1;
+    elseif contador == 1
+        zdes(conta,:) = [0 -2 zdess];
+        conta=conta+1;
+        contador=contador+1;
+    elseif contador == 2
+        zdes(conta,:) = [2 0 zdess];
+        conta=conta+1;
+        contador=contador+1; 
+    else
+        zdess=+1;    
+        zdes(conta,:) = [0 2 zdess];
+        conta=conta+1;
+        contador = 0;
+        zdess = 0;
+    end      
+pause(0.01)    
+end
+end
 %%circulo
 % zdes = [1 0 -0.5 ; 0.5 0 -1 ; -0.5 0 -1 ; -1 0 -0.5  ;-1 0 0.5 ; -0.5 0 1 ; 0.5 0 1];
 
 %%ciculos uno la lado del otro
+if circulo == 1
 conta=1;
 contador=0;
 zdess = 0;
 uno = 1;
 cero5 = 0.5;
-dif = 0
+dif = 0;
 while conta < np
     if contador == 0
         zdes(conta,:) = [uno 0 -cero5];
@@ -915,7 +1003,7 @@ while conta < np
     end      
 pause(0.01)    
 end
-
+ end
 %%
 %RK
 for i=1:nsteps-1
@@ -1524,11 +1612,13 @@ function uitable10_CellEditCallback(hObject, eventdata, handles)
 % --- Executes on selection change in popupmenu4.
 function popupmenu4_Callback(hObject, eventdata, handles)
 %%Menu desplegable para figuras de agentes %%%%
-global cuadrado bandada poligon elegir
+global cuadrado bandada poligon elegir circulo triangulo
 elegir = 0;
 cuadrado = 0;
 bandada = 0;
 poligon = 0;
+circulo = 0;
+triangulo = 0;
 v=get(handles.popupmenu4,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -1541,6 +1631,10 @@ switch v
         bandada = 1;
     case 4
         poligon = 1;
+    case 5
+        circulo = 1;
+    case 6
+        triangulo = 1;
     otherwise
         
     elegir = 1;
@@ -1695,3 +1789,76 @@ function popupmenu6_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on selection change in popupmenu7.
+function popupmenu7_Callback(hObject, eventdata, handles)
+global cuadrado paredes circulo elegir
+elegir = 0;
+cuadrado = 0;
+paredes = 0;
+circulo = 0;
+v=get(handles.popupmenu7,'Value')
+%bandada = get(handles.popupmenu4,'Value');
+
+switch v
+    
+        
+    case 2
+        cuadrado = 1;
+    case 3
+        paredes = 1;
+    case 4
+        circulo = 1;
+    otherwise
+        
+    elegir = 1;
+        
+end
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu7_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu8.
+function popupmenu8_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu8 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu8
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu8_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in radiobutton26.
+function radiobutton26_Callback(hObject, eventdata, handles)
+set(handles.popupmenu4,'Visible','on')
+set(handles.popupmenu7,'Visible','off')
+
+
+% --- Executes on button press in radiobutton27.
+function radiobutton27_Callback(hObject, eventdata, handles)
+set(handles.popupmenu4,'Visible','off')
+set(handles.popupmenu7,'Visible','on')
