@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 24-Nov-2020 13:18:26
+% Last Modified by GUIDE v2.5 25-Nov-2020 13:12:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -101,8 +101,10 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes circulo triangulo  
+ global paredes circulo triangulo piramide olympic  
  % reestablece nombre boton stop
+
+set (handles.pushbutton16, 'BackgroundColor' , 'yellow' );
 set(handles.stop,'String',"Stop")
 
     %%Codigo para ingresar cantidad de agentes 
@@ -114,7 +116,7 @@ if dimension ==2;
 a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 axis([a b])
 a=a+[-2 2];b=b+[-2 2];  
-    
+set (handles.pushbutton16, 'BackgroundColor' , 'green' )    
     
        
 set(handles.slider2,'MIN',0,'MAX',20000);
@@ -837,94 +839,106 @@ while kk<=np-1
 end
 end 
 % any number of agents - regular poligon with agent at the center
-% zdes=[];
-% R=8;
-% NN=np-1;
-% theta1=2*pi/(NN);
-% phi=2*pi*rand(1)/8;
-% zdes(1,:)=-[R*cos(phi) R*sin(phi) 0];
-% zdes(2,:)=-[R*cos(phi+theta1) R*sin(phi+theta1) 0]+[R*cos(phi) R*sin(phi) 0];
-% 
-% for i=3:NN
-%     zdes(i,:)=[R*cos(phi+theta1*(i-2)) R*sin(phi+theta1*(i-2)) 0]-[R*cos(phi+theta1*(i-1)) R*sin(phi+theta1*(i-1)) 0]+[0 0 i];
-% end
+if poligon == 1;
+zdes=[];
+R=8;
+NN=np-1;
+theta1=2*pi/(NN);
+phi=2*pi*rand(1)/8;
+zdes(1,:)=-[R*cos(phi) R*sin(phi) 0];
+zdes(2,:)=-[R*cos(phi+theta1) R*sin(phi+theta1) 0]+[R*cos(phi) R*sin(phi) 0];
+
+for i=3:NN
+    zdes(i,:)=[R*cos(phi+theta1*(i-2)) R*sin(phi+theta1*(i-2)) 0]-[R*cos(phi+theta1*(i-1)) R*sin(phi+theta1*(i-1)) 0]+[0 0 i];
+end
+end
     
 % % bird-like flocking
-% vbardir=vbar0/norm(vbar0);
-% anglevbdir=atan2(vbardir(2),vbardir(1));
-% 
-% for i=1:floor(np/2)
-%     zdes(i,:)=-[2*cos(anglevbdir-10*2*pi/180) 2*sin(anglevbdir-10*2*pi/180)];
-% end
-% 
-% for i=floor(np/2)+1:np-1
-%     zdes(i,:)=[2*cos(anglevbdir+10*2*pi/180) 2*sin(anglevbdir+10*2*pi/180)];
-% end
+if bandada==1
+vbardir=vbar0/norm(vbar0);
+anglevbdir=atan2(vbardir(2),vbardir(1));
 
+for i=1:floor(np/2)
+    zdes(i,:)=-[2*cos(anglevbdir-10*2*pi/180) 2*sin(anglevbdir-10*2*pi/180) 0];
+end
+
+for i=floor(np/2)+1:np-1
+    zdes(i,:)=[2*cos(anglevbdir+10*2*pi/180) 2*sin(anglevbdir+10*2*pi/180) 0];
+end
+end
 %olympic rings 2d
-% Nr = np/5; % agents per ring
-% Nr = np/5;
-% angle = linspace(0,(Nr-1)*2*pi/Nr,Nr);
-% 
-% xb = cos(angle) * 0.9;
-% yb = sin(angle) * 0.9;
-% 
-% xy = cos(angle+0.1) * 0.9 + 1;
-% yy = sin(angle+0.1) * 0.9 - 1;
-% 
-% xk = cos(angle+0.2) * 0.9 + 2;
-% yk = sin(angle+0.2) * 0.9;
-% 
-% xg = cos(angle+0.1) * 0.9 + 3;
-% yg = sin(angle+0.1) * 0.9 - 1;
-% 
-% xr = cos(angle+0.2) * 0.9 + 4;
-% yr = sin(angle+0.2) * 0.9;
-% zdes=[];
-% zdes(1,:)=-[xb(2) yb(2) 0]+[xb(1) yb(1) 0];
-% 
-% for i=2:np/5-1
-%     zdes(i,:)=[xb(i) yb(i) 0]-[xb(i+1) yb(i+1) 0];
-% end
-% i=np/5;
-% jj=1;
-% zdes(i,:)=[xb(i) yb(i) 0]-[xy(jj) yy(jj) 0];
-% for i=np/5+1:2*np/5-1
-%     zdes(i,:)=[xy(jj) yy(jj) 0]-[xy(jj+1) yy(jj+1) 0];
-%     jj=jj+1;
-% end
-% i=2*np/5;
-% zdes(i,:)=[xy(jj) yy(jj) 0]-[xk(1) yk(1) 0];
-% 
-% jj=1;
-% for i=2*np/5+1:3*np/5-1
-%     zdes(i,:)=[xk(jj) yk(jj) 0]-[xk(jj+1) yk(jj+1) 0];
-%     jj=jj+1;
-% end 
-% i=3*np/5;
-% zdes(i,:)=[xk(jj) yk(jj) 0]-[xr(1) yr(1) 0];
-% 
-% jj=1;
-% for i=3*np/5+1:4*np/5-1
-%     zdes(i,:)=[xr(jj) yr(jj) 0]-[xr(jj+1) yr(jj+1) 0];
-%     jj=jj+1;
-% end 
-% i=4*np/5;
-% zdes(i,:)=[xr(jj) yr(jj) 0]-[xg(1) yg(1) 0];
-% 
-% jj=1;
-% for i=4*np/5+1:np-1
-%     zdes(i,:)=[xg(jj) yg(jj) 0]-[xg(jj+1) yg(jj+1) 0];
-%     jj=jj+1;
-% end
+if olympic == 1
+Nr = np/5; % agents per ring
+Nr = np/5;
+angle = linspace(0,(Nr-1)*2*pi/Nr,Nr);
 
+xb = cos(angle) * 0.9;
+yb = sin(angle) * 0.9;
+
+xy = cos(angle+0.1) * 0.9 + 1;
+yy = sin(angle+0.1) * 0.9 - 1;
+
+xk = cos(angle+0.2) * 0.9 + 2;
+yk = sin(angle+0.2) * 0.9;
+
+xg = cos(angle+0.1) * 0.9 + 3;
+yg = sin(angle+0.1) * 0.9 - 1;
+
+xr = cos(angle+0.2) * 0.9 + 4;
+yr = sin(angle+0.2) * 0.9;
+zdes=[];
+zdes(1,:)=-[xb(2) yb(2) 0]+[xb(1) yb(1) 0];
+
+for i=2:np/5-1
+    zdes(i,:)=[xb(i) yb(i) 0]-[xb(i+1) yb(i+1) 0];
+end
+i=np/5;
+jj=1;
+zdes(i,:)=[xb(i) yb(i) 0]-[xy(jj) yy(jj) 0];
+for i=np/5+1:2*np/5-1
+    zdes(i,:)=[xy(jj) yy(jj) 0]-[xy(jj+1) yy(jj+1) 0];
+    jj=jj+1;
+end
+i=2*np/5;
+zdes(i,:)=[xy(jj) yy(jj) 0]-[xk(1) yk(1) 0];
+
+jj=1;
+for i=2*np/5+1:3*np/5-1
+    zdes(i,:)=[xk(jj) yk(jj) 0]-[xk(jj+1) yk(jj+1) 0];
+    jj=jj+1;
+end 
+i=3*np/5;
+zdes(i,:)=[xk(jj) yk(jj) 0]-[xr(1) yr(1) 0];
+
+jj=1;
+for i=3*np/5+1:4*np/5-1
+    zdes(i,:)=[xr(jj) yr(jj) 0]-[xr(jj+1) yr(jj+1) 0];
+    jj=jj+1;
+end 
+i=4*np/5;
+zdes(i,:)=[xr(jj) yr(jj) 0]-[xg(1) yg(1) 0];
+
+jj=1;
+for i=4*np/5+1:np-1
+    zdes(i,:)=[xg(jj) yg(jj) 0]-[xg(jj+1) yg(jj+1) 0];
+    jj=jj+1;
+end
+end
 %cuadrado
 % zdes = [0 2 -1;0 2 -1;2 0 -2; 0 -2 1]; 
 % cubo
 % zdes = [-2 0 0;0 -2 0;2 0 0; 0 2 -3;-2 0 0;0 -2 0;2 0 0];
 % zdes=[];
 
+if piramide == 1
+% zdes = [0 2 -1;0 2 -1;2 0 -2; 0 -2 1]; 
+%zdes = [6 0 0;3 -6 0]%triangulo
+zdes = [-3 0 0; 3 -3 0;-3 0 0;1.5 1.5 -5;0.5 0.5 2]
+% cubo
+%zdes = [-2 0 0;0 -2 0;2 0 0; 0 2 -3;-2 0 0;0 -2 0;2 0 0];
+% zdes=[];
 
+end
 %%Paredes
 if paredes == 1
 conta=1;
@@ -1192,6 +1206,7 @@ hold on
 if cabeza_agente == "Con cabeza"
 set(handles.cabeza,'visible','on'); 
 set(handles.cabezano,'visible','off');
+set (handles.pushbutton16, 'BackgroundColor' , 'green' ) 
 for kk=1:np
     
   %comment for removing trajectories
@@ -1251,10 +1266,10 @@ menu2 = [1:np];
 menu3=[];
 
  for  kk=1:np 
-%  plot3(squeeze(x(kk,1,1:ss)),squeeze(x(kk,2,1:ss)),squeeze(x(kk,3,1:ss)),'LineWidth',2','LineStyle','-')
-%  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)), '.','MarkerSize',15)
- plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(kk,:))
-menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+  axis([a b c])
+  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(kk,:))
+  menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
 v=get(handles.popupmenu6,'Value');
 set(handles.text22,'string',ceil(menu3(v,1))+" "+ceil(menu3(v,2))+" "+ceil(menu3(v,3)))
@@ -1326,6 +1341,7 @@ function text6_CreateFcn(hObject, eventdata, handles)
 function stop_Callback(hObject, eventdata, handles)
 global cuadrado bandada poligon
 
+set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
 set(handles.salir,'visible','off');
 set(handles.slider2,'Value',0)
 set(handles.slider7,'Value',0)
@@ -1793,12 +1809,15 @@ end
 
 % --- Executes on selection change in popupmenu7.
 function popupmenu7_Callback(hObject, eventdata, handles)
-global cuadrado paredes circulo elegir
+global cuadrado paredes circulo elegir bandada poligon olympic piramide
 elegir = 0;
 cuadrado = 0;
 paredes = 0;
 circulo = 0;
-v=get(handles.popupmenu7,'Value')
+bandada = 0;
+olympic = 0;
+piramide = 0;
+v=get(handles.popupmenu7,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
 switch v
@@ -1810,6 +1829,15 @@ switch v
         paredes = 1;
     case 4
         circulo = 1;
+    case 5
+        piramide=1;
+    case 6
+        bandada=1;
+    case 7   
+        poligon=1;
+    case 8
+        olympic=1;
+        
     otherwise
         
     elegir = 1;
@@ -1862,3 +1890,10 @@ set(handles.popupmenu7,'Visible','off')
 function radiobutton27_Callback(hObject, eventdata, handles)
 set(handles.popupmenu4,'Visible','off')
 set(handles.popupmenu7,'Visible','on')
+
+
+% --- Executes on button press in pushbutton16.
+function pushbutton16_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
