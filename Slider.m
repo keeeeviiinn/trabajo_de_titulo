@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 25-Nov-2020 13:12:26
+% Last Modified by GUIDE v2.5 25-Nov-2020 16:17:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -100,18 +100,21 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
+ 
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes circulo triangulo piramide olympic  
+ global paredes circulo triangulo piramide olympic dt 
  % reestablece nombre boton stop
 
-set (handles.pushbutton16, 'BackgroundColor' , 'yellow' );
+set(handles.pushbutton16, 'BackgroundColor' , 'yellow' );
 set(handles.stop,'String',"Stop")
 
+
+
     %%Codigo para ingresar cantidad de agentes 
-dimen = get(handles.edit10,'String');
-dimension = str2double(dimen);
-if dimension ==2;
-    
+dos = get(handles.radiobutton26,'Value');
+tres= get(handles.radiobutton27,'Value');
+if dos ==1;
+
   
 a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 axis([a b])
@@ -173,7 +176,7 @@ alpha=1.1;
 tf=20;
 pp=2; %potencia a la que esta elevada
 % np=5; %number of agents
-
+dt=0.001;
 
 end
 %OPCION DE PERSONALIZADO 
@@ -198,16 +201,17 @@ if deseado == 1
   M = str2double(v7);
   v7 = recibido(8,2);
   tf = str2double(v7);
+  v8 = recibido(9,2);
+  dt = str2double(v8)
   
   
 end
 
 
-ndim= dimension;
+ndim= 2;
 np=nppp;
 alpha1=10;
-ti=0;
-dt=.001;%.001 
+ti=0; 
 t=ti:dt:tf;
 nsteps=length(t);
 
@@ -238,31 +242,11 @@ if triangulo == 1
     
     val1=0;
     val2=5;
-    val3 = floor(np/2)
-    val4= vbar2(2), vbar2(1)
+    val3 = floor(np/2);
+    val4= vbar2(2), vbar2(1);
     
-%     vbardir=vbar0/norm(vbar0);
-%     anglevbdir=atan2(vbardir(2),vbardir(1));
-% 
-% for i=1:floor(np/2)
-%     zdes(i,:)=-[2*cos(anglevbdir-10*2*pi/180) 2*sin(anglevbdir-10*2*pi/180)];
-% end
-% 
-% for i=floor(np/2)+1:np-1
-%     zdes(i,:)=[2*cos(anglevbdir+10*2*pi/180) 2*sin(anglevbdir+10*2*pi/180)];
-% end
-for i= 1:floor(np/2)
-    zdes(i,:) = [val1 val2]%forma una linea 
 end
-
-for i=1:floor(np/2)+1:np
-    zdes(i,:) = [-8 -8]
-end
-% for cont= 1 
-%     zdes(miti,:) = [-cont contador]
-% end
-end
-%%%%%%% bird-like flocking %%%%%%%%%%%%%%%
+%%%%%%% CIRCULO2D %%%%%%%%%%%%%%%
 if circulo == 1
 conta=1;
 contador=0;
@@ -273,7 +257,7 @@ dif = 0;
 while conta < np
     if contador == 0
 %         zdes(conta,:) = [uno 0 -cero5];
-        zdes(conta,:) = [uno -cero5]
+        zdes(conta,:) = [uno -cero5];
         contador=+1;
         conta=conta+1;
         
@@ -319,6 +303,7 @@ while conta < np
 end
 end
 
+%%%%%%% bird-like flocking %%%%%%%%%%%%%%%
 if bandada == 1;
 vbardir=vbar0/norm(vbar0);
 anglevbdir=atan2(vbardir(2),vbardir(1));
@@ -340,7 +325,7 @@ zdes=[];
 R=4;
 NN=np-1;
 theta1=2*pi/(NN);
-phi=2*pi*rand(1)/8
+phi=2*pi*rand(1)/8;
 zdes(1,:)=-[R*cos(phi) R*sin(phi)];
 zdes(2,:)=-[R*cos(phi+theta1) R*sin(phi+theta1)]+[R*cos(phi) R*sin(phi)];
 
@@ -638,7 +623,7 @@ end
 
 
 %******** COMIENZO CODIGO 3D*************
-if dimension == 3
+if tres == 1
 
 
 set(handles.salir,'visible','off');
@@ -700,7 +685,8 @@ K=10;
 beta=0.1;
 alpha=1.1;
 alpha1=10;
-pp=4; 
+pp=4;
+dt=0.05;
 end
 %OPCION DE PERSONALIZADO 
 if deseado == 1
@@ -724,12 +710,14 @@ if deseado == 1
   M = str2double(v7);
   v7 = recibido(8,2);
   tf = str2double(v7);
+  v8 = recibido(9,2);
+  dt = str2double(v8)
 end
 
 np=nppp;%number of agents
-ndim=dimension;
+ndim=3;
 ti=0;
-dt=0.05; %simulation step
+ %simulation step
 t=ti:dt:tf;
 nsteps=length(t);
 gamma0=5;
@@ -933,7 +921,9 @@ end
 if piramide == 1
 % zdes = [0 2 -1;0 2 -1;2 0 -2; 0 -2 1]; 
 %zdes = [6 0 0;3 -6 0]%triangulo
-zdes = [-3 0 0; 3 -3 0;-3 0 0;1.5 1.5 -5;0.5 0.5 2]
+ zdes = [-3 0 0; 3 -3 0;-3 0 0;1.5 1.5 -5;0.5 0.5 2]
+
+ 
 % cubo
 %zdes = [-2 0 0;0 -2 0;2 0 0; 0 2 -3;-2 0 0;0 -2 0;2 0 0];
 % zdes=[];
@@ -1216,7 +1206,8 @@ for kk=1:np
   back = get(handles.radiobutton12,'Value');
   
   plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-  if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+    
+if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
      set(handles.salir,'visible','on');
      set(handles.salir,'value',0);
 %       a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
@@ -1340,7 +1331,8 @@ function text6_CreateFcn(hObject, eventdata, handles)
 %
 function stop_Callback(hObject, eventdata, handles)
 global cuadrado bandada poligon
-
+set(handles.original,'Value',1);
+set(handles.uitable10,'Visible','off')
 set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
 set(handles.salir,'visible','off');
 set(handles.slider2,'Value',0)
@@ -1604,12 +1596,26 @@ set(handles.uitable10,'Visible','off');
 
 % --- Executes on button press in deseado.
 function deseado_Callback(hObject, eventdata, handles)
-global np ndim sigma K beta pp flag alpha M zdes
-set(handles.uitable10,'Visible','on');
-A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final'};
-B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20'};
-variables = [A B];
-set(handles.uitable10,'data',variables);
+global np ndim sigma K beta pp flag alpha M zdes dt
+dos=get(handles.radiobutton26,'Value');
+tres=get(handles.radiobutton27,'Value');
+
+
+if dos==1
+    set(handles.uitable10,'Visible','on');
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001'};
+    variables = [A B];
+    set(handles.uitable10,'data',variables);
+end
+
+if tres == 1
+    set(handles.uitable10,'Visible','on');
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05'};
+    variables = [A B];
+    set(handles.uitable10,'data',variables);
+end
 
 
 
@@ -1884,16 +1890,131 @@ end
 function radiobutton26_Callback(hObject, eventdata, handles)
 set(handles.popupmenu4,'Visible','on')
 set(handles.popupmenu7,'Visible','off')
+set(handles.original,'Value',1);
+original=get(handles.original,'Value');
+
+if original == 1
+   set(handles.uitable10,'Visible','off') 
+end
 
 
 % --- Executes on button press in radiobutton27.
 function radiobutton27_Callback(hObject, eventdata, handles)
 set(handles.popupmenu4,'Visible','off')
 set(handles.popupmenu7,'Visible','on')
+set(handles.original,'Value',1); 
+original=get(handles.original,'Value');
 
+if original == 1
+   set(handles.uitable10,'Visible','off') 
+end
 
 % --- Executes on button press in pushbutton16.
 function pushbutton16_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton16 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+%******************************************************************
+%******************INCORPORACION DE CODIGOS EXTERIORES*************
+
+function [x]=csdynshape3d(xinit,u)
+global np ndim beta pp flag alpha zdes M K 
+
+flag2=0;
+if u==1
+    flag2=1;
+end
+u=zeros(np,ndim);
+
+a=zeros(np,np,ndim);
+f=zeros(np,np,ndim);
+distance=zeros(np,np);
+difv=zeros(np,np,ndim);
+difx=zeros(np,np,ndim);
+Np=np;
+x0=xinit(1:np,:);
+v0=xinit(np+1:2*np,:);
+mdiag=-eye(np);
+front=[[zeros(1,np-1);eye(np-1)] zeros(np,1)];
+back=[zeros(np,1) [eye(np-1);zeros(1,np-1)]];
+
+for i=1:np
+    distance(i,:)=sqrt(sum((repmat(x0(i,:),Np,1)-x0).^2,2));
+    difv(i,:,:)=v0-repmat(v0(i,:),Np,1);
+    difx(i,:,:)=-(x0-repmat(x0(i,:),Np,1));
+end
+distform=[];
+for i=1:np-1
+    %distance from desired formation
+    distform(i)=norm(x0(i,:)-x0(i+1,:)-zdes(i,:),2);
+end
+
+distance=distance+eye(length(distance)); %this is to avoid division by zero
+alignment=1*sqrt((0.5/np)*(sum(sum(difv(:,:,1).^2))+sum(sum(difv(:,:,2).^2))));
+for k=1:ndim;
+    a(:,:,k)=K*influence3d(distance,alpha).*difv(:,:,k);
+    f(:,:,k)=repulsion3d(distance,pp).*difx(:,:,k);
+end
+
+u(1,:)=-M*influenceu3d(distform(1),beta)*(x0(1,:)-x0(2,:)-zdes(1,:));
+u(Np,:)=M*influenceu3d(distform(Np-1),beta)*(x0(Np-1,:)-x0(Np,:)-zdes(Np-1,:));
+for i=2:Np-1
+    u(i,:)=M*influenceu3d(distform(i-1),beta)*(x0(i-1,:)-x0(i,:)-zdes(i-1,:))-M*influenceu3d(distform(i),beta)*(x0(i,:)-x0(i+1,:)-zdes(i,:));
+end
+
+%zdes=[z1 z2];
+%     temp=diag(distform,1);
+%     temp2=diag(distform,-1);
+%     distform=distform-diag(temp,1)+diag(temp2,1);
+%     for k=1:ndim;
+%         au(:,:,k)=influenceu(distform,beta).*(-difx(:,:,k)+(back-front)*zdes(:,k)).*(back+front);
+%     end
+%     u=squeeze(sum(au,2));
+
+% (1/np)*
+if flag2
+    u=u+[50 0;zeros(np-1,2)];
+end
+x(1:np,:)=v0;
+x(np+1:2*np,:)=squeeze(sum(a,2))./np+0*alignment*squeeze(sum(f,2))+1*u;
+%end
+
+%***************************FIN csdynshape3d***********************
+
+function [x]=RK43d(x0,u,dt,fun)
+global np ndim
+x=zeros(2*np,ndim);
+
+   p1=feval(fun,x0,u);
+   p2=feval(fun,x0+(dt/2)*p1,u);
+   p3=feval(fun,x0+(dt/2)*p2,u);
+   p4=feval(fun,x0+(dt)*p3,u);
+   x=x0+dt*((1/6)*p1+(1/3)*p2+(1/3)*p3+(1/6)*p4);
+   %x(:,:,k+1)=x(:,:,k)+dt*p1;
+   
+ %*************FIN RK43d ********************************************
+ 
+ function [a]=influenceu3d(distance,pow)
+a=1./((1+distance.^2).^pow);
+% a=((1./distance.^2).*pow);
+%  end
+
+%**************** FIN INFLUENCEU3D*********************************
+function [a]=influence3d(distance,pow)
+global sigma 
+if distance==0
+    a=0;
+else
+    a=1./((sigma+distance).^pow);
+end
+
+%*****************FIN INFLUENCE3D************************
+
+function [f]=repulsion3d(distance,pow)
+
+f=1./(distance-1e-10).^pow;
+% end
+
+%****************FIN REPULSION***************************
