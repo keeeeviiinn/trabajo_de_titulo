@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 25-Nov-2020 16:17:54
+% Last Modified by GUIDE v2.5 27-Nov-2020 11:50:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -115,7 +115,7 @@ dos = get(handles.radiobutton26,'Value');
 tres= get(handles.radiobutton27,'Value');
 if dos ==1;
 
-  
+
 a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 axis([a b])
 a=a+[-2 2];b=b+[-2 2];  
@@ -182,6 +182,18 @@ end
 %OPCION DE PERSONALIZADO 
 if deseado == 1
   recibido=get(handles.uitable10,'data');
+  
+  % recibido= get(handles.uitable10,'data');
+  caca = recibido(11,2)
+%   ecuacion = 
+  x=2;
+  y = [];
+  formula = inline(caca);
+  
+  for i=2
+      y=[y formula(x(i))]
+  end
+  
   
   
 %valores de la tabla
@@ -1012,7 +1024,7 @@ end
 %RK
 for i=1:nsteps-1
     %x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@cscdyn);
-    x(:,:,i+1)=RK43d(x(:,:,i),u(:,:,i),dt,@csdynshape3d);
+    x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@csdynshape3d);
     x0=squeeze(x(1:np,:,i+1));
     v0=squeeze(x(np+1:end,:,i+1));
     
@@ -1603,16 +1615,16 @@ tres=get(handles.radiobutton27,'Value');
 
 if dos==1
     set(handles.uitable10,'Visible','on');
-    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
-    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001'};
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; ' '; 'Influence';'Influenceu'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((sigma+distance).^pow)';'1./((1+distance.^2).^pow'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
 
 if tres == 1
     set(handles.uitable10,'Visible','on');
-    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
-    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05'};
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((sigma+distance).^pow)';'1./((1+distance.^2).^pow'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
@@ -1919,7 +1931,73 @@ function pushbutton16_Callback(hObject, eventdata, handles)
 %******************************************************************
 %******************INCORPORACION DE CODIGOS EXTERIORES*************
 
-function [x]=csdynshape3d(xinit,u)
+%**********************CODIGOS PARA 2D************************************
+
+function [x]=csdynmatlab(t,xinitt)
+global np ndim beta pp flag alpha zdes M K voldvi xnodevi aoldxvi aoldyvi An
+
+
+xinit=reshape(xinitt,2*np,ndim);
+a=zeros(np,np,ndim);
+a2=zeros(np,np,ndim);
+f=zeros(np,np,ndim);
+distance=zeros(np,np);
+difv=zeros(np,np,ndim);
+difx=zeros(np,np,ndim);
+Np=np;
+x0=xinit(1:np,:);
+v0=xinit(np+1:2*np,:);
+mdiag=-eye(np);
+front=[[zeros(1,np-1);eye(np-1)] zeros(np,1)];
+back=[zeros(np,1) [eye(np-1);zeros(1,np-1)]];
+
+for i=1:np
+    distance(i,:)=sqrt(sum((repmat(x0(i,:),Np,1)-x0).^2,2));
+    difv(i,:,:)=v0-repmat(v0(i,:),Np,1);
+    difx(i,:,:)=-(x0-repmat(x0(i,:),Np,1));
+end
+distform=[];
+for i=1:np-1
+    %distance from desired formation
+    distform(i)=norm(x0(i,:)-x0(i+1,:)-zdes(i,:),2);
+end
+
+distance=distance+eye(length(distance)); %this is to avoid division by zero
+alignment=1*sqrt((0.5/np)*(sum(sum(difv(:,:,1).^2))+sum(sum(difv(:,:,2).^2))));
+
+
+
+for k=1:ndim;
+    a(:,:,k)=K*influence(distance,alpha).*difv(:,:,k); %full observation influence
+    f(:,:,k)=repulsion(distance,pp).*difx(:,:,k);
+end
+
+u(1,:)=-M*influenceu(distform(1),beta)*(x0(1,:)-x0(2,:)-zdes(1,:));
+u(Np,:)=M*influenceu(distform(Np-1),beta)*(x0(Np-1,:)-x0(Np,:)-zdes(Np-1,:));
+for i=2:Np-1
+    u(i,:)=M*influenceu(distform(i-1),beta)*(x0(i-1,:)-x0(i,:)-zdes(i-1,:))-M*influenceu(distform(i),beta)*(x0(i,:)-x0(i+1,:)-zdes(i,:));
+end
+
+
+
+%zdes=[z1 z2];
+%     temp=diag(distform,1);
+%     temp2=diag(distform,-1);
+%     distform=distform-diag(temp,1)+diag(temp2,1);
+%     for k=1:ndim;
+%         au(:,:,k)=influenceu(distform,beta).*(-difx(:,:,k)+(back-front)*zdes(:,k)).*(back+front);
+%     end
+%     u=squeeze(sum(au,2));
+
+% (1/np)*
+x(1:np,:)=v0;
+x(np+1:2*np,:)=squeeze(sum(a,2))./Np+0*alignment*squeeze(sum(f,2))+1*u;
+x=x(:);
+%  end
+
+%*****************FIN CODIGO csdynmatlab PARA 2D*********************
+
+function [x]=csdynshape(xinit,u)
 global np ndim beta pp flag alpha zdes M K 
 
 flag2=0;
@@ -1954,14 +2032,85 @@ end
 distance=distance+eye(length(distance)); %this is to avoid division by zero
 alignment=1*sqrt((0.5/np)*(sum(sum(difv(:,:,1).^2))+sum(sum(difv(:,:,2).^2))));
 for k=1:ndim;
-    a(:,:,k)=K*influence3d(distance,alpha).*difv(:,:,k);
-    f(:,:,k)=repulsion3d(distance,pp).*difx(:,:,k);
+    a(:,:,k)=K*influence(distance,alpha).*difv(:,:,k);
+    f(:,:,k)=repulsion(distance,pp).*difx(:,:,k);
 end
 
-u(1,:)=-M*influenceu3d(distform(1),beta)*(x0(1,:)-x0(2,:)-zdes(1,:));
-u(Np,:)=M*influenceu3d(distform(Np-1),beta)*(x0(Np-1,:)-x0(Np,:)-zdes(Np-1,:));
+u(1,:)=-M*influenceu(distform(1),beta)*(x0(1,:)-x0(2,:)-zdes(1,:));
+u(Np,:)=M*influenceu(distform(Np-1),beta)*(x0(Np-1,:)-x0(Np,:)-zdes(Np-1,:));
 for i=2:Np-1
-    u(i,:)=M*influenceu3d(distform(i-1),beta)*(x0(i-1,:)-x0(i,:)-zdes(i-1,:))-M*influenceu3d(distform(i),beta)*(x0(i,:)-x0(i+1,:)-zdes(i,:));
+    u(i,:)=M*influenceu(distform(i-1),beta)*(x0(i-1,:)-x0(i,:)-zdes(i-1,:))-M*influenceu(distform(i),beta)*(x0(i,:)-x0(i+1,:)-zdes(i,:));
+end
+
+%zdes=[z1 z2];
+%     temp=diag(distform,1);
+%     temp2=diag(distform,-1);
+%     distform=distform-diag(temp,1)+diag(temp2,1);
+%     for k=1:ndim;
+%         au(:,:,k)=influenceu(distform,beta).*(-difx(:,:,k)+(back-front)*zdes(:,k)).*(back+front);
+%     end
+%     u=squeeze(sum(au,2));
+
+% (1/np)*
+if flag2
+    u=u+[50 0;zeros(np-1,2)];
+end
+x(1:np,:)=v0;
+x(np+1:2*np,:)=squeeze(sum(a,2))./np+0*alignment*squeeze(sum(f,2))+1*u;
+% end
+
+%*****************FIN CODIGO csdynshape PARA 2D**************
+
+
+
+
+
+%****************CODIGOS PARA 3D*******************************************
+function [x]=csdynshape3d(xinit,u)
+global np ndim beta pp flag alpha zdes M K 
+
+flag2=0;
+if u==1
+    flag2=1;
+end
+u=zeros(np,ndim);
+
+
+
+a=zeros(np,np,ndim);
+f=zeros(np,np,ndim);
+distance=zeros(np,np);
+difv=zeros(np,np,ndim);
+difx=zeros(np,np,ndim);
+Np=np;
+x0=xinit(1:np,:);
+v0=xinit(np+1:2*np,:);
+mdiag=-eye(np);
+front=[[zeros(1,np-1);eye(np-1)] zeros(np,1)];
+back=[zeros(np,1) [eye(np-1);zeros(1,np-1)]];
+
+for i=1:np
+    distance(i,:)=sqrt(sum((repmat(x0(i,:),Np,1)-x0).^2,2));
+    difv(i,:,:)=v0-repmat(v0(i,:),Np,1);
+    difx(i,:,:)=-(x0-repmat(x0(i,:),Np,1));
+end
+distform=[];
+for i=1:np-1
+    %distance from desired formation
+    distform(i)=norm(x0(i,:)-x0(i+1,:)-zdes(i,:),2);
+end
+
+distance=distance+eye(length(distance)); %this is to avoid division by zero
+alignment=1*sqrt((0.5/np)*(sum(sum(difv(:,:,1).^2))+sum(sum(difv(:,:,2).^2))));
+for k=1:ndim;
+    a(:,:,k)=K*influence(distance,alpha).*difv(:,:,k);
+    f(:,:,k)=repulsion(distance,pp).*difx(:,:,k);
+end
+
+u(1,:)=-M*influenceu(distform(1),beta)*(x0(1,:)-x0(2,:)-zdes(1,:));
+u(Np,:)=M*influenceu(distform(Np-1),beta)*(x0(Np-1,:)-x0(Np,:)-zdes(Np-1,:));
+for i=2:Np-1
+    u(i,:)=M*influenceu(distform(i-1),beta)*(x0(i-1,:)-x0(i,:)-zdes(i-1,:))-M*influenceu(distform(i),beta)*(x0(i,:)-x0(i+1,:)-zdes(i,:));
 end
 
 %zdes=[z1 z2];
@@ -1983,7 +2132,7 @@ x(np+1:2*np,:)=squeeze(sum(a,2))./np+0*alignment*squeeze(sum(f,2))+1*u;
 
 %***************************FIN csdynshape3d***********************
 
-function [x]=RK43d(x0,u,dt,fun)
+function [x]=RK4(x0,u,dt,fun)
 global np ndim
 x=zeros(2*np,ndim);
 
@@ -1993,28 +2142,68 @@ x=zeros(2*np,ndim);
    p4=feval(fun,x0+(dt)*p3,u);
    x=x0+dt*((1/6)*p1+(1/3)*p2+(1/3)*p3+(1/6)*p4);
    %x(:,:,k+1)=x(:,:,k)+dt*p1;
+
    
  %*************FIN RK43d ********************************************
  
- function [a]=influenceu3d(distance,pow)
-a=1./((1+distance.^2).^pow);
-% a=((1./distance.^2).*pow);
+ function [a]=influenceu(distance,pow)
+% recibido=get(handles.uitable10,'data');
+%valores de la tabla
+%     v2 = recibido(12,2);
+%     influenceuu = str2double(v2);
+    a=1./((1+distance.^2).^pow);
+%     a=influenceuu;
+% 
 %  end
 
 %**************** FIN INFLUENCEU3D*********************************
-function [a]=influence3d(distance,pow)
+function [a]=influence(distance,pow)
 global sigma 
+% recibido=get(handles.uitable10,'data');
 if distance==0
     a=0;
 else
+    %valores de la tabla
+%     v1 = recibido(11,2);
+%     influencee = str2double(v1);
     a=1./((sigma+distance).^pow);
+%     a = influencee;
 end
 
 %*****************FIN INFLUENCE3D************************
 
-function [f]=repulsion3d(distance,pow)
+function [f]=repulsion(distance,pow)
 
 f=1./(distance-1e-10).^pow;
 % end
 
 %****************FIN REPULSION***************************
+
+
+% --- Executes on button press in radiobutton28.
+function radiobutton28_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton28 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% dos=get(handles.radiobutton26,'Value');
+% tres=get(handles.radiobutton27,'Value');
+% ecuaciones=get(hanles.radiobutton28,'Value')
+% 
+% if ecuaciones == 0
+% 
+% if dos==1
+%     set(handles.uitable10,'Visible','on');
+%     A = {'influence';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
+%     B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001'};
+%     variables = [A B];
+%     set(handles.uitable10,'data',variables);
+% end
+% 
+% if tres == 1
+%     set(handles.uitable10,'Visible','on');
+%     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
+%     B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05'};
+%     variables = [A B];
+%     set(handles.uitable10,'data',variables);
+% end
+% end
