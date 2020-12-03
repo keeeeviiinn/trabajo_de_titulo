@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 27-Nov-2020 11:50:52
+% Last Modified by GUIDE v2.5 03-Dec-2020 19:43:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,8 +74,6 @@ varargout{1} = handles.output;
 
 
 
-
-
 % --- Executes during object creation, after setting all properties.
 function T_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to T (see GCBO)
@@ -102,9 +100,14 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes circulo triangulo piramide olympic dt 
+ global paredes circulo triangulo piramide olympic dt str1
  % reestablece nombre boton stop
 
+ 
+ 
+
+str1=get(handles.edit11,'String');
+ 
 set(handles.pushbutton16, 'BackgroundColor' , 'yellow' );
 set(handles.stop,'String',"Stop")
 
@@ -1023,6 +1026,7 @@ end
 %%
 %RK
 for i=1:nsteps-1
+     
     %x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@cscdyn);
     x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@csdynshape3d);
     x0=squeeze(x(1:np,:,i+1));
@@ -1504,11 +1508,11 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global np ndim sigma K beta pp flag alpha M zdes tf
-f = uifigure('Position', [100 100 300 265],'Color','White','Name','Obtención de datos');
+f = uifigure('Position', [100 100 300 265],'Color','White','Name','ObtenciÃ³n de datos');
     t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp;tf]);
     t.FontSize = 10;%alpha beta flag M sigma K pp   ;'Alpha' ;'Beta' ; 'Flag';'M' ;'Sigma' ;'K' ;'PP'
     t.ColumnName = {'Datos'};
-    t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP' 'Tiempo final'};
+    t.RowName = {'Agentes' 'DimensiÃ³n' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP' 'Tiempo final'};
     t.Position = [50 50 195 205];
 
 
@@ -1934,9 +1938,13 @@ function pushbutton16_Callback(hObject, eventdata, handles)
 %**********************CODIGOS PARA 2D************************************
 
 function [x]=csdynmatlab(t,xinitt)
-global np ndim beta pp flag alpha zdes M K voldvi xnodevi aoldxvi aoldyvi An
+global np ndim beta pp flag alpha zdes M K voldvi xnodevi aoldxvi aoldyvi An str1
 
 
+%influenceu=@(distance,pow)distance^5./((1+distance.^2).^pow); 
+%influenceu=@(distance,pow)0;
+
+influenceu=eval(str1{1});
 xinit=reshape(xinitt,2*np,ndim);
 a=zeros(np,np,ndim);
 a2=zeros(np,np,ndim);
@@ -2068,7 +2076,7 @@ x(np+1:2*np,:)=squeeze(sum(a,2))./np+0*alignment*squeeze(sum(f,2))+1*u;
 %****************CODIGOS PARA 3D*******************************************
 function [x]=csdynshape3d(xinit,u)
 global np ndim beta pp flag alpha zdes M K 
-
+influenceu=@(distance,pow)1./((1+distance.^2).^pow); 
 flag2=0;
 if u==1
     flag2=1;
@@ -2144,14 +2152,16 @@ x=zeros(2*np,ndim);
    %x(:,:,k+1)=x(:,:,k)+dt*p1;
 
    
+   
+ 
  %*************FIN RK43d ********************************************
  
- function [a]=influenceu(distance,pow)
+% function [a]=influenceu(distance,pow)
 % recibido=get(handles.uitable10,'data');
 %valores de la tabla
 %     v2 = recibido(12,2);
 %     influenceuu = str2double(v2);
-    a=1./((1+distance.^2).^pow);
+%    a=1./((1+distance.^2).^pow);
 %     a=influenceuu;
 % 
 %  end
@@ -2207,3 +2217,26 @@ function radiobutton28_Callback(hObject, eventdata, handles)
 %     set(handles.uitable10,'data',variables);
 % end
 % end
+
+
+
+function edit11_Callback(hObject, eventdata, handles)
+% hObject    handle to edit11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit11 as text
+%        str2double(get(hObject,'String')) returns contents of edit11 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit11_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
