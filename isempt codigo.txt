@@ -1,0 +1,7 @@
+para que si se ingresa un string, pero debe ser numero
+
+por ejemplo np=get(....)
+
+if isempt(str2num(np)==1) % si es una letra, lo toma como si el campo estuviera vacio
+set(handles.text,'String','Debe introducir numeros')
+end
