@@ -1,0 +1,3 @@
+//cambiar icono de app en java
+
+setIconImage(Toolkit.getDefaulToolkit().getImage(getClass().getResource("/carpeta/imagen.png")));

@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 03-Dec-2020 19:43:06
+% Last Modified by GUIDE v2.5 15-Dec-2020 14:44:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -100,13 +100,22 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes circulo triangulo piramide olympic dt str1
+ global paredes circulo triangulo piramide olympic dt str1 original deseado
  % reestablece nombre boton stop
 
  
  
 
-str1=get(handles.edit11,'String');
+% str1=get(handles.edit11,'String');
+if original ==1
+    str1 = @(distance,pow)1./((1+distance.^2).^pow);
+end
+
+if deseado ==1
+  recibido=get(handles.uitable10,'data');  
+ str1 = recibido(12,2);
+  
+end
  
 set(handles.pushbutton16, 'BackgroundColor' , 'yellow' );
 set(handles.stop,'String',"Stop")
@@ -168,6 +177,7 @@ deseado= get(handles.deseado,'Value');
 
 
 if original == 1
+% str1 = @(distance,pow)1./((1+distance.^2).^pow;    
     
 flag=0;
 M=50;
@@ -185,20 +195,11 @@ end
 %OPCION DE PERSONALIZADO 
 if deseado == 1
   recibido=get(handles.uitable10,'data');
+%   str1 = @(distance,pow)1./((1+distance.^2).^pow;
+%  v8 = recibido(9,2);
+%   str1 = str2double(v8)
   
-  % recibido= get(handles.uitable10,'data');
-  caca = recibido(11,2)
-%   ecuacion = 
-  x=2;
-  y = [];
-  formula = inline(caca);
-  
-  for i=2
-      y=[y formula(x(i))]
-  end
-  
-  
-  
+
 %valores de la tabla
   v1 = recibido(1,2);
   alpha = str2double(v1);
@@ -641,8 +642,7 @@ end
 if tres == 1
 
 
-set(handles.salir,'visible','off');
-set(handles.salir,'value',1);
+
 set(handles.cabeza,'visible','on');
 set(handles.cabeza,'String','Con cabeza');
 set(handles.cabezano,'String','Sin cabeza');
@@ -1188,7 +1188,7 @@ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
  zoom=get(handles.slider10,'Value')/10;
  cabeza_agente = get(handles.cabeza,'String');
  cabeza_agente2 = get(handles.cabezano,'String');
- salir=get(handles.salir,'value');
+ 
 %  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
 %  axis([a b c])
   grid on
@@ -1224,8 +1224,8 @@ for kk=1:np
   plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
     
 if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-     set(handles.salir,'visible','on');
-     set(handles.salir,'value',0);
+     
+     
 %       a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
 %       axis([a b c])
 %       xlim([x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex])
@@ -1240,8 +1240,7 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 %      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
      
   elseif zoom_agente == "Zoom Personal" & back == 1
-          set(handles.salir,'visible','on');
-          set(handles.salir,'value',0); 
+          
         a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
 %      a1=[x(o,2,ss)-zoom+ejey zoom+ejey];b1=[x(o,2,ss)-zoom zoom];c1=[x(o,2,ss)-zoom+ejex zoom+ejex];
 %      a2=[x(o,3,ss)-zoom+ejey zoom+ejey];b2=[x(o,3,ss)-zoom zoom];c2=[x(o,3,ss)-zoom+ejex zoom+ejex];
@@ -1253,10 +1252,7 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
             
   else
  
- if salir == 1
-  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
-  axis([a b c])
- end   
+   
   end
 %   plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
 %   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
@@ -1286,10 +1282,7 @@ pause(0.01)
  
  
  
-  view(-view11,view22)
- %   view(-5,10)
-% 
-% 
+view(-view11,view22)
 axis([a b c])
 sss=ss;
 % d=0;
@@ -1350,7 +1343,7 @@ global cuadrado bandada poligon
 set(handles.original,'Value',1);
 set(handles.uitable10,'Visible','off')
 set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
-set(handles.salir,'visible','off');
+% set(handles.salir,'visible','off');
 set(handles.slider2,'Value',0)
 set(handles.slider7,'Value',0)
 set(handles.radiobutton8,'Value',1)
@@ -1405,6 +1398,8 @@ function text9_CreateFcn(hObject, eventdata, handles)
 function nosotros_Callback(hObject, eventdata, handles)
 %
 function archivo_Callback(hObject, eventdata, handles)
+
+
 %
 function grabar_Callback(hObject, eventdata, handles)
 %
@@ -1620,7 +1615,7 @@ tres=get(handles.radiobutton27,'Value');
 if dos==1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; ' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((sigma+distance).^pow)';'1./((1+distance.^2).^pow'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((sigma+distance).^pow)';'@(distance,pow)1./((1+distance.^2).^pow)'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
@@ -1628,7 +1623,7 @@ end
 if tres == 1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((sigma+distance).^pow)';'1./((1+distance.^2).^pow'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((sigma+distance).^pow)';'@(distance,pow)1./((1+distance.^2).^pow)'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
@@ -1939,12 +1934,16 @@ function pushbutton16_Callback(hObject, eventdata, handles)
 
 function [x]=csdynmatlab(t,xinitt)
 global np ndim beta pp flag alpha zdes M K voldvi xnodevi aoldxvi aoldyvi An str1
-
+global original deseado
 
 %influenceu=@(distance,pow)distance^5./((1+distance.^2).^pow); 
 %influenceu=@(distance,pow)0;
-
+if original ==1
+    influenceu=@(distance,pow)1./((1+distance.^2).^pow);
+end
+if deseado ==1
 influenceu=eval(str1{1});
+end
 xinit=reshape(xinitt,2*np,ndim);
 a=zeros(np,np,ndim);
 a2=zeros(np,np,ndim);
@@ -2006,7 +2005,14 @@ x=x(:);
 %*****************FIN CODIGO csdynmatlab PARA 2D*********************
 
 function [x]=csdynshape(xinit,u)
-global np ndim beta pp flag alpha zdes M K 
+global np ndim beta pp flag alpha zdes M K original deseado str1
+
+if original ==1
+    influenceu=@(distance,pow)1./((1+distance.^2).^pow);
+end
+if deseado ==1
+influenceu=eval(str1{1});
+end
 
 flag2=0;
 if u==1
@@ -2075,8 +2081,15 @@ x(np+1:2*np,:)=squeeze(sum(a,2))./np+0*alignment*squeeze(sum(f,2))+1*u;
 
 %****************CODIGOS PARA 3D*******************************************
 function [x]=csdynshape3d(xinit,u)
-global np ndim beta pp flag alpha zdes M K 
-influenceu=@(distance,pow)1./((1+distance.^2).^pow); 
+global np ndim beta pp flag alpha zdes M K original deseado str1
+
+if original ==1
+    influenceu=@(distance,pow)1./((1+distance.^2).^pow);
+end
+if deseado ==1
+influenceu=eval(str1{1});
+end
+
 flag2=0;
 if u==1
     flag2=1;
@@ -2141,7 +2154,14 @@ x(np+1:2*np,:)=squeeze(sum(a,2))./np+0*alignment*squeeze(sum(f,2))+1*u;
 %***************************FIN csdynshape3d***********************
 
 function [x]=RK4(x0,u,dt,fun)
-global np ndim
+global np ndim deseado original str1
+
+if original ==1
+    influenceu=@(distance,pow)1./((1+distance.^2).^pow);
+end
+if deseado ==1
+influenceu=eval(str1{1});
+end
 x=zeros(2*np,ndim);
 
    p1=feval(fun,x0,u);
@@ -2193,30 +2213,7 @@ f=1./(distance-1e-10).^pow;
 % --- Executes on button press in radiobutton28.
 function radiobutton28_Callback(hObject, eventdata, handles)
 % hObject    handle to radiobutton28 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% dos=get(handles.radiobutton26,'Value');
-% tres=get(handles.radiobutton27,'Value');
-% ecuaciones=get(hanles.radiobutton28,'Value')
-% 
-% if ecuaciones == 0
-% 
-% if dos==1
-%     set(handles.uitable10,'Visible','on');
-%     A = {'influence';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
-%     B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001'};
-%     variables = [A B];
-%     set(handles.uitable10,'data',variables);
-% end
-% 
-% if tres == 1
-%     set(handles.uitable10,'Visible','on');
-%     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'};
-%     B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05'};
-%     variables = [A B];
-%     set(handles.uitable10,'data',variables);
-% end
-% end
+
 
 
 
@@ -2240,3 +2237,33 @@ function edit11_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function edit12_Callback(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit12 as text
+%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit12_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton17.
+function pushbutton17_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
