@@ -1618,7 +1618,7 @@ end
 if tres == 1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((sigma+distance).^pow)';'@(distance,pow)1./((1+distance.^2).^pow)'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((sigma+distance).^pow)';'1./((1+distance.^2).^pow'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
