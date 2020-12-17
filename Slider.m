@@ -22,7 +22,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 03-Dec-2020 19:43:06
+% Last Modified by GUIDE v2.5 17-Dec-2020 18:45:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -193,7 +193,7 @@ if distance == 0
     
     str2 = @(distance,pow)0;
 else
-str2 =@(distance,pow) 1./((sigma+distance).^pow);
+str2 =@(distance,pow)1./((sigma+distance).^pow);
 
 end
 flag=0;
@@ -621,9 +621,9 @@ for     i=1:np
           
         set (handles.pushbutton16, 'BackgroundColor' , 'green' )
         plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'LineWidth',2,'LineStyle','-')
-%         plot(x1(i,ss),x2(i,ss),'.','MarkerSize',20)
-         plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(i,:))
-        plot(x1(i,ss2),x2(i,ss2),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(i,:))
+%         plot(x1(i,18000-ss:ss),x2(i,18000-ss:ss),'LineWidth',2,'LineStyle','-')
+         plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+        plot(x1(i,ss2),x2(i,ss2),'Marker','.','MarkerSize',14,'MarkerFaceColor',col(i,:))
         
         
        
@@ -1337,7 +1337,7 @@ menu3=[];
  for  kk=1:np 
   a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
-  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(kk,:))
+  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
   menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
 v=get(handles.popupmenu6,'Value');
@@ -2317,3 +2317,12 @@ function edit11_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in estela.
+function estela_Callback(hObject, eventdata, handles)
+% hObject    handle to estela (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of estela
