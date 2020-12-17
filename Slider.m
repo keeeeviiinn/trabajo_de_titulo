@@ -100,16 +100,32 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes circulo triangulo piramide olympic dt str1 original deseado
+ global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado
  % reestablece nombre boton stop
 
  
- 
+
 
 % str1=get(handles.edit11,'String');
  
 set(handles.pushbutton16, 'BackgroundColor' , 'yellow' );
 set(handles.stop,'String',"Stop")
+
+npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
+nppp   = str2double(npp); %el valor de npp se convierte en un numer
+
+if nppp <= 1
+    set(handles.text8,'String','Ingrese valor mayor a 1')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
+    set(handles.stop,'String','Stop.')
+end
+if isnan (nppp)
+    set(handles.text8,'String','Ingrese valor numerico')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )
+    set(handles.stop,'String','Stop.')
+end
+
+
 
 
 
@@ -122,7 +138,7 @@ if dos ==1;
 a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 axis([a b])
 a=a+[-2 2];b=b+[-2 2];  
-set (handles.pushbutton16, 'BackgroundColor' , 'green' )    
+  
     
        
 set(handles.slider2,'MIN',0,'MAX',20000);
@@ -135,8 +151,11 @@ npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cua
 nppp   = str2double(npp); %el valor de npp se convierte en un numer
 if nppp <= 1
     set(handles.text8,'String','Ingrese valor mayor a 1')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+    set(handles.stop,'String','Stop.')
 elseif isnan (nppp)
     set(handles.text8,'String','Ingrese valor numerico')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
 
 
 else
@@ -168,7 +187,15 @@ deseado= get(handles.deseado,'Value');
 
 
 if original == 1
-str1=@(distance,pow)1./((1+distance.^2).^pow);   
+str1=@(distance,pow)1./((1+distance.^2).^pow); 
+
+if distance == 0
+    
+    str2 = @(distance,pow)0;
+else
+str2 =@(distance,pow) 1./((sigma+distance).^pow);
+
+end
 flag=0;
 M=50;
 %sigma=0 singular influence
@@ -186,7 +213,20 @@ end
 if deseado == 1
   recibido=get(handles.uitable10,'data');
   
-str1 = recibido(12,2);
+infl = recibido(12,2);
+str1 = @(distance,pow)eval(infl{1});
+
+
+if distance == 0
+    
+    str4 = @(distance,pow)0;
+else
+str2 = recibido(11,2);
+% str3 = eval(str2{1});
+str4 = @(distance,pow)eval(str2{1});
+
+end
+
 
 %valores de la tabla
   v1 = recibido(1,2);
@@ -206,7 +246,7 @@ str1 = recibido(12,2);
   v7 = recibido(8,2);
   tf = str2double(v7);
   v8 = recibido(9,2);
-  dt = str2double(v8)
+  dt = str2double(v8);
   
   
 end
@@ -236,7 +276,7 @@ vbar2=1/np*sum(v00,1);
 zdes=zeros(np-1,ndim);
 
 %%%% en caso de elegir la primera opcion de popmenu %%%
-
+set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )  
 if elegir == 1;
     set(handles.text8,'String','Elegir forma de agente')
     
@@ -323,7 +363,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%% any number of agents - regular poligon with agent at the center%%%
-
+set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )  
 if poligon == 1;
 zdes=[];
 R=4;
@@ -383,12 +423,19 @@ Gammap=0;
 Lambdap=0;
 Ec0p=0;
 D0=0;
+set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
 for i=1:np
     Ec0p=Ec0p+norm(v00(i,:),2).^2; %kinetic
     for j=1:np
         Gammap=Gammap+norm(x00(i,:)-x00(j,:),2).^2;
         Lambdap=Lambdap+norm(v00(i,:)-v00(j,:),2).^2;
-        D0=D0+0.5*(K/np)*influence(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
+    if original == 1
+        D0=D0+0.5*(K/np)*str2(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
+    end
+    
+    if deseado == 1
+       D0=D0+0.5*(K/np)*str4(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
+    end
     end
 end
 Ep0=0;
@@ -439,7 +486,7 @@ for i=1:np
         end
     end
 end
-
+set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         DD(1)=dd;
         % Theta(1)=theta;
         Gamma(1)=gamma0;
@@ -478,7 +525,7 @@ end
         zz = 1;
         ejexx=1;
         ejeyy=1;
-      
+ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )     
 while   dd==0
 
     stop=get(handles.stop,'String');
@@ -572,7 +619,7 @@ for     i=1:np
 %           ejex = ejex;
           
           
-        
+        set (handles.pushbutton16, 'BackgroundColor' , 'green' )
         plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'LineWidth',2,'LineStyle','-')
 %         plot(x1(i,ss),x2(i,ss),'.','MarkerSize',20)
          plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',12,'MarkerFaceColor',col(i,:))
@@ -647,15 +694,16 @@ set(handles.slider16,'Value',29);
 
 npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
 nppp   = str2double(npp); %el valor de npp se convierte en un numer
-% if nppp <= 9
-%     set(handles.text8,'String','Ingrese valor > o = a 10 agentes')
+
+% if nppp <= 1
+%     set(handles.text8,'String','Ingrese valor mayor a 1')
+%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
 % elseif isnan (nppp)
 %     set(handles.text8,'String','Ingrese valor numerico')
+%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
 % 
 % 
 % else
-
-% set(handles.text8,'String',' ')
 %%%%%%%
 % close all
 % clc
@@ -679,8 +727,19 @@ flagcolision=0;
 tic
 original= get(handles.original,'Value');
 deseado= get(handles.deseado,'Value');
+
 if original == 1
-str1=@(distance,pow)1./((1+distance.^2).^pow);
+
+str1=@(distance,pow)1./((1+distance.^2).^pow); 
+
+if distance == 0
+    
+    str2 = @(distance,pow)0;
+else
+str2 =@(distance,pow) 1./((sigma+distance).^pow);
+
+end
+
 flag=0;
 M=50;
 tf=400; %simulation time
@@ -696,7 +755,20 @@ end
 %OPCION DE PERSONALIZADO 
 if deseado == 1
   recibido=get(handles.uitable10,'data');
-  str1 = recibido(12,2);
+  infl = recibido(12,2);
+  
+str1 = @(distance,pow)eval(infl{1});
+
+
+if distance == 0
+    
+    str4 = @(distance,pow)0;
+else
+str2 = recibido(11,2);
+% str3 = eval(str2{1});
+str4 = @(distance,pow)eval(str2{1});
+
+end
   
 %valores de la tabla
   v1 = recibido(1,2);
@@ -716,7 +788,7 @@ if deseado == 1
   v7 = recibido(8,2);
   tf = str2double(v7);
   v8 = recibido(9,2);
-  dt = str2double(v8)
+  dt = str2double(v8);
 end
 
 np=nppp;%number of agents
@@ -1610,7 +1682,7 @@ tres=get(handles.radiobutton27,'Value');
 if dos==1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; ' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((sigma+distance).^pow)';'@(distance,pow)1./((1+distance.^2).^pow)'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
@@ -1618,7 +1690,7 @@ end
 if tres == 1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((sigma+distance).^pow)';'@(distance,pow)1./((1+distance.^2).^pow)'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
@@ -1929,17 +2001,19 @@ function pushbutton16_Callback(hObject, eventdata, handles)
 
 function [x]=csdynmatlab(t,xinitt)
 global np ndim beta pp flag alpha zdes M K voldvi xnodevi aoldxvi aoldyvi An str1
-global deseado original
+global deseado original str2 distance pow str3 str4 sigma
 
 %influenceu=@(distance,pow)distance^5./((1+distance.^2).^pow); 
 %influenceu=@(distance,pow)0;
 
 if original == 1
    influenceu = str1; 
+   influence = str2;
 end
 
 if deseado == 1
-   influenceu=eval(str1{1});
+   influenceu=str1;
+   influence = @(distance,pow)eval(str2{1});
 end
 xinit=reshape(xinitt,2*np,ndim);
 a=zeros(np,np,ndim);
@@ -2002,14 +2076,17 @@ x=x(:);
 %*****************FIN CODIGO csdynmatlab PARA 2D*********************
 
 function [x]=csdynshape(xinit,u)
-global np ndim beta pp flag alpha zdes M K str1 original deseado
+global np ndim beta pp flag distance pow alpha str4 zdes M K sigma str1 original deseado str2
 
 if original == 1
    influenceu = str1; 
+   influence = str2;
 end
 
 if deseado == 1
-   influenceu=eval(str1{1});
+   influenceu=str1;
+%    influence = @(distance,pow)eval(str2{1});
+    influence = str4;
 end
 
 flag2=0;
@@ -2171,14 +2248,14 @@ x=zeros(2*np,ndim);
 %  end
 
 %**************** FIN INFLUENCEU3D*********************************
-function [a]=influence(distance,pow)
-global sigma 
-if distance==0
-    a=0;
-else
-    a=1./((sigma+distance).^pow);
-
-end
+% function [a]=influence(distance,pow)
+% global sigma 
+% if distance==0
+%     a=0;
+% else
+%     a=1./((sigma+distance).^pow);
+% 
+% end
 
 %*****************FIN INFLUENCE3D************************
 
