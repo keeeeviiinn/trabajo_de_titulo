@@ -1,1 +1,28 @@
-probando
+Tareas
+
+Fecha limite domingo 20
+
+1.- Ingresar la funcion influenceu e influence desde la tabla para 2D y 3D (Kevin) Ok
+2.- Elegir metodo de resolucion de ecuaciones difernciales Rk4 o Ode23 (Claudio-Kevin) 
+3.- Agregar opcion de que el usuario elija los limites maximos de los slider de movimiento de los agentes (Porque con mas agente tarda mas puntos en llegar a converger en la figura deseada) (Claudio)
+4.- Que la cola siga a la cabeza simulando una estela (Kevin)
+5.- Ingresar los vectores de distacia euclediana por el usuario  (Claudio)
+6.- Arreglar el valor de la posicion de los agentes y incorporarlo a 2D (Claudio)
+
+Fecha limite domingo 27
+
+7.- Crear guia de laboratorio
+	- Explicacion funcionamiento de la distacia euclediana  (Claudio)
+	- Explicacion de las variables en el entorno grafico    (Kevin)
+	- Realizar ejercicios de figuras ingresando los vectores y variando variables, ejemplo variar M para evaluar es comportamiento de la simulacion (esto con todas las variables de la tabla) 
+	- Realizar tablas y esquemas obtenidos (en papel)
+	- Realizar preguntas teoricas
+8.- Documentar los temas de 2D y 3D
+
+Fecha por definir
+
+9.- Agregar opciones en la ventana guide
+	- Fotos de los graficos y tablas
+		
+10.- Ingresar velocidades y posiciones iniciales  (Pregunta al profesor)
+

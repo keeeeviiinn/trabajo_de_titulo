@@ -132,54 +132,19 @@ end
     %%Codigo para ingresar cantidad de agentes 
 dos = get(handles.radiobutton26,'Value');
 tres= get(handles.radiobutton27,'Value');
-if dos ==1;
 
+
+
+if dos ==1;
+slider = 20000;
+slider2 = 100;
+slider3 = 100;
+slider4 = 100;
 
 a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 axis([a b])
-a=a+[-2 2];b=b+[-2 2];  
-  
+a=a+[-2 2];b=b+[-2 2];     
     
-       
-set(handles.slider2,'MIN',0,'MAX',20000);
-set(handles.slider7,'MIN',0,'MAX',10000);
-set(handles.slider10,'MIN',1,'MAX',100);
-set(handles.ejey,'MIN',-100,'MAX',100);
-set(handles.ejex,'MIN',-100,'MAX',100);
-    
-npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
-nppp   = str2double(npp); %el valor de npp se convierte en un numer
-if nppp <= 1
-    set(handles.text8,'String','Ingrese valor mayor a 1')
-    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
-    set(handles.stop,'String','Stop.')
-elseif isnan (nppp)
-    set(handles.text8,'String','Ingrese valor numerico')
-    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
-
-
-else
-% set(handles.text8,'String',' ')
-%%%%%%%
-% close all
-% clc
-%function [value,th]=consensus3(gamma0,lambda0)
-set(handles.text8,'String','')
-set(handles.radiobutton8,'Value',0)
-set(handles.radiobutton11,'Value',0)
-set(handles.slider10,'Value',50)
-set(handles.pushbutton5,'String','Play')
-set(handles.pushbutton6,'String','Zoom Personal')
-set(handles.ejey,'Value',0)
-set(handles.ejex,'Value',0)
-set(handles.pushbutton9,'visible','on')
-movimiento = 0;%Movimiento automatico de los agentes mediante boton
-
-% datos = get(handles,uitable3,'Data');
-% datos(:,:) = [];
-% set(handles.uitable3,'Data',datos)
-
-
 flagcolision=0;
 tic
 original= get(handles.original,'Value');
@@ -247,9 +212,57 @@ end
   tf = str2double(v7);
   v8 = recibido(9,2);
   dt = str2double(v8);
+  v9 = recibido(13,2);
+  slider = str2double(v9)
+  v10 = recibido(14,2);
+  slider2 = str2double(v10)
+  v11 = recibido(15,2);
+  slider3 = str2double(v11)
+  v12 = recibido(16,2);
+  slider4 = str2double(v12)
   
   
-end
+end    
+    
+set(handles.slider2,'MIN',0,'MAX',slider);
+set(handles.slider7,'MIN',0,'MAX',slider);
+set(handles.slider10,'MIN',1,'MAX',slider4);
+set(handles.ejey,'MIN',-slider2,'MAX',slider2);
+set(handles.ejex,'MIN',-slider3,'MAX',slider3);
+    
+npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
+nppp   = str2double(npp); %el valor de npp se convierte en un numer
+if nppp <= 1
+    set(handles.text8,'String','Ingrese valor mayor a 1')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+    set(handles.stop,'String','Stop.')
+elseif isnan (nppp)
+    set(handles.text8,'String','Ingrese valor numerico')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+
+
+else    
+    
+% set(handles.text8,'String',' ')
+%%%%%%%
+% close all
+% clc
+%function [value,th]=consensus3(gamma0,lambda0)
+set(handles.text8,'String','')
+set(handles.radiobutton8,'Value',0)
+set(handles.radiobutton11,'Value',0)
+set(handles.slider10,'Value',50)
+set(handles.pushbutton5,'String','Play')
+set(handles.pushbutton6,'String','Zoom Personal')
+set(handles.ejey,'Value',0)
+set(handles.ejex,'Value',0)
+set(handles.pushbutton9,'visible','on')
+movimiento = 0;%Movimiento automatico de los agentes mediante boton
+
+% datos = get(handles,uitable3,'Data');
+% datos(:,:) = [];
+% set(handles.uitable3,'Data',datos)
+
 
 
 ndim= 2;
@@ -526,7 +539,21 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         ejexx=1;
         ejeyy=1;
  set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )     
-while   dd==0
+
+ 
+ [xx2,yy2,zz2] = size(x);
+xx2
+yy2
+zz2
+
+if zz2 <= slider
+    
+set(handles.slider2,'MIN',0,'MAX',zz);
+set(handles.slider7,'MIN',0,'MAX',zz);
+
+end
+ 
+ while   dd==0
 
     stop=get(handles.stop,'String');
     if stop == "Stop."
@@ -675,56 +702,12 @@ end
 
 %******** COMIENZO CODIGO 3D*************
 if tres == 1
-
-
-set(handles.salir,'visible','off');
-set(handles.salir,'value',1);
-set(handles.cabeza,'visible','on');
-set(handles.cabeza,'String','Con cabeza');
-set(handles.cabezano,'String','Sin cabeza');
-set(handles.slider2,'MIN',0,'MAX',101);
-set(handles.slider7,'MIN',0,'MAX',101);
-set(handles.slider10,'MIN',1,'MAX',100);
-set(handles.ejey,'MIN',-100,'MAX',100);
-set(handles.ejex,'MIN',-100,'MAX',100); 
-set(handles.slider15,'Value',-38);
-set(handles.slider16,'Value',29);
-
-
-
-npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
-nppp   = str2double(npp); %el valor de npp se convierte en un numer
-
-% if nppp <= 1
-%     set(handles.text8,'String','Ingrese valor mayor a 1')
-%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
-% elseif isnan (nppp)
-%     set(handles.text8,'String','Ingrese valor numerico')
-%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
-% 
-% 
-% else
-%%%%%%%
-% close all
-% clc
-%function [value,th]=consensus3(gamma0,lambda0)
-set(handles.text8,'String','')
-set(handles.radiobutton8,'Value',0)
-set(handles.radiobutton11,'Value',0)
-set(handles.slider10,'Value',50)
-set(handles.pushbutton5,'String','Play')
-set(handles.pushbutton6,'String','Zoom Personal')
-set(handles.ejey,'Value',0)
-set(handles.ejex,'Value',0)
-set(handles.pushbutton9,'visible','on')
-set(handles.slider15,'Visible','on');
-set(handles.slider16,'Visible','on');
-set(handles.text21,'Visible','on');
-movimiento = 0;%Movimiento automatico de los agentes mediante boton
- 
-
 flagcolision=0;
 tic
+slider = 101;
+slider2 = 100;
+slider3 = 100;
+slider4 = 100;
 original= get(handles.original,'Value');
 deseado= get(handles.deseado,'Value');
 
@@ -772,7 +755,7 @@ end
   
 %valores de la tabla
   v1 = recibido(1,2);
-  alpha = str2double(v1)
+  alpha = str2double(v1);
   v2 = recibido(2,2);
   beta = str2double(v2);
   v3 = recibido(3,2);
@@ -789,7 +772,62 @@ end
   tf = str2double(v7);
   v8 = recibido(9,2);
   dt = str2double(v8);
+  v9 = recibido(13,2);
+  slider = str2double(v9)
+  v10 = recibido(14,2);
+  slider2 = str2double(v10)
+  v11 = recibido(15,2);
+  slider3 = str2double(v11)
+  v12 = recibido(16,2);
+  slider4 = str2double(v12)
+  
 end
+
+set(handles.salir,'visible','off');
+set(handles.salir,'value',1);
+set(handles.cabeza,'visible','on');
+set(handles.cabeza,'String','Con cabeza');
+set(handles.cabezano,'String','Sin cabeza');
+set(handles.slider2,'MIN',0,'MAX',slider);
+set(handles.slider7,'MIN',0,'MAX',slider);
+set(handles.slider10,'MIN',1,'MAX',slider4);
+set(handles.ejey,'MIN',-slider2,'MAX',slider2);
+set(handles.ejex,'MIN',-slider3,'MAX',slider3); 
+set(handles.slider15,'Value',-38);
+set(handles.slider16,'Value',29);
+
+
+
+npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
+nppp   = str2double(npp); %el valor de npp se convierte en un numer
+
+% if nppp <= 1
+%     set(handles.text8,'String','Ingrese valor mayor a 1')
+%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+% elseif isnan (nppp)
+%     set(handles.text8,'String','Ingrese valor numerico')
+%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+% 
+% 
+% else
+%%%%%%%
+% close all
+% clc
+%function [value,th]=consensus3(gamma0,lambda0)
+set(handles.text8,'String','')
+set(handles.radiobutton8,'Value',0)
+set(handles.radiobutton11,'Value',0)
+set(handles.slider10,'Value',50)
+set(handles.pushbutton5,'String','Play')
+set(handles.pushbutton6,'String','Zoom Personal')
+set(handles.ejey,'Value',0)
+set(handles.ejex,'Value',0)
+set(handles.pushbutton9,'visible','on')
+set(handles.slider15,'Visible','on');
+set(handles.slider16,'Visible','on');
+set(handles.text21,'Visible','on');
+movimiento = 0;%Movimiento automatico de los agentes mediante boton
+ 
 
 np=nppp;%number of agents
 ndim=3;
@@ -1167,6 +1205,18 @@ view1=19;
 view2=48;
 movim = 1;
 
+%valores filas xx columnas yy dimension zz de la matriz z
+[xx,yy,zz] = size(x);
+xx
+yy
+zz
+
+if zz <= slider
+    
+set(handles.slider2,'MIN',0,'MAX',zz);
+set(handles.slider7,'MIN',0,'MAX',zz);
+
+end
 
   while dd ==0
 
@@ -1681,16 +1731,16 @@ tres=get(handles.radiobutton27,'Value');
 
 if dos==1
     set(handles.uitable10,'Visible','on');
-    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; ' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)'};
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; ' '; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'101';'100';'100';'100' };
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
 
 if tres == 1
     set(handles.uitable10,'Visible','on');
-    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu'};
-    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)'};
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'101';'100';'100';'100'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
