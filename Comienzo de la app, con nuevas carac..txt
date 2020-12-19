@@ -4,10 +4,10 @@ Fecha limite domingo 20
 
 1.- Ingresar la funcion influenceu e influence desde la tabla para 2D y 3D (Kevin) Ok
 2.- Elegir metodo de resolucion de ecuaciones difernciales Rk4 o Ode23 (Claudio-Kevin) 
-3.- Agregar opcion de que el usuario elija los limites maximos de los slider de movimiento de los agentes (Porque con mas agente tarda mas puntos en llegar a converger en la figura deseada) (Claudio)
+3.- Agregar opcion de que el usuario elija los limites maximos de los slider de movimiento de los agentes (Porque con mas agente tarda mas puntos en llegar a converger en la figura deseada) (Claudio) Ok
 4.- Que la cola siga a la cabeza simulando una estela (Kevin)
 5.- Ingresar los vectores de distacia euclediana por el usuario  (Claudio)
-6.- Arreglar el valor de la posicion de los agentes y incorporarlo a 2D (Claudio)
+6.- Arreglar el valor de la posicion de los agentes y incorporarlo a 2D (Claudio) Ok
 
 Fecha limite domingo 27
 

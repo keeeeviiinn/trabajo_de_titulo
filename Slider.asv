@@ -102,8 +102,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
  global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado
  % reestablece nombre boton stop
-set(handles.popupmenu6,'Visible','on')
-set(handles.text22,'Visible','on')
+
  
 
 
@@ -714,7 +713,7 @@ menu = [1:np];
     set(handles.popupmenu3,'string',menu)
  end
 set(handles.popupmenu6,'Visible','off')
-set(handles.text22,'Visible','off')
+set(handles.popu,'Visible','off')
 end
 cla reset
 end
@@ -1142,7 +1141,6 @@ while conta < np
     end      
 pause(0.01)    
 end
-
  end
 %%
 %RK
@@ -1441,8 +1439,7 @@ view2=view1;
 menu = [1:np]; 
     set(handles.popupmenu3,'string',menu)
 end    
-set(handles.popupmenu6,'Visible','off')
-set(handles.text22,'Visible','off')
+
 % end
 cla reset
 end
