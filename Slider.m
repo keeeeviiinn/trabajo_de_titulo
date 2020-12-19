@@ -1,3 +1,6 @@
+
+
+
 function varargout = Slider(varargin)
 % SLIDER MATLAB code for Slider.fig
 %      SLIDER, by itself, creates a new SLIDER or raises the existing
@@ -22,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 17-Dec-2020 18:45:16
+% Last Modified by GUIDE v2.5 18-Dec-2020 23:56:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,10 +57,13 @@ function Slider_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for Slider
 handles.output = hObject;
-
 % Update handles structure
 guidata(hObject, handles);
+ global vectoresAgentes vector;
+ vectoresAgentes = [];
 
+ vector = 1
+ 
 % UIWAIT makes Slider wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -100,12 +106,33 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado
+ global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo vectoresAgentes vector
  % reestablece nombre boton stop
 set(handles.popupmenu6,'Visible','on')
 set(handles.text22,'Visible','on')
  
-
+vectoresAgentes
+tamanio = size(vectoresAgentes);
+fila = tamanio(1,1);
+columna =tamanio(1,2);
+restr = tamanio(1,1);
+conta = [];
+conta2 = [];
+conta3 = [];
+contador = 0;
+for i=1:fila
+    conta = vectoresAgentes(i,:)
+    for j=1:columna
+        conta2 = conta(1,j)
+%         conta3 = conta(j,1)
+        if isnan(conta2)
+            contador = 1;
+        end
+    end
+end
+% for i=1:columna;
+%     conta2 = vectoresAgentes(:,i)
+% end
 
 % str1=get(handles.edit11,'String');
  
@@ -126,7 +153,18 @@ if isnan (nppp)
     set(handles.stop,'String','Stop.')
 end
 
+if (tamanio(1,1)~= (nppp-1)|| contador ==1 ) && (get(handles.popupmenu7,'Value')== 9 || get(handles.popupmenu4,'Value') == 7)
+    vectoresAgentes = [];
+    vector = 1;
+    tamanio = [];
+    restr = 0;
+    set(handles.text8,'String','Ingrese la cantidad correcta de vectores')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )
+    set(handles.stop,'String','Stop.')
+    
+else
 
+    set(handles.text8,'String',' ')
 
 
 
@@ -361,7 +399,12 @@ while conta < np
     end 
 end
 end
+%%
+if creativo == 1
 
+    zdes = [vectoresAgentes];
+end
+%%
 %%%%%%% bird-like flocking %%%%%%%%%%%%%%%
 if bandada == 1;
 vbardir=vbar0/norm(vbar0);
@@ -414,6 +457,7 @@ while kk<=np-1
         end
     end
 end
+zdes
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -730,6 +774,10 @@ slider3 = 100;
 slider4 = 100;
 original= get(handles.original,'Value');
 deseado= get(handles.deseado,'Value');
+
+vectoresAgentes
+tamanio = size(vectoresAgentes)
+tamanio(1,1)
 
 if original == 1
 
@@ -1143,7 +1191,12 @@ while conta < np
 pause(0.01)    
 end
 
- end
+end
+ 
+if creativo == 1
+    zdes = [vectoresAgentes]
+end
+
 %%
 %RK
 for i=1:nsteps-1
@@ -1448,6 +1501,7 @@ cla reset
 end
 %******** FIN CODIGO 3D *****************
 
+end
 
 
 
@@ -1490,7 +1544,24 @@ end
 function text6_CreateFcn(hObject, eventdata, handles)
 %
 function stop_Callback(hObject, eventdata, handles)
-global cuadrado bandada poligon
+global cuadrado bandada poligon vector vectoresAgentes;
+vectoresAgentes = [];
+vector = 1;
+
+set(handles.text28,'Visible','off')
+set(handles.edit12,'Visible','off')
+set(handles.edit13,'Visible','off')
+set(handles.edit14,'Visible','off')
+set(handles.text25,'Visible','off')
+set(handles.text26,'Visible','off')
+set(handles.text27,'Visible','off')
+set(handles.pushbutton17,'Visible','off')
+
+set(handles.edit12,'String',' ')
+set(handles.edit13,'String',' ')
+set(handles.edit14,'String',' ')
+
+
 set(handles.popupmenu6,'String','Agent position')
 set(handles.original,'Value',1);
 set(handles.uitable10,'Visible','off')
@@ -1530,7 +1601,7 @@ set(handles.cabezano,'visible','off');
 % end
 
 cla reset
-
+    
 
 
 %
@@ -1795,13 +1866,14 @@ function uitable10_CellEditCallback(hObject, eventdata, handles)
 % --- Executes on selection change in popupmenu4.
 function popupmenu4_Callback(hObject, eventdata, handles)
 %%Menu desplegable para figuras de agentes %%%%
-global cuadrado bandada poligon elegir circulo triangulo
+global cuadrado bandada poligon elegir circulo triangulo creativo
 elegir = 0;
 cuadrado = 0;
 bandada = 0;
 poligon = 0;
 circulo = 0;
 triangulo = 0;
+creativo = 0;
 v=get(handles.popupmenu4,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -1818,6 +1890,19 @@ switch v
         circulo = 1;
     case 6
         triangulo = 1;
+    case 7
+        creativo = 1;
+        set(handles.text28,'Visible','on')
+        set(handles.edit12,'Visible','on')
+        set(handles.edit13,'Visible','on')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','on')
+        set(handles.text26,'Visible','on')
+        set(handles.text25,'String','x')
+        set(handles.text26,'String','y')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'String','Ingrese Vectores')
+        set(handles.pushbutton17,'Visible','on')
     otherwise
         
     elegir = 1;
@@ -1976,7 +2061,7 @@ end
 
 % --- Executes on selection change in popupmenu7.
 function popupmenu7_Callback(hObject, eventdata, handles)
-global cuadrado paredes circulo elegir bandada poligon olympic piramide
+global cuadrado paredes circulo elegir bandada poligon olympic piramide creativo
 elegir = 0;
 cuadrado = 0;
 paredes = 0;
@@ -1984,6 +2069,7 @@ circulo = 0;
 bandada = 0;
 olympic = 0;
 piramide = 0;
+creativo = 0;
 v=get(handles.popupmenu7,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -2004,6 +2090,20 @@ switch v
         poligon=1;
     case 8
         olympic=1;
+    case 9
+        creativo=1;
+        set(handles.text28,'Visible','on')
+        set(handles.edit12,'Visible','on')
+        set(handles.edit13,'Visible','on')
+        set(handles.edit14,'Visible','on')
+        set(handles.text25,'Visible','on')
+        set(handles.text26,'Visible','on')
+        set(handles.text27,'Visible','on')
+        set(handles.text25,'String','x')
+        set(handles.text26,'String','y')
+        set(handles.text27,'String','z')
+        set(handles.text28,'String','Ingrese Vectores')
+        set(handles.pushbutton17,'Visible','on')
         
     otherwise
         
@@ -2409,3 +2509,114 @@ function estela_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of estela
+
+
+% --- Executes on button press in pushbutton17.
+function pushbutton17_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global vectoresAgentes  vector;
+
+vectorx = get(handles.edit12,'String')
+vectory = get(handles.edit13,'String')
+vectorz = get(handles.edit14,'String')
+
+cont = 3;
+dim = get(handles.radiobutton26,'Value');
+if dim == 1
+    cont = 2;
+end
+
+vectorx;
+vectory;
+vectorz;
+
+vectoresAgentes (vector,1)= [str2double(vectorx)];
+set(handles.text25,'String',vectoresAgentes(vector,1));
+set(handles.pushbutton17,'Value',0);
+
+vectoresAgentes (vector,2)= [str2double(vectory)];
+set(handles.text26,'String',vectoresAgentes(vector,2));
+set(handles.pushbutton17,'Value',0);
+
+if cont == 3
+vectoresAgentes (vector,3)= [str2double(vectorz)];
+set(handles.text27,'String',vectoresAgentes(vector,3));
+set(handles.pushbutton17,'Value',0);
+end 
+vectoresAgentes;
+vector 
+set(handles.text28,'String',"Ingresado Vector "+vector)
+
+vector=vector+1;
+
+
+
+
+function edit12_Callback(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit12 as text
+%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit12_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit13_Callback(hObject, eventdata, handles)
+% hObject    handle to edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit13 as text
+%        str2double(get(hObject,'String')) returns contents of edit13 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit13_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit14_Callback(hObject, eventdata, handles)
+% hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit14 as text
+%        str2double(get(hObject,'String')) returns contents of edit14 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit14_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
