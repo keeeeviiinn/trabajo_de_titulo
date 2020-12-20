@@ -553,6 +553,12 @@ for i=1:np
     end
 end
 set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
+
+% recibido=get(handles.uitable10,'data');
+% stringsolver = recibido(10,2);
+% solver = eval(stringsolver{1});
+
+%         if solver == "ode23"
         DD(1)=dd;
         % Theta(1)=theta;
         Gamma(1)=gamma0;
@@ -579,6 +585,63 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         v1=X(np+1:2*np,:); % desde np + 1 hasta 2np tenemos la velocidad en el ejex
         v2=X(3*np+1:4*np,:);
         %%%%%%%
+%         end
+        
+      %  if solver == "RK4" || solver == "rk4" 
+            %RK
+%             for i=1:nsteps-1
+%      
+%                 %x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@cscdyn);
+%                 x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@csdynshape);
+%                 x0=squeeze(x(1:np,:,i+1));
+%                 v0=squeeze(x(np+1:end,:,i+1));
+%     
+%                 %for i=1:np
+%                 %distform(i,:)=sqrt(sum((repmat(x0(i,:),np,1)-x0-repmat(zdes,np,1)).^2,2));
+% %               end
+%                 gamma=0;
+%                 lambda=0;
+%                 theta=0;
+%                 dd=NaN;
+%                 vbbb=0;
+%                 %lambda gamma theta and dd
+%                 for ii=1:np
+%                     for jj=1:np
+%                         gamma=gamma+norm(x0(ii,:)-x0(jj,:),2).^2;
+%                         lambda=lambda+norm(v0(ii,:)-v0(jj,:),2).^2;
+%                     end
+%                     if ii<np
+%                         %theta=theta+norm(x0(ii,:)-x0(ii+1,:)-zdes,2).^2;
+%                     end
+%                     if ii~=jj
+%                         dd=min(norm(x0(ii,:)-x0(jj,:),2).^2,dd);
+%                     end
+%         
+%                 end
+%                 % Theta(i+1)=theta/(np-1);
+%                 Gamma(i+1)=1/(2*np^2)*gamma;
+%                 Lambda(i+1)=1/(2*np^2)*lambda;
+%                 %????
+%                 if dd<=1e-20 
+%                 flagcolision=1;
+%                 end
+%                 DD(i+1)=dd;
+%                 VB(i+1,:)=1/np*sum(v0,1);
+%         %       tests to stop if consensus is likely or unlikely to be achieved (for
+%     %            bench)
+% %               if i>=501 
+% %               test=sum(Lambda(i-150:i));
+% %               test2=sum(Theta(i-150:i));
+% %               if test<=1||test2>=1000
+% %               break
+% %               toc
+% %               end
+% %               end    
+%     
+%             end
+            
+      %  end
+        
         col = jet(1);
         hold on
         d=1;
@@ -796,9 +859,9 @@ slider4 = 100;
 original= get(handles.original,'Value');
 deseado= get(handles.deseado,'Value');
 
-vectoresAgentes
-tamanio = size(vectoresAgentes)
-tamanio(1,1)
+vectoresAgentes;
+tamanio = size(vectoresAgentes);
+tamanio(1,1);
 
 if original == 1
 
@@ -1219,6 +1282,36 @@ if creativo == 1
 end
 
 %%
+
+% recibido=get(handles.uitable10,'data');
+% stringsolver = recibido(10,2);
+% solver = eval(stringsolver{1});
+
+% if solver == "ode23"
+%%%ODE23%%%%
+
+%         %energy
+%         Ec=zeros(1,length(0:dt:tf));
+%         Ep=zeros(1,length(0:dt:tf));
+%         Ec(1)=Ec0p/2;
+%         Ep(1)=Ep0;
+%         DD=zeros(1,length(0:dt:tf));
+%         DD(1)=D0;
+        
+%         %ode23s%%%
+%         xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2)];
+%         [t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt); % resuelve el sistema de ecuaciones diferenciales con el solver "ode23"
+%         X=X';
+%         ftime=length(t);
+%         x1=X(1:np,:); 
+%         x2=X(2*np+1:3*np,:);
+%         v1=X(np+1:2*np,:); % desde np + 1 hasta 2np tenemos la velocidad en el ejex
+%         v2=X(3*np+1:4*np,:);
+%         %%%%%%%
+%end
+
+
+%if solver == "RK4" || solver== "rk4"
 %RK
 for i=1:nsteps-1
      
@@ -1270,6 +1363,8 @@ for i=1:nsteps-1
 %     end    
     
 end
+% end
+
 toc
 
 value=Lambda(end);
@@ -1516,7 +1611,7 @@ set(handles.cabezano,'visible','on');
   a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
   if estela == 0
-            plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+%             plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
         end
         
         if estela == 1
@@ -1904,16 +1999,16 @@ tres=get(handles.radiobutton27,'Value');
 
 if dos==1
     set(handles.uitable10,'Visible','on');
-    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; ' '; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
-    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'101';'100';'100';'100' };
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; 'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';'ode23s';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'20001';'100';'100';'100' };
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
 
 if tres == 1
     set(handles.uitable10,'Visible','on');
-    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';' '; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
-    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';' ';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'101';'100';'100';'100'};
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';'RK4';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'101';'100';'100';'100'};
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
