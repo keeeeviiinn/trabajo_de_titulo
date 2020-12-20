@@ -20,12 +20,12 @@ function varargout = Slider(varargin)
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".k
-%
+%24
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 18-Dec-2020 23:56:29
+% Last Modified by GUIDE v2.5 19-Dec-2020 21:37:15
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -176,10 +176,7 @@ tres= get(handles.radiobutton27,'Value');
 
 if dos ==1;
        
-slider = 20000;
-slider2 = 100;
-slider3 = 100;
-slider4 = 100;
+
 
 a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
 axis([a b])
@@ -201,6 +198,16 @@ else
 str2 =@(distance,pow)1./((sigma+distance).^pow);
 
 end
+
+slider = 20000;
+slider2 = 100;
+slider3 = 100;
+slider4 = 100;
+  set(handles.slider2,'MIN',0,'MAX',slider);
+  set(handles.slider7,'MIN',0,'MAX',slider);
+  set(handles.slider10,'MIN',1,'MAX',slider4);
+  set(handles.ejey,'MIN',-slider2,'MAX',slider2);
+  set(handles.ejex,'MIN',-slider3,'MAX',slider3);
 flag=0;
 M=50;
 %sigma=0 singular influence
@@ -261,14 +268,14 @@ end
   v12 = recibido(16,2);
   slider4 = str2double(v12)
   
-  
+  set(handles.slider2,'MIN',0,'MAX',slider);
+  set(handles.slider7,'MIN',0,'MAX',slider);
+  set(handles.slider10,'MIN',1,'MAX',slider4);
+  set(handles.ejey,'MIN',-slider2,'MAX',slider2);
+  set(handles.ejex,'MIN',-slider3,'MAX',slider3);
 end    
     
-set(handles.slider2,'MIN',0,'MAX',slider);
-set(handles.slider7,'MIN',0,'MAX',slider);
-set(handles.slider10,'MIN',1,'MAX',slider4);
-set(handles.ejey,'MIN',-slider2,'MAX',slider2);
-set(handles.ejex,'MIN',-slider3,'MAX',slider3);
+
     
 npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
 nppp   = str2double(npp); %el valor de npp se convierte en un numer
@@ -557,10 +564,13 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         %energy
         Ec=zeros(1,length(0:dt:tf));
         Ep=zeros(1,length(0:dt:tf));
-        Ec(1)=Ec0p/2;
+        Ec(1)=Ec0p/2;RK4
+        
         Ep(1)=Ep0;
         DD=zeros(1,length(0:dt:tf));
         DD(1)=D0;
+        
+        %ode23s%%%
         xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2)];
         [t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt); % resuelve el sistema de ecuaciones diferenciales con el solver "ode23"
         X=X';
@@ -569,7 +579,7 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         x2=X(2*np+1:3*np,:);
         v1=X(np+1:2*np,:); % desde np + 1 hasta 2np tenemos la velocidad en el ejex
         v2=X(3*np+1:4*np,:);
-
+        %%%%%%%
         col = jet(1);
         hold on
         d=1;
@@ -591,11 +601,10 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
 xx2;
 yy2;
 zz2;
-
 if zz2 <= slider
     
-set(handles.slider2,'MIN',0,'MAX',zz);
-set(handles.slider7,'MIN',0,'MAX',zz);
+set(handles.slider2,'MIN',0,'MAX',zz2);
+set(handles.slider7,'MIN',0,'MAX',zz2);
 
 end
  
@@ -689,20 +698,33 @@ if  sss~=ss | sss2~=ss2 | zz ~= get(handles.slider10,'Value') | ejexx ~= get(han
         
          N=np;
          col=jet(N);
- menu3=[];        
+ menu3=[];  
+ estela = get(handles.estela,'Value');
 for     i=1:np
         
           ejey = get(handles.ejey,'Value');
-%           ejey = ejey);
           ejex = get(handles.ejex,'Value');
-%           ejex = ejex;
+
           
           
         set (handles.pushbutton16, 'BackgroundColor' , 'green' )
-        plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'LineWidth',2,'LineStyle','-')
-%         plot(x1(i,18000-ss:ss),x2(i,18000-ss:ss),'LineWidth',2,'LineStyle','-')
-         plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
-        plot(x1(i,ss2),x2(i,ss2),'Marker','.','MarkerSize',14,'MarkerFaceColor',col(i,:))
+        if estela == 0
+            plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'LineWidth',2,'LineStyle','-')
+            plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+            plot(x1(i,ss2),x2(i,ss2),'Marker','.','MarkerSize',14,'MarkerFaceColor',col(i,:))
+        end
+        
+        if estela == 1
+            if ss<800
+                plot(x1(i,ss2:1:ss),x2(i,ss2:1:ss),'LineWidth',2,'LineStyle','-')
+            end
+            if ss > 800
+                plot(x1(i,ss-800:200:ss),x2(i,ss-800:200:ss),'LineWidth',2,'LineStyle','-')
+            end
+            
+            plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+        end 
+        
         
         %Para registras
         %Se generan Menu2 y Menu 3 para sobreescribir la tabla
@@ -843,11 +865,11 @@ end
   v9 = recibido(13,2);
   slider = str2double(v9)
   v10 = recibido(14,2);
-  slider2 = str2double(v10)
+  slider2 = str2double(v10);
   v11 = recibido(15,2);
-  slider3 = str2double(v11)
+  slider3 = str2double(v11);
   v12 = recibido(16,2);
-  slider4 = str2double(v12)
+  slider4 = str2double(v12);
   
 end
 
@@ -1194,7 +1216,7 @@ end
 end
  
 if creativo == 1
-    zdes = [vectoresAgentes]
+    zdes = [vectoresAgentes];
 end
 
 %%
@@ -1412,8 +1434,31 @@ for kk=1:np
   o = get(handles.popupmenu3,'Value');% recibe el valor del menu de agente
   front = get(handles.radiobutton11,'Value');
   back = get(handles.radiobutton12,'Value');
-  
-  plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+  estela = get(handles.estela,'Value');
+        if estela == 0
+            plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+        end
+        
+        if estela == 1
+            if ss > 100
+                plot3(squeeze(x(kk,1,ss-100:50:ss)),squeeze(x(kk,2,ss-100:50:ss)),squeeze(x(kk,3,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+            else
+                
+                if ss<20
+                    plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                if ss > 20
+                    plot3(squeeze(x(kk,1,ss-20:10:ss)),squeeze(x(kk,2,ss-20:10:ss)),squeeze(x(kk,3,ss-20:10:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                
+                
+                
+                
+            end
+            
+%             plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+        end 
+%   plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
   
   menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
   v=get(handles.popupmenu6,'Value');
@@ -1471,6 +1516,31 @@ set(handles.cabezano,'visible','on');
  for  kk=1:np 
   a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
+  if estela == 0
+            plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+        end
+        
+        if estela == 1
+            if ss > 100
+                plot3(squeeze(x(kk,1,ss-100:50:ss)),squeeze(x(kk,2,ss-100:50:ss)),squeeze(x(kk,3,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+            else
+                
+                if ss<20
+                    plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                if ss > 20
+                   
+                    plot3(squeeze(x(kk,1,ss-20:20:ss)),squeeze(x(kk,2,ss-20:20:ss)),squeeze(x(kk,3,ss-220:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                
+                
+                
+                
+            end
+            
+%             plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+        end
+        ss
   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
   menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
@@ -2612,6 +2682,29 @@ function edit14_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit14_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit15_Callback(hObject, eventdata, handles)
+% hObject    handle to edit15 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit15 as text
+%        str2double(get(hObject,'String')) returns contents of edit15 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit15_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit15 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
