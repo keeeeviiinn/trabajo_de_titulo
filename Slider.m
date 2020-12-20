@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 19-Dec-2020 21:37:15
+% Last Modified by GUIDE v2.5 20-Dec-2020 19:49:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -62,7 +62,7 @@ guidata(hObject, handles);
  global vectoresAgentes vector;
  vectoresAgentes = [];
 
- vector = 1
+ vector = 1;
  
 % UIWAIT makes Slider wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -121,9 +121,9 @@ conta2 = [];
 conta3 = [];
 contador = 0;
 for i=1:fila
-    conta = vectoresAgentes(i,:)
+    conta = vectoresAgentes(i,:);
     for j=1:columna
-        conta2 = conta(1,j)
+        conta2 = conta(1,j);
 %         conta3 = conta(j,1)
         if isnan(conta2)
             contador = 1;
@@ -296,7 +296,6 @@ else
 % clc
 %function [value,th]=consensus3(gamma0,lambda0)
 set(handles.text8,'String','')
-set(handles.radiobutton8,'Value',0)
 set(handles.radiobutton11,'Value',0)
 set(handles.slider10,'Value',50)
 set(handles.pushbutton5,'String','Play')
@@ -722,7 +721,6 @@ end
 
         s= get(handles.slider2,'Value');
         s2=get(handles.slider7,'Value');
-        dd= get(handles.radiobutton8,'Value');%Guardar valor del boton pausa
         ss=round(s);%ss es la variable que se genera con el slider y se redondea
         ss2=round(s2);
         
@@ -935,8 +933,8 @@ end
   
 end
 
-set(handles.salir,'visible','off');
-set(handles.salir,'value',1);
+% set(handles.salir,'visible','off');
+% set(handles.salir,'value',1);
 set(handles.cabeza,'visible','on');
 set(handles.cabeza,'String','Con cabeza');
 set(handles.cabezano,'String','Sin cabeza');
@@ -967,7 +965,6 @@ nppp   = str2double(npp); %el valor de npp se convierte en un numer
 % clc
 %function [value,th]=consensus3(gamma0,lambda0)
 set(handles.text8,'String','')
-set(handles.radiobutton8,'Value',0)
 set(handles.radiobutton11,'Value',0)
 set(handles.slider10,'Value',50)
 set(handles.pushbutton5,'String','Play')
@@ -1474,35 +1471,20 @@ menu3=[];
     end
 pause(0.01)
 
-%  if view ~= view2
-%      cont=1;
-%  end
 
 
 %figure
 
-a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
-% set(gca,'nextplot','replacechildren');
-%  if cont == 1   
-%     axis([a b c])
-%     view(-view1,view22) %fix perspective 
-%    
-% %      a=a+[-5 5];b=b+[-5 5];c=c+[-5 5];
-%      grid on
-%      cont = 0;
-%  end
+ a=get(gca,'xlim');b=get(gca,'ylim');c=get(gca,'zlim');
+
  ejex=get(handles.ejey,'Value')/10;
  ejey=get(handles.ejex,'Value')/10;
  zoom=get(handles.slider10,'Value')/10;
  cabeza_agente = get(handles.cabeza,'String');
  cabeza_agente2 = get(handles.cabezano,'String');
- salir=get(handles.salir,'value');
-%  a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
-%  axis([a b c])
+
   grid on
-%  if ss ~= sss
-%      ss
-%  end
+
      
 %trajectories with initial and final points highlighted. 
 cla
@@ -1516,13 +1498,14 @@ hold on
             set(handles.slider16,'Value',29);
             set(handles.pushbutton10,'String',"Centrar")
     end
-%for ss=1:1:200
+
 if cabeza_agente == "Con cabeza"
 set(handles.cabeza,'visible','on'); 
 set(handles.cabezano,'visible','off');
 set (handles.pushbutton16, 'BackgroundColor' , 'green' ) 
 for kk=1:np
-    
+     a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+     axis([a b c])
   %comment for removing trajectories
   zoom_agente= get(handles.pushbutton6,'String');
   o = get(handles.popupmenu3,'Value');% recibe el valor del menu de agente
@@ -1544,58 +1527,48 @@ for kk=1:np
                 if ss > 20
                     plot3(squeeze(x(kk,1,ss-20:10:ss)),squeeze(x(kk,2,ss-20:10:ss)),squeeze(x(kk,3,ss-20:10:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
                 end
-                
-                
-                
-                
             end
             
-%             plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+        
         end 
-%   plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+
   
-  menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
-  v=get(handles.popupmenu6,'Value');
-set(handles.text22,'string',"x = "+(menu3(v,1))+";  "+"y = "+(menu3(v,2))+";  "+"z = "+(menu3(v,3)));
+    menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+    v=get(handles.popupmenu6,'Value');
+    set(handles.text22,'string',"x = "+(menu3(v,1))+";  "+"y = "+(menu3(v,2))+";  "+"z = "+(menu3(v,3)));
   
 if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-     set(handles.salir,'visible','on');
-     set(handles.salir,'value',0);
+
 %       a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
 %       axis([a b c])
 %       xlim([x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex])
 %       ylim([x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey])
+%       zlim([x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey])
      
-     a=[x(o,1,ss)-zoom+ejey x(o,1,ss)+zoom+ejey];b=[x(o,1,ss)-zoom x(o,1,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
-     a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
-     a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
+     a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
+%      a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
+%      a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
      axis([a b c])
-     axis([a1 b1 c1])
-     axis([a2 b2 c2])
-%      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
-     
-  elseif zoom_agente == "Zoom Personal" & back == 1
-          set(handles.salir,'visible','on');
-          set(handles.salir,'value',0); 
-        a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
-%      a1=[x(o,2,ss)-zoom+ejey zoom+ejey];b1=[x(o,2,ss)-zoom zoom];c1=[x(o,2,ss)-zoom+ejex zoom+ejex];
-%      a2=[x(o,3,ss)-zoom+ejey zoom+ejey];b2=[x(o,3,ss)-zoom zoom];c2=[x(o,3,ss)-zoom+ejex zoom+ejex];
-       axis([a b c])
 %      axis([a1 b1 c1])
 %      axis([a2 b2 c2])
+%      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
+     
+elseif zoom_agente == "Zoom Personal" & back == 1
+%           set(handles.salir,'visible','on');
+%           set(handles.salir,'value',0); 
+       a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
+       axis([a b c])
        plot3(squeeze(x(o,1,ss2)),squeeze(x(o,2,ss2)),squeeze(x(o,3,ss2))) 
             
             
   else
- 
- if salir == 1
+ salirzoom=get(handles.salirzoom,'String');
+ if salirzoom == "Salir zoom"
   a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
  end   
   end
-%   plot3(squeeze(x(kk,1,1)),squeeze(x(kk,2,1)),squeeze(x(kk,3,1)),'Color',[0.5 0.5 1],'Marker','x','MarkerSize',5)
-%   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',[sqrt(1-1)/N sqrt(1-1)/N sqrt(1-1)/N],'Marker','square','MarkerSize',10,'MarkerFaceColor',col(kk,:))
-% plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:))
+
 end
 end
 if cabeza_agente == "ok"
@@ -1608,12 +1581,19 @@ set(handles.cabezano,'visible','on');
 % menu3=[];
 
  for  kk=1:np 
+     
   a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
-  if estela == 0
-%             plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-        end
-        
+  if salirzoom == "Salir zoom"
+    a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
+    axis([a b c])
+  end 
+  
+  if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+  a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
+  axis([a b c])
+  end
+    
         if estela == 1
             if ss > 100
                 plot3(squeeze(x(kk,1,ss-100:50:ss)),squeeze(x(kk,2,ss-100:50:ss)),squeeze(x(kk,3,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
@@ -1624,19 +1604,25 @@ set(handles.cabezano,'visible','on');
                 end
                 if ss > 20
                    
-                    plot3(squeeze(x(kk,1,ss-20:20:ss)),squeeze(x(kk,2,ss-20:20:ss)),squeeze(x(kk,3,ss-220:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                    plot3(squeeze(x(kk,1,ss-20:1:ss)),squeeze(x(kk,2,ss-20:1:ss)),squeeze(x(kk,3,ss-20:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
                 end
-                
-                
-                
-                
+
             end
             
 %             plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
         end
-        ss
+        
   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
-  menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+  
+  if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+      
+        a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
+%       a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
+%       a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
+        axis([a b c])
+  end
+  
+menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
 v=get(handles.popupmenu6,'Value');
 set(handles.text22,'string',"x = "+(menu3(v,1))+";  "+"y = "+(menu3(v,2))+";  "+"z = "+(menu3(v,3)));
@@ -1719,50 +1705,39 @@ set(handles.edit14,'Visible','off')
 set(handles.text25,'Visible','off')
 set(handles.text26,'Visible','off')
 set(handles.text27,'Visible','off')
+set(handles.text13,'visible','off')
+set(handles.cabeza,'visible','off'); 
+set(handles.cabezano,'visible','off');
+set(handles.uitable10,'Visible','off')
 set(handles.pushbutton17,'Visible','off')
+set(handles.slider15,'Visible','off');
+set(handles.slider16,'Visible','off');
+set(handles.text21,'Visible','off');
+set(handles.pushbutton9,'visible','off')
+set(handles.uibuttongroup3,'visible','off')
+% set(handles.salir,'visible','off');
+set(handles.popupmenu3,'visible','off')
+
 
 set(handles.edit12,'String',' ')
 set(handles.edit13,'String',' ')
 set(handles.edit14,'String',' ')
-
-
-set(handles.popupmenu6,'String','Agent position')
-set(handles.original,'Value',1);
-set(handles.uitable10,'Visible','off')
-set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
-set(handles.salir,'visible','off');
-set(handles.slider2,'Value',0)
-set(handles.slider7,'Value',0)
-set(handles.radiobutton8,'Value',1)
-set(handles.text8,'String','Ingrese nuevos valores')
-set(handles.pushbutton6,'Value',0)
-set(handles.pushbutton6,'String',"Stop")
-set(handles.pushbutton5,'Value',0)
-set(handles.pushbutton5,'String',"Stop")
-set(handles.popupmenu3,'visible','off')
-set(handles.text13,'visible','off')
-set(handles.uibuttongroup3,'visible','off')
-set(handles.pushbutton9,'visible','off')
-set(handles.slider15,'Visible','off');
-set(handles.slider16,'Visible','off');
-set(handles.text21,'Visible','off');
-% cuadrado = 0;
-% poligon = 0;
-% bandada = 0;
-
 set(handles.stop,'String','Stop.')
 set(handles.cabeza,'String','Cabeza');
-set(handles.cabeza,'visible','off'); 
-set(handles.cabezano,'visible','off');
+set(handles.popupmenu6,'String','Agent position')
+set(handles.text8,'String','Ingrese nuevos valores')
+set(handles.pushbutton6,'String',"Stop")
+set(handles.pushbutton5,'String',"Stop")
+set(handles.salirzoom,'String','Stop')
 
-% a=get(gca,'xlim');b=get(gca,'ylim')
-% axis([a b])
-% a=a+[-2 2];b=b+[-2 2];  
-% for i=0;3
-% cla reset
-% cla reset
-% pause(0.01)
-% end
+set(handles.original,'Value',1);
+set(handles.slider2,'Value',0)
+set(handles.slider7,'Value',0)
+set(handles.pushbutton6,'Value',0)
+set(handles.pushbutton5,'Value',0)
+
+set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
+
 
 cla reset
     
@@ -1857,6 +1832,8 @@ set(handles.popupmenu3,'visible','on')
 set(handles.text13,'visible','on')
 set(handles.uibuttongroup3,'visible','on')
 set(handles.radiobutton11,'Value',1)
+set(handles.pushbutton6,'visible','off')
+set(handles.salirzoom,'visible','on')
 %
 function ejey_Callback(hObject, eventdata, handles)
 %
@@ -2682,9 +2659,9 @@ function pushbutton17_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global vectoresAgentes  vector;
 
-vectorx = get(handles.edit12,'String')
-vectory = get(handles.edit13,'String')
-vectorz = get(handles.edit14,'String')
+vectorx = get(handles.edit12,'String');
+vectory = get(handles.edit13,'String');
+vectorz = get(handles.edit14,'String');
 
 cont = 3;
 dim = get(handles.radiobutton26,'Value');
@@ -2710,7 +2687,7 @@ set(handles.text27,'String',vectoresAgentes(vector,3));
 set(handles.pushbutton17,'Value',0);
 end 
 vectoresAgentes;
-vector 
+vector ;
 set(handles.text28,'String',"Ingresado Vector "+vector)
 
 vector=vector+1;
@@ -2799,6 +2776,41 @@ function edit15_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit15_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit15 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in salirzoom.
+function salirzoom_Callback(hObject, eventdata, handles)
+set(handles.salirzoom,'String','Salir zoom')
+set(handles.pushbutton6,'String','Zoom personal')
+set(handles.popupmenu3,'visible','off')
+set(handles.text13,'visible','off')
+set(handles.uibuttongroup3,'visible','off')
+set(handles.radiobutton11,'Value',0)
+set(handles.pushbutton6,'visible','on')
+set(handles.salirzoom,'visible','off')
+
+
+
+function edit16_Callback(hObject, eventdata, handles)
+% hObject    handle to edit16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit16 as text
+%        str2double(get(hObject,'String')) returns contents of edit16 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit16_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit16 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
