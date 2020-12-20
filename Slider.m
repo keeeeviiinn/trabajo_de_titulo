@@ -564,8 +564,7 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         %energy
         Ec=zeros(1,length(0:dt:tf));
         Ep=zeros(1,length(0:dt:tf));
-        Ec(1)=Ec0p/2;RK4
-        
+        Ec(1)=Ec0p/2;
         Ep(1)=Ep0;
         DD=zeros(1,length(0:dt:tf));
         DD(1)=D0;
