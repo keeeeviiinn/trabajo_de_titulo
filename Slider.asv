@@ -110,8 +110,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
  % reestablece nombre boton stop
 set(handles.popupmenu6,'Visible','on')
 set(handles.text22,'Visible','on')
-set(handles.salirzoom,'String','Salir zoom')
-
+ 
 vectoresAgentes
 tamanio = size(vectoresAgentes);
 fila = tamanio(1,1);
@@ -1549,7 +1548,7 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 %       zlim([x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey])
      
 %      a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
-     a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[-zoom+x(o,3,ss) x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
+     a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom++ejey];b=[-zoom+x(o,3,ss) x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
 % a
 % x(o,1,ss)
 % b
