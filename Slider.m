@@ -1503,6 +1503,7 @@ if cabeza_agente == "Con cabeza"
 set(handles.cabeza,'visible','on'); 
 set(handles.cabezano,'visible','off');
 set (handles.pushbutton16, 'BackgroundColor' , 'green' ) 
+
 for kk=1:np
      a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
      axis([a b c])
@@ -1514,6 +1515,7 @@ for kk=1:np
   estela = get(handles.estela,'Value');
         if estela == 0
             plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+%        plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:),'Marker','o')
         end
         
         if estela == 1
@@ -1545,7 +1547,7 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 %       ylim([x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey])
 %       zlim([x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey])
      
-     a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
+     a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
 %      a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
 %      a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
      axis([a b c])
@@ -1556,7 +1558,7 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 elseif zoom_agente == "Zoom Personal" & back == 1
 %           set(handles.salir,'visible','on');
 %           set(handles.salir,'value',0); 
-       a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
+       a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
        axis([a b c])
        plot3(squeeze(x(o,1,ss2)),squeeze(x(o,2,ss2)),squeeze(x(o,3,ss2))) 
             
@@ -1590,7 +1592,7 @@ set(handles.cabezano,'visible','on');
   end 
   
   if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-  a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
+  a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
   axis([a b c])
   end
     
@@ -1614,13 +1616,13 @@ set(handles.cabezano,'visible','on');
         
   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
   
-  if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-      
-        a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
-%       a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
-%       a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
-        axis([a b c])
-  end
+%   if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+%       
+%         a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
+% %       a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
+% %       a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
+%         axis([a b c])
+%   end
   
 menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
