@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 20-Dec-2020 19:49:29
+% Last Modified by GUIDE v2.5 22-Dec-2020 18:36:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -108,11 +108,13 @@ function pushbutton1_Callback(hObject, eventdata, handles)
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
  global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo vectoresAgentes vector
  % reestablece nombre boton stop
+% clear all
+% clc
 set(handles.popupmenu6,'Visible','on')
 set(handles.text22,'Visible','on')
 set(handles.salirzoom,'String','Salir zoom')
 
-vectoresAgentes
+vectoresAgentes;
 tamanio = size(vectoresAgentes);
 fila = tamanio(1,1);
 columna =tamanio(1,2);
@@ -261,13 +263,13 @@ end
   v8 = recibido(9,2);
   dt = str2double(v8);
   v9 = recibido(13,2);
-  slider = str2double(v9)
+  slider = str2double(v9);
   v10 = recibido(14,2);
-  slider2 = str2double(v10)
+  slider2 = str2double(v10);
   v11 = recibido(15,2);
-  slider3 = str2double(v11)
+  slider3 = str2double(v11);
   v12 = recibido(16,2);
-  slider4 = str2double(v12)
+  slider4 = str2double(v12);
   
   set(handles.slider2,'MIN',0,'MAX',slider);
   set(handles.slider7,'MIN',0,'MAX',slider);
@@ -344,11 +346,12 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if triangulo == 1
     
-    val1=0;
-    val2=5;
-    val3 = floor(np/2);
-    val4= vbar2(2), vbar2(1);
-    
+%     val1=0;
+%     val2=5;
+%     val3 = floor(np/2);
+%     val4= vbar2(2), vbar2(1);
+%     zdes=[-0.5 -0.5;-0.5 -0.5;0 -0.5;0 -0.5;2 0;0 0.5;0 0.5;-0.5 0.5;-2.5 -1.5;-0.5 0;-0.5 0;-0.5 0;-0.5 0;1 0.5;0 0.5;0 0.5;0 0.5;-2 0;-1 0;-1 0;2 -0.5;0 -0.5;-1 0;-1 0;2 -0.5;0 -0.5;-1 0;-1 0;-2 0;0 0.5;0 0.5;0 0.5;0 0.5;-1 -1.5;-1 0.5;-1 -0.5;-1 -0.5;0 0.5;0 0.5;0 0.5;0 0.5;-1 -2];
+    zdes=[0 0.5;-1 0;1 0.5;0 0.5;0 0.5;-2 -1;-1 -0.5;0 0.5;0 0.5;0 0.5;0 0.5;0.5 -1.75];
 end
 %%%%%%% CIRCULO2D %%%%%%%%%%%%%%%
 if circulo == 1
@@ -702,7 +705,7 @@ if movim == 20001
     pause(0.01)
     end
     
-    set(handles.slider2,'Value',1)
+    set(handles.slider2,'Value',1);
     movim = 1;
     
     Reinicia = get(handles.pushbutton5,'String'); 
@@ -715,7 +718,7 @@ end
 
 %%% AQUI COMIENZA CODIGO PARA GENERAR MOVIMIENTO AUTOMATICO DE LOS AGENTES
 if movimiento == "Ok!"
-    set(handles.slider2,'Value',movim)
+    set(handles.slider2,'Value',movim);
     movim = movim + 200;
     pause(0.1)
 end    
@@ -952,15 +955,15 @@ set(handles.slider16,'Value',29);
 npp    = get(handles.edit1,'String');%Se guarda el vaor que se ingrese en el cuadro de texto en guide en la variable "npp"
 nppp   = str2double(npp); %el valor de npp se convierte en un numer
 
-% if nppp <= 1
-%     set(handles.text8,'String','Ingrese valor mayor a 1')
-%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
-% elseif isnan (nppp)
-%     set(handles.text8,'String','Ingrese valor numerico')
-%     set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
-% 
-% 
-% else
+if nppp <= 1
+    set(handles.text8,'String','Ingrese valor mayor a 1')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+elseif isnan (nppp)
+    set(handles.text8,'String','Ingrese valor numerico')
+    set (handles.pushbutton16, 'BackgroundColor' , 'red' )   
+
+
+else
 %%%%%%%
 % close all
 % clc
@@ -1186,7 +1189,7 @@ end
 if piramide == 1
 % zdes = [0 2 -1;0 2 -1;2 0 -2; 0 -2 1]; 
 %zdes = [6 0 0;3 -6 0]%triangulo
- zdes = [-3 0 0; 3 -3 0;-3 0 0;1.5 1.5 -5;0.5 0.5 2]
+ zdes = [-3 0 0; 3 -3 0;-3 0 0;1.5 1.5 -5;0.5 0.5 2];
 
  
 % cubo
@@ -1504,13 +1507,7 @@ if cabeza_agente == "Con cabeza"
 set(handles.cabeza,'visible','on'); 
 set(handles.cabezano,'visible','off');
 set (handles.pushbutton16, 'BackgroundColor' , 'green' ) 
-<<<<<<< HEAD
-
-for kk=1:np
-     a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
-=======
 a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
->>>>>>> 6cc41acac3432f064a9e8c64fb29d94dea5b00ed
      axis([a b c])
 for kk=1:np
      
@@ -1520,17 +1517,10 @@ for kk=1:np
   front = get(handles.radiobutton11,'Value');
   back = get(handles.radiobutton12,'Value');
   estela = get(handles.estela,'Value');
-<<<<<<< HEAD
-        if estela == 0
-            plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-%        plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:),'Marker','o')
-        end
-=======
          if estela == 0
              plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
        plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:),'Marker','o')
          end
->>>>>>> 6cc41acac3432f064a9e8c64fb29d94dea5b00ed
         
         if estela == 1
             if ss > 100
@@ -1561,9 +1551,6 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 %       ylim([x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey])
 %       zlim([x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey])
      
-<<<<<<< HEAD
-     a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
-
 %      a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
      a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[-zoom+x(o,3,ss) x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
 % a
@@ -1574,10 +1561,9 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 %  x(o,3,ss)
      
      
-
 %      a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
 %      a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
-
+     axis([c a b])
 %      axis([a1 b1 c1])
 %      axis([a2 b2 c2])
 %      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
@@ -1585,7 +1571,7 @@ if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente p
 elseif zoom_agente == "Zoom Personal" & back == 1
 %           set(handles.salir,'visible','on');
 %           set(handles.salir,'value',0); 
-       a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
+       a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
        axis([a b c])
        plot3(squeeze(x(o,1,ss2)),squeeze(x(o,2,ss2)),squeeze(x(o,3,ss2))) 
             
@@ -1620,19 +1606,17 @@ a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
     a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
     axis([a b c])
   end
+  if zoom_agente == "Zoom Personal" & front == 1
+    a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[-zoom +zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
+   axis([a b c])  
+      
+  end 
   
-  if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-  a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
-  axis([a b c])
-  end
-    
-
 %   if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
 %   a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
 %   axis([a b c])
 %   end
 %     
-
         if estela == 1
             if ss > 100
                 plot3(squeeze(x(kk,1,ss-100:50:ss)),squeeze(x(kk,2,ss-100:50:ss)),squeeze(x(kk,3,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
@@ -1654,12 +1638,6 @@ a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
   
 %   if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-%       
-%         a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
-% %       a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
-% %       a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
-%         axis([a b c])
-
       
 %         a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
 %       a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
@@ -1692,7 +1670,7 @@ a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
         
         
         
-
+%   end
   
 menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
@@ -1722,7 +1700,7 @@ set(handles.text22,'Visible','off')
 cla reset
 end
 %******** FIN CODIGO 3D *****************
-
+end
 end
 
 
@@ -1780,11 +1758,13 @@ set(handles.text27,'Visible','off')
 set(handles.text13,'visible','off')
 set(handles.cabeza,'visible','off'); 
 set(handles.cabezano,'visible','off');
+set(handles.pushbutton6,'visible','on');
 set(handles.uitable10,'Visible','off')
 set(handles.pushbutton17,'Visible','off')
 set(handles.slider15,'Visible','off');
 set(handles.slider16,'Visible','off');
-set(handles.text21,'Visible','off');
+set(handles.slider16,'Visible','off');
+set(handles.salirzoom,'Visible','off');
 set(handles.pushbutton9,'visible','off')
 set(handles.uibuttongroup3,'visible','off')
 % set(handles.salir,'visible','off');
@@ -1803,8 +1783,8 @@ set(handles.pushbutton5,'String',"Stop")
 set(handles.salirzoom,'String','Stop')
 
 set(handles.original,'Value',1);
-set(handles.slider2,'Value',0)
-set(handles.slider7,'Value',0)
+set(handles.slider2,'Value',0);
+set(handles.slider7,'Value',0);
 set(handles.pushbutton6,'Value',0)
 set(handles.pushbutton5,'Value',0)
 
@@ -1830,6 +1810,7 @@ end
 function text9_CreateFcn(hObject, eventdata, handles)
 %
 function nosotros_Callback(hObject, eventdata, handles)
+winopen('Nosotros.docx');
 %
 function archivo_Callback(hObject, eventdata, handles)
 %
@@ -1937,11 +1918,11 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global np ndim sigma K beta pp flag alpha M zdes tf
-f = uifigure('Position', [100 100 300 265],'Color','White','Name','ObtenciÃ³n de datos');
+f = uifigure('Position', [100 100 300 265],'Color','White','Name','Obtención de datos');
     t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp;tf]);
     t.FontSize = 10;%alpha beta flag M sigma K pp   ;'Alpha' ;'Beta' ; 'Flag';'M' ;'Sigma' ;'K' ;'PP'
     t.ColumnName = {'Datos'};
-    t.RowName = {'Agentes' 'DimensiÃ³n' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP' 'Tiempo final'};
+    t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP' 'Tiempo final'};
     t.Position = [50 50 195 205];
 
 
@@ -2891,3 +2872,8 @@ function edit16_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --------------------------------------------------------------------
+function universidad_Callback(hObject, eventdata, handles)
+web https://www.utem.cl/ -browser
