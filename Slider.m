@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 22-Dec-2020 18:36:00
+% Last Modified by GUIDE v2.5 26-Dec-2020 16:41:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -194,13 +194,13 @@ deseado= get(handles.deseado,'Value');
 if original == 1
 str1=@(distance,pow)1./((1+distance.^2).^pow); 
 
-if distance == 0
-    
-    str2 = @(distance,pow)0;
-else
-str2 =@(distance,pow)1./((sigma+distance).^pow);
+% if distance == 0
+%     
+%     str2 = @(distance,pow)0;
+% else
+str2 =@(distance,pow)1./((0+distance).^pow);
 
-end
+% end
 
 slider = 20000;
 slider2 = 100;
@@ -1519,7 +1519,7 @@ for kk=1:np
   estela = get(handles.estela,'Value');
          if estela == 0
              plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-       plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Color',col(kk,:),'Marker','o')
+       
          end
         
         if estela == 1
@@ -2877,3 +2877,14 @@ end
 % --------------------------------------------------------------------
 function universidad_Callback(hObject, eventdata, handles)
 web https://www.utem.cl/ -browser
+
+
+% --------------------------------------------------------------------
+function guardar_Callback(hObject, eventdata, handles)
+% hObject    handle to guardar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% exportgraphics(,'Agentes.png','Resolution',300)
+% t = tiledlayout(2,1);
+% exportgraphics(gcf,'vectorfig.pdf','ContentType','vector')
