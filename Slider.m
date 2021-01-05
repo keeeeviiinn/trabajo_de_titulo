@@ -206,6 +206,7 @@ slider = 20000;
 slider2 = 100;
 slider3 = 100;
 slider4 = 100;
+solver = "ode23s";
   set(handles.slider2,'MIN',0,'MAX',slider);
   set(handles.slider7,'MIN',0,'MAX',slider);
   set(handles.slider10,'MIN',1,'MAX',slider4);
@@ -270,6 +271,7 @@ end
   slider3 = str2double(v11);
   v12 = recibido(16,2);
   slider4 = str2double(v12);
+  solver = recibido(10,2);
   
   set(handles.slider2,'MIN',0,'MAX',slider);
   set(handles.slider7,'MIN',0,'MAX',slider);
@@ -557,27 +559,9 @@ for i=1:np
 end
 set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
 
-% recibido=get(handles.uitable10,'data');
-% stringsolver = recibido(10,2);
-% solver = eval(stringsolver{1});
 
-%         if solver == "ode23"
-        DD(1)=dd;
-        % Theta(1)=theta;
-        Gamma(1)=gamma0;
-        Lambda(1)=lambda0;
-        
        
-        VB(1,:)=vbar0;
-
-        %energy
-        Ec=zeros(1,length(0:dt:tf));
-        Ep=zeros(1,length(0:dt:tf));
-        Ec(1)=Ec0p/2;
-        Ep(1)=Ep0;
-        DD=zeros(1,length(0:dt:tf));
-        DD(1)=D0;
-        
+if solver == "ode23s"
         %ode23s%%%
         xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2)];
         [t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt); % resuelve el sistema de ecuaciones diferenciales con el solver "ode23"
@@ -588,63 +572,66 @@ set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
         v1=X(np+1:2*np,:); % desde np + 1 hasta 2np tenemos la velocidad en el ejex
         v2=X(3*np+1:4*np,:);
         %%%%%%%
-%         end
-        
-      %  if solver == "RK4" || solver == "rk4" 
+end
+
+
+if solver == "RK4" || solver == "rk4"
+           
             %RK
-%             for i=1:nsteps-1
-%      
-%                 %x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@cscdyn);
-%                 x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@csdynshape);
-%                 x0=squeeze(x(1:np,:,i+1));
-%                 v0=squeeze(x(np+1:end,:,i+1));
-%     
-%                 %for i=1:np
-%                 %distform(i,:)=sqrt(sum((repmat(x0(i,:),np,1)-x0-repmat(zdes,np,1)).^2,2));
-% %               end
-%                 gamma=0;
-%                 lambda=0;
-%                 theta=0;
-%                 dd=NaN;
-%                 vbbb=0;
-%                 %lambda gamma theta and dd
-%                 for ii=1:np
-%                     for jj=1:np
-%                         gamma=gamma+norm(x0(ii,:)-x0(jj,:),2).^2;
-%                         lambda=lambda+norm(v0(ii,:)-v0(jj,:),2).^2;
-%                     end
-%                     if ii<np
-%                         %theta=theta+norm(x0(ii,:)-x0(ii+1,:)-zdes,2).^2;
-%                     end
-%                     if ii~=jj
-%                         dd=min(norm(x0(ii,:)-x0(jj,:),2).^2,dd);
-%                     end
-%         
-%                 end
-%                 % Theta(i+1)=theta/(np-1);
-%                 Gamma(i+1)=1/(2*np^2)*gamma;
-%                 Lambda(i+1)=1/(2*np^2)*lambda;
-%                 %????
-%                 if dd<=1e-20 
-%                 flagcolision=1;
-%                 end
-%                 DD(i+1)=dd;
-%                 VB(i+1,:)=1/np*sum(v0,1);
-%         %       tests to stop if consensus is likely or unlikely to be achieved (for
-%     %            bench)
-% %               if i>=501 
-% %               test=sum(Lambda(i-150:i));
-% %               test2=sum(Theta(i-150:i));
-% %               if test<=1||test2>=1000
-% %               break
-% %               toc
-% %               end
-% %               end    
-%     
-%             end
-            
-      %  end
+            for i=1:nsteps-1
+     
+%                 x1(:,:,i+1)=RK4(x1(:,:,i),u(:,:,i),dt,@csdynshape);
+                x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@csdynshape);
+                x0=squeeze(x(1:np,:,i+1));
+                v0=squeeze(x(np+1:end,:,i+1));
+    
+                %for i=1:np
+                %distform(i,:)=sqrt(sum((repmat(x0(i,:),np,1)-x0-repmat(zdes,np,1)).^2,2));
+%               end
+                gamma=0;
+                lambda=0;
+                theta=0;
+                dd=NaN;
+                vbbb=0;
+                %lambda gamma theta and dd
+                for ii=1:np
+                    for jj=1:np
+                        gamma=gamma+norm(x0(ii,:)-x0(jj,:),2).^2;
+                        lambda=lambda+norm(v0(ii,:)-v0(jj,:),2).^2;
+                    end
+                    if ii<np
+                        %theta=theta+norm(x0(ii,:)-x0(ii+1,:)-zdes,2).^2;
+                    end
+                    if ii~=jj
+                        dd=min(norm(x0(ii,:)-x0(jj,:),2).^2,dd);
+                    end
         
+                end
+                % Theta(i+1)=theta/(np-1);
+                Gamma(i+1)=1/(2*np^2)*gamma;
+                Lambda(i+1)=1/(2*np^2)*lambda;
+                %????
+                if dd<=1e-20 
+                flagcolision=1;
+                end
+                DD(i+1)=dd;
+                VB(i+1,:)=1/np*sum(v0,1);
+        %       tests to stop if consensus is likely or unlikely to be achieved (for
+    %            bench)
+%               if i>=501 
+%               test=sum(Lambda(i-150:i));
+%               test2=sum(Theta(i-150:i));
+%               if test<=1||test2>=1000
+%               break
+%               toc
+%               end
+%               end    
+    
+            end
+            
+end
+        
+       
         col = jet(1);
         hold on
         d=1;
@@ -873,8 +860,8 @@ if distance == 0
     
     str2 = @(distance,pow)0;
 else
-str2 =@(distance,pow) 1./((sigma+distance).^pow);
-
+% str2 =@(distance,pow)1./((sigma+distance).^pow);
+str2 =@(distance,pow)1./((0+distance).^pow);
 end
 
 flag=0;
@@ -888,6 +875,7 @@ alpha=1.1;
 alpha1=10;
 pp=4;
 dt=0.05;
+solver = "RK4"
 end
 %OPCION DE PERSONALIZADO 
 if deseado == 1
@@ -927,13 +915,14 @@ end
   v8 = recibido(9,2);
   dt = str2double(v8);
   v9 = recibido(13,2);
-  slider = str2double(v9)
+  slider = str2double(v9);
   v10 = recibido(14,2);
   slider2 = str2double(v10);
   v11 = recibido(15,2);
   slider3 = str2double(v11);
   v12 = recibido(16,2);
   slider4 = str2double(v12);
+  solver =recibido(10,2);
   
 end
 
@@ -1288,31 +1277,24 @@ end
 % stringsolver = recibido(10,2);
 % solver = eval(stringsolver{1});
 
-% if solver == "ode23"
-%%%ODE23%%%%
+if solver == "ode23s"
 
-%         %energy
-%         Ec=zeros(1,length(0:dt:tf));
-%         Ep=zeros(1,length(0:dt:tf));
-%         Ec(1)=Ec0p/2;
-%         Ep(1)=Ep0;
-%         DD=zeros(1,length(0:dt:tf));
-%         DD(1)=D0;
-        
-%         %ode23s%%%
-%         xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2)];
-%         [t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt); % resuelve el sistema de ecuaciones diferenciales con el solver "ode23"
-%         X=X';
-%         ftime=length(t);
-%         x1=X(1:np,:); 
-%         x2=X(2*np+1:3*np,:);
-%         v1=X(np+1:2*np,:); % desde np + 1 hasta 2np tenemos la velocidad en el ejex
-%         v2=X(3*np+1:4*np,:);
-%         %%%%%%%
-%end
+        %ode23s%%%
+        xinitt=[x00(:,1);v00(:,1);x00(:,2);v00(:,2);x00(:,3);v00(:,3)];
+        [t,X]=ode23s(@csdynmatlab,0:dt:tf,xinitt);
+        X=X';
+        ftime=length(t);
+        x1=X(1:np,:);
+        v1=X(np+1:2*np,:); % desde np + 1 hasta 2np tenemos la velocidad en el ejex
+        x2=X(2*np+1:3*np,:);
+        v2=X(3*np+1:4*np,:);
+        x3=X(4*np+1:5*np,:);
+        v3=X(5*np+1:6*np,:);
+
+end
 
 
-%if solver == "RK4" || solver== "rk4"
+if solver == "RK4" || solver== "rk4"
 %RK
 for i=1:nsteps-1
      
@@ -1364,7 +1346,7 @@ for i=1:nsteps-1
 %     end    
     
 end
-% end
+end
 
 toc
 
@@ -1517,6 +1499,9 @@ for kk=1:np
   front = get(handles.radiobutton11,'Value');
   back = get(handles.radiobutton12,'Value');
   estela = get(handles.estela,'Value');
+  
+ %%%%% CON SOLVER RK4 PARA PLOT  %%%%%%
+if solver == "RK4" | solver == "rk4"
          if estela == 0
              plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
        
@@ -1537,43 +1522,51 @@ for kk=1:np
             
         
         end 
+        menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+end
 
+
+%%%%% CON SOLVER ode23s PARA PLOT  %%%%
+
+if solver == "ode23s"
+         if estela == 0
+             plot3(x1(kk,ss2:1:ss),x2(kk,ss2:1:ss),x3(kk,ss2:1:ss),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+         end
+        
+        if estela == 1
+            if ss > 100
+                  plot3((x1(kk,ss-100:50:ss)),(x2(kk,ss-100:50:ss)),(x3(kk,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+            else
+                
+                if ss<20
+                    plot3((x1(kk,ss2:1:ss)),(x2(kk,ss2:1:ss)),(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                if ss > 20
+                    plot3((x1(kk,ss-20:10:ss)),(x2(kk,ss-20:10:ss)),(x3(kk,ss-20:10:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+            end
+            
+        
+        end 
+        menu3(kk,:)=[x1(kk,ss) x2(kk,ss) x3(kk,ss)];
+end
   
-    menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+    
     v=get(handles.popupmenu6,'Value');
     set(handles.text22,'string',"x = "+(menu3(v,1))+";  "+"y = "+(menu3(v,2))+";  "+"z = "+(menu3(v,3)));
   
 if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
 
-%       a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
-%       axis([a b c])
-%       xlim([x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex])
-%       ylim([x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey])
-%       zlim([x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey])
-     
-%      a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
      a=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b=[-zoom+x(o,3,ss) x(o,3,ss)+zoom];c=[x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex];
-% a
-% x(o,1,ss)
-% b
-% x(o,1,ss)
-%  x(o,2,ss)
-%  x(o,3,ss)
-     
-     
-%      a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
-%      a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
      axis([c a b])
-%      axis([a1 b1 c1])
-%      axis([a2 b2 c2])
-%      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
+
      
 elseif zoom_agente == "Zoom Personal" & back == 1
 %           set(handles.salir,'visible','on');
 %           set(handles.salir,'value',0); 
        a=[x(o,ss)-zoom+ejey zoom+ejey];b=[x(o,ss)-zoom zoom];c=[x(o,ss)-zoom+ejex zoom+ejex];
        axis([a b c])
-       plot3(squeeze(x(o,1,ss2)),squeeze(x(o,2,ss2)),squeeze(x(o,3,ss2))) 
+       
             
             
   else
@@ -1617,6 +1610,8 @@ a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
 %   axis([a b c])
 %   end
 %     
+
+if solver == "RK4" | solver =="rk4"
         if estela == 1
             if ss > 100
                 plot3(squeeze(x(kk,1,ss-100:50:ss)),squeeze(x(kk,2,ss-100:50:ss)),squeeze(x(kk,3,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
@@ -1635,44 +1630,35 @@ a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
 %             plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
         end
         
-  plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
-  
-%   if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
-      
-%         a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
-%       a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
-%       a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
-%         axis([a b c])
-        
-        
-        
-%         if zoom_agente == "Zoom Personal" & front == 1%% controla la cabeza del agente para realizar zoom de seguimiento
+    plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+    menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+end 
 
-%       a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
-%       axis([a b c])
-%       xlim([x(o,1,ss)-zoom+ejex x(o,1,ss)+zoom+ejex])
-%       ylim([x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey])
-%       zlim([x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey])
-     
-%      a=[x(o,ss)-zoom+ejey x(o,ss)+zoom+ejey];b=[x(o,ss)-zoom x(o,ss)+zoom];c=[x(o,ss)-zoom+ejex x(o,ss)+zoom+ejex];
-%      a1=[x(o,2,ss)-zoom+ejey x(o,2,ss)+zoom+ejey];b1=[x(o,2,ss)-zoom x(o,2,ss)+zoom];c1=[x(o,2,ss)-zoom+ejex x(o,2,ss)+zoom+ejex];
-%      a2=[x(o,3,ss)-zoom+ejey x(o,3,ss)+zoom+ejey];b2=[x(o,3,ss)-zoom x(o,3,ss)+zoom];c2=[x(o,3,ss)-zoom+ejex x(o,3,ss)+zoom+ejex];
-%      axis([a b c])
-%      axis([a1 b1 c1])
-%      axis([a2 b2 c2])
-%      plot3(squeeze(x(o,1,ss)),squeeze(x(o,2,ss)),squeeze(x(o,3,ss)))
-        
-        
-        
-        
-        
-        
-        
-        
-        
-%   end
+%%%%%    CON ode23s   %%%%%%
+if solver == "ode23s"
+    
+    if estela == 1
+            if ss > 100
+                plot3((x1(kk,ss-100:50:ss)),(x2(kk,ss-100:50:ss)),(x3(kk,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+            else
+                
+                if ss<20
+                    plot3((x1(kk,ss2:1:ss)),(x2(kk,ss2:1:ss)),(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                if ss > 20
+                   
+                    plot3((x1(kk,ss-20:1:ss)),(x2(kk,ss-20:1:ss)),(x3(kk,ss-20:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+
+            end
+            
+%             plot(x1(i,ss),x2(i,ss),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(i,:))
+        end
+    plot3((x1(kk,ss)),squeeze(x2(kk,ss)),squeeze(x3(kk,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+    menu3(kk,:)=[x1(kk,ss) x2(kk,ss) x3(kk,ss)];
+end
   
-menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+% menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
  end
 v=get(handles.popupmenu6,'Value');
 set(handles.text22,'string',"x = "+(menu3(v,1))+";  "+"y = "+(menu3(v,2))+";  "+"z = "+(menu3(v,3)));
@@ -1683,14 +1669,9 @@ pause(0.01)
  
  
   view(-view11,view22)
- %   view(-5,10)
-% 
-% 
-% axis([a b c])
+ 
 sss=ss;
-% d=0;
 view2=view1;    
-%end
 menu = [1:np]; 
     set(handles.popupmenu3,'string',menu)
 end    
