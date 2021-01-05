@@ -1598,11 +1598,6 @@ end
 if cabeza_agente == "ok"
 set(handles.cabeza,'visible','off'); 
 set(handles.cabezano,'visible','on');
-  zoom_agente= get(handles.pushbutton6,'String');
-  o = get(handles.popupmenu3,'Value');% recibe el valor del menu de agente
-  front = get(handles.radiobutton11,'Value');
-  back = get(handles.radiobutton12,'Value');
-  estela = get(handles.estela,'Value');
 % Menu2 es para mostrar en una lista las posiciones de los agentes
 % menu2 = [1:np]
 %     set(handles.popupmenu6,'string',menu2) 
