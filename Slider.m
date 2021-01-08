@@ -574,64 +574,28 @@ if solver == "ode23s"
         %%%%%%%
 end
 
-
+x1=[];
+x2=[];
 if solver == "RK4" || solver == "rk4"
            
             %RK
             for i=1:nsteps-1
      
-%                 x1(:,:,i+1)=RK4(x1(:,:,i),u(:,:,i),dt,@csdynshape);
+
                 x(:,:,i+1)=RK4(x(:,:,i),u(:,:,i),dt,@csdynshape);
-                x0=squeeze(x(1:np,:,i+1));
-                v0=squeeze(x(np+1:end,:,i+1));
-    
-                %for i=1:np
-                %distform(i,:)=sqrt(sum((repmat(x0(i,:),np,1)-x0-repmat(zdes,np,1)).^2,2));
-%               end
-                gamma=0;
-                lambda=0;
-                theta=0;
-                dd=NaN;
-                vbbb=0;
-                %lambda gamma theta and dd
-                for ii=1:np
-                    for jj=1:np
-                        gamma=gamma+norm(x0(ii,:)-x0(jj,:),2).^2;
-                        lambda=lambda+norm(v0(ii,:)-v0(jj,:),2).^2;
-                    end
-                    if ii<np
-                        %theta=theta+norm(x0(ii,:)-x0(ii+1,:)-zdes,2).^2;
-                    end
-                    if ii~=jj
-                        dd=min(norm(x0(ii,:)-x0(jj,:),2).^2,dd);
-                    end
-        
-                end
-                % Theta(i+1)=theta/(np-1);
-                Gamma(i+1)=1/(2*np^2)*gamma;
-                Lambda(i+1)=1/(2*np^2)*lambda;
-                %????
-                if dd<=1e-20 
-                flagcolision=1;
-                end
-                DD(i+1)=dd;
-                VB(i+1,:)=1/np*sum(v0,1);
-        %       tests to stop if consensus is likely or unlikely to be achieved (for
-    %            bench)
-%               if i>=501 
-%               test=sum(Lambda(i-150:i));
-%               test2=sum(Theta(i-150:i));
-%               if test<=1||test2>=1000
-%               break
-%               toc
-%               end
-%               end    
+                x0=squeeze(x(1:np,1,i+1));
+                x1=[x1 x0];
+                x0=squeeze(x(1:np,2,i+1));
+                x2=[x2 x0];
+                
     
             end
-            
+        %    x1=squeeze(x(1:np,1,:));
+         %   x2=squeeze(x(1:np,2,:));
 end
         
-       
+
+% trabajo_titulo
         col = jet(1);
         hold on
         d=1;
