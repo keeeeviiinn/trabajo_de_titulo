@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 26-Dec-2020 16:41:58
+% Last Modified by GUIDE v2.5 17-Jan-2021 15:37:42
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -106,10 +106,11 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo vectoresAgentes vector
+ global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo vectoresAgentes vector refreshOn
  % reestablece nombre boton stop
 % clear all
 % clc
+refreshOn = 1;
 set(handles.popupmenu6,'Visible','on')
 set(handles.text22,'Visible','on')
 set(handles.salirzoom,'String','Salir zoom')
@@ -623,8 +624,11 @@ set(handles.slider7,'MIN',0,'MAX',zz2);
 
 end
  
+%while2D
  while   dd==0
-     
+     global columna2d
+ [fila,columna2d]=size(x1);
+
        %Menu2 es para mostrar en una lista las posiciones de los agentes
 menu2 = [1:np];
     set(handles.popupmenu6,'string',menu2) 
@@ -677,6 +681,12 @@ end
         s2=get(handles.slider7,'Value');
         ss=round(s);%ss es la variable que se genera con el slider y se redondea
         ss2=round(s2);
+        
+        if ss >= columna2d
+            ss = columna2d;
+            set(handles.slider2,'Value',ss);
+            set(handles.slider2,'MIN',0,'MAX',ss);
+        end
         
         
 if      ss==0;
@@ -1685,7 +1695,7 @@ function stop_Callback(hObject, eventdata, handles)
 global cuadrado bandada poligon vector vectoresAgentes;
 vectoresAgentes = [];
 vector = 1;
-
+refreshOn = 1;
 set(handles.text28,'Visible','off')
 set(handles.edit12,'Visible','off')
 set(handles.edit13,'Visible','off')
@@ -2826,3 +2836,213 @@ function guardar_Callback(hObject, eventdata, handles)
 % exportgraphics(,'Agentes.png','Resolution',300)
 % t = tiledlayout(2,1);
 % exportgraphics(gcf,'vectorfig.pdf','ContentType','vector')
+
+
+% --- Executes on button press in pushbutton19.
+function pushbutton19_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton19 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% frontControlPlus = str2double(get(handles.slider2,'MAX'))
+global columna2d
+frontControlPlus = get(handles.slider2,'MAX') + 100;
+limFrontControl1 = get(handles.slider2,'Value');
+limBackControl1 = get(handles.slider7,'Value');
+
+
+
+if frontControlPlus >= columna2d
+set(handles.slider2,'MIN',0,'MAX',columna2d);
+set(handles.slider7,'MIN',0,'MAX',columna2d);
+% frontControlPlus = get(handles.slider2,'MAX');
+else
+    set(handles.slider2,'MIN',0,'MAX',frontControlPlus)
+    set(handles.slider7,'MIN',0,'MAX',frontControlPlus)
+end
+
+if limFrontControl1 > frontControlPlus
+    set(handles.slider2,'Value',frontControlPlus)        
+end
+if limBackControl1 > frontControlPlus
+    set(handles.slider2,'Value',frontControlPlus)        
+end
+
+% BackControl = get(handles.slider2,'MAX')
+% set(handles.slider2,'Value',frontControlPlus)
+
+
+
+% --- Executes on button press in pushbutton20.
+function pushbutton20_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+zoomRest = get(handles.slider10,'MIN')
+zoomPlus = get(handles.slider10,'MAX') + 5
+% if zoomRest == 0 
+%     set(handles.slider10,'MIN')
+% end
+set(handles.slider10,'MIN',zoomRest,'MAX',zoomPlus);
+
+% --- Executes on button press in pushbutton21.
+function pushbutton21_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton21 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+frontControlSubtraction = get(handles.slider2,'MAX') - 100;
+
+set(handles.slider2,'MIN',0,'MAX',frontControlSubtraction);
+set(handles.slider7,'MIN',0,'MAX',frontControlSubtraction);
+limFrontControl2 = get(handles.slider2,'Value');
+limBackControl2 = get(handles.slider7,'Value');
+
+if limFrontControl2 > frontControlSubtraction
+    set(handles.slider2,'Value',frontControlSubtraction)
+end
+if limBackControl2 > frontControlSubtraction
+    set(handles.slider7,'Value',frontControlSubtraction)
+end
+
+
+
+% --- Executes on button press in pushbutton22.
+function pushbutton22_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton22 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+zoomRest = get(handles.slider10,'MIN') - 0.01
+if zoomRest <= 0.1
+    zoomRest = zoomRest - 0.01 
+end
+if zoomRest <= 0 
+   zoomRest = 0.01
+end
+set(handles.slider10,'MIN',zoomRest);
+
+
+
+% --- Executes on button press in pushbutton23.
+function pushbutton23_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton23 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton24.
+function pushbutton24_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton24 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton25.
+function pushbutton25_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton25 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ejeyPlus = get(handles.ejey,'MAX') + 1
+set(handles.ejey,'MIN',-ejeyPlus,'MAX',ejeyPlus);
+
+
+% --- Executes on button press in pushbutton26.
+function pushbutton26_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton26 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ejeyPlus = get(handles.ejey,'MAX') - 1
+set(handles.ejey,'MIN',-ejeyPlus,'MAX',ejeyPlus);
+
+
+% --- Executes on button press in pushbutton27.
+function pushbutton27_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton27 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ejexPlus = get(handles.ejex,'MAX') + 1
+set(handles.ejex,'MIN',-ejexPlus,'MAX',ejexPlus);
+
+
+% --- Executes on button press in pushbutton28.
+function pushbutton28_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton28 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ejexPlus = get(handles.ejex,'MAX') - 1
+set(handles.ejex,'MIN',-ejexPlus,'MAX',ejexPlus);
+
+
+% --- Executes on button press in pull.
+function pull_Callback(hObject, eventdata, handles)
+% hObject    handle to pull (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global refreshOn zoomRefresh frontRefresh ejeyRefresh ejexRefresh
+dos=get(handles.radiobutton26,'Value');
+tres=get(handles.radiobutton27,'Value');
+if refreshOn == 1
+zoomRefresh = num2str(get(handles.slider10,'MAX'))
+frontRefresh = num2str(get(handles.slider2,'MAX'))
+ejeyRefresh = num2str(get(handles.ejey,'MAX'))
+ejexRefresh = num2str(get(handles.ejex,'MAX'))
+refreshOn = 0;
+end
+cont = get(handles.pull,'String')
+if cont == "Refresh"
+if dos==1
+    set(handles.uitable10,'Visible','on');
+    A = {'Limit Front Control';'y';'x';'zoom'};
+    B = {frontRefresh;ejeyRefresh;ejexRefresh;zoomRefresh };
+    variables = [A B];
+    set(handles.uitable10,'data',variables);
+end
+
+if tres == 1
+    set(handles.uitable10,'Visible','on');
+    A = {'Limit Front Control';'y';'x';'zoom'};
+    B = {frontRefresh;ejeyRefresh;ejexRefresh;zoomRefresh };
+    variables = [A B];
+    set(handles.uitable10,'data',variables);
+end
+
+
+    set(handles.pull,'String','Push')
+    set(handles.uitable10,'Visible','on')
+end    
+if cont == "Push"
+recibido=get(handles.uitable10,'data');
+
+  r1 = recibido(1,2)
+  frontRefresh = str2double(r1)
+  r2 = recibido(2,2)
+  ejeyRefresh = str2double(r2)
+  r3 = recibido(3,2)
+  ejexRefresh = str2double(r3)
+  r4 = recibido(4,2)
+  zoomRefresh = str2double(r4)
+  zoomValue = get(handles.slider10,'Value');
+  frontValue = get(handles.slider2,'Value');
+  ejeyValue = get(handles.ejey,'Value');
+  ejexValue = get(handles.ejex,'Value');
+  if zoomValue >= zoomRefresh
+    set(handles.slider10,'Value',zoomRefresh);  
+  end
+  if frontValue >= frontRefresh
+    set(handles.slider2,'Value',frontRefresh);  
+  end
+  if ejeyValue >= ejeyRefresh
+    set(handles.ejey,'Value',ejeyRefresh);  
+  end
+  if ejexValue >= ejexRefresh
+    set(handles.ejex,'Value',ejexRefresh);  
+  end
+  
+  
+  set(handles.slider2,'MIN',0,'MAX',frontRefresh);
+  set(handles.slider7,'MIN',0,'MAX',frontRefresh);
+  set(handles.slider10,'MIN',1,'MAX',zoomRefresh);
+  set(handles.ejey,'MIN',-ejeyRefresh,'MAX',ejeyRefresh);
+  set(handles.ejex,'MIN',-ejexRefresh,'MAX',ejexRefresh);
+  
+  set(handles.uitable10,'Visible','on')
+%   set(handles.pull,'String','Refresh')
+end
