@@ -354,7 +354,14 @@ if triangulo == 1
 %     val3 = floor(np/2);
 %     val4= vbar2(2), vbar2(1);
 %     zdes=[-0.5 -0.5;-0.5 -0.5;0 -0.5;0 -0.5;2 0;0 0.5;0 0.5;-0.5 0.5;-2.5 -1.5;-0.5 0;-0.5 0;-0.5 0;-0.5 0;1 0.5;0 0.5;0 0.5;0 0.5;-2 0;-1 0;-1 0;2 -0.5;0 -0.5;-1 0;-1 0;2 -0.5;0 -0.5;-1 0;-1 0;-2 0;0 0.5;0 0.5;0 0.5;0 0.5;-1 -1.5;-1 0.5;-1 -0.5;-1 -0.5;0 0.5;0 0.5;0 0.5;0 0.5;-1 -2];
-    zdes=[0 0.5;-1 0;1 0.5;0 0.5;0 0.5;-2 -1;-1 -0.5;0 0.5;0 0.5;0 0.5;0 0.5;0.5 -1.75];
+ %   zdes=[0 0.5;-1 0;1 0.5;0 0.5;0 0.5;-2 -1;-1 -0.5;0 0.5;0 0.5;0 0.5;0 0.5;0.5 -1.75];
+   %zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5]; %letra U
+%     zdes= [-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25];%Letra T
+%       zdes=[-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0];%letra E
+%     zdes=[0 -2.5;0 -2.5;0 -5;-1.5 2.5;-1.5 2.5;-1.5 0;-2.5 -5;0 5;0 2.5;0 2.5];%letra M
+%     zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25];% letra UT
+%     zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25;-5 -10;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0];% letra UTE
+    zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25;-5 -10;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;-2 0;0 -2.5;0 -2.5;0 -5;-1.5 2.5;-1.5 2.5;-1.5 0;-2.5 -5;0 5;0 2.5;0 2.5;-23 10];% letra UTEM
 end
 %%%%%%% CIRCULO2D %%%%%%%%%%%%%%%
 if circulo == 1
@@ -560,7 +567,7 @@ for i=1:np
 end
 set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
 
-
+tic
        
 if solver == "ode23s"
         %ode23s%%%
@@ -594,7 +601,9 @@ if solver == "RK4" || solver == "rk4"
 
 end
         
-
+toc
+save('x1','x1')
+save('x2','x2')
 % trabajo_titulo
         col = jet(1);
         hold on
@@ -1737,7 +1746,8 @@ set(handles.pushbutton6,'Value',0)
 set(handles.pushbutton5,'Value',0)
 
 set (handles.pushbutton16, 'BackgroundColor' , 'red' ) 
-
+ set(handles.uitable10,'Visible','off')
+ set(handles.pull,'String','Refresh')
 
 cla reset
     
@@ -1970,12 +1980,36 @@ set(handles.uitable10,'Visible','off');
 
 % --- Executes on button press in deseado.
 function deseado_Callback(hObject, eventdata, handles)
-global np ndim sigma K beta pp flag alpha M zdes dt
+global np ndim sigma K beta pp flag alpha M zdes dt refreshOn frontRefresh ejeyRefresh ejexRefresh zoomRefresh
 dos=get(handles.radiobutton26,'Value');
 tres=get(handles.radiobutton27,'Value');
+refresh = get(handles.pull,'String');
+A = get(handles.uitable10,'data')
+vectores = size(A)
+    
 
-
+if refresh == "Push" || vectores(1,1)
 if dos==1
+    set(handles.uitable10,'Visible','on');
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; 'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
+    B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';'ode23s';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';frontRefresh;ejeyRefresh;ejexRefresh;zoomRefresh};
+    variables = [A B];
+    set(handles.uitable10,'data',variables);
+end
+
+if tres == 1
+    set(handles.uitable10,'Visible','on');
+    A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo';'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
+    B = {'1.1';'0.1';'0';'10';'4';'0';'50';'400';'0.05';'RK4';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';frontRefresh;ejeyRefresh;ejexRefresh;zoomRefresh};
+    variables = [A B];
+    set(handles.uitable10,'data',variables);    
+end
+
+set(handles.pull,'String','Refresh')
+
+else
+        
+   if dos==1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; 'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
     B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';'ode23s';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'20001';'100';'100';'100' };
@@ -1990,6 +2024,9 @@ if tres == 1
     variables = [A B];
     set(handles.uitable10,'data',variables);
 end
+end
+
+
 
 
 
@@ -2977,6 +3014,7 @@ function pull_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global refreshOn zoomRefresh frontRefresh ejeyRefresh ejexRefresh
+set(handles.deseado,'Value',0);
 dos=get(handles.radiobutton26,'Value');
 tres=get(handles.radiobutton27,'Value');
 if refreshOn == 1
@@ -2992,7 +3030,7 @@ if dos==1
     set(handles.uitable10,'Visible','on');
     A = {'Limit Front Control';'y';'x';'zoom'};
     B = {frontRefresh;ejeyRefresh;ejexRefresh;zoomRefresh };
-    variables = [A B];
+    variables = [A B];    
     set(handles.uitable10,'data',variables);
 end
 
@@ -3035,7 +3073,10 @@ recibido=get(handles.uitable10,'data');
   if ejexValue >= ejexRefresh
     set(handles.ejex,'Value',ejexRefresh);  
   end
-  
+ 
+  frontRefresh
+  frontRefresh
+  zoomRefresh
   
   set(handles.slider2,'MIN',0,'MAX',frontRefresh);
   set(handles.slider7,'MIN',0,'MAX',frontRefresh);
@@ -3044,5 +3085,7 @@ recibido=get(handles.uitable10,'data');
   set(handles.ejex,'MIN',-ejexRefresh,'MAX',ejexRefresh);
   
   set(handles.uitable10,'Visible','on')
+  
+
 %   set(handles.pull,'String','Refresh')
 end
