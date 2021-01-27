@@ -1323,12 +1323,12 @@ movim = 1;
 %valores filas xx columnas yy dimension zz de la matriz z
 if solver == "ode23s" 
     [xx,yy,zz] = size(x1);
-    xx;
-    yy;
-    zz;
+    xx
+    yy
+    zz
 
-    if yy <= slider
-        yydividido = yy/79;
+    if zz <= slider
+        yydividido = yy/79
         set(handles.slider2,'MIN',0,'MAX',yydividido);
         set(handles.slider7,'MIN',0,'MAX',yydividido);
 
