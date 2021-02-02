@@ -106,7 +106,7 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo vectoresAgentes vector refreshOn
+ global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo cargar vectoresAgentes vector refreshOn
  % reestablece nombre boton stop
 % clear all
 % clc
@@ -334,8 +334,16 @@ for i=1:np
     for kk=1:ndim
         x00(i,kk)=10*rand-1;
         v00(i,kk)=2*rand-1;
+       
     end
 end
+
+% x00=[10*0.5 10*0.5;5*0.5 5*0.5;2*0.5 2*0.5;7*0.5 7*0.5];
+% v00=[0.5 0.5;0.6 0.6;0.3 0.3;0.7 0.7];
+
+
+
+
 vbar0=1/np*sum(v00,1);
 vbar2=1/np*sum(v00,1);
 zdes=zeros(np-1,ndim);
@@ -479,6 +487,28 @@ while kk<=np-1
 end
 zdes
 end
+
+if cargar == 1;
+% x1 = load ('x1.mat')
+% x2 = load ('x2.mat')
+% x = load('x.mat') 
+% x1 = load ('x1.txt')
+% x2 = load ('x2.txt')
+% x = load('x.txt') 
+filename = 'x1.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x1 = importdata(filename,delimiterIn,headerlinesIn);
+filename = 'x2.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x2 = importdata(filename,delimiterIn,headerlinesIn);
+filename = 'x.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x = importdata(filename,delimiterIn,headerlinesIn);
+
+else
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Initial energies and gamma lambda
@@ -495,7 +525,7 @@ end
 
 Gamma=1/(2*np^2)*Gamma;
 Lambda=1/(2*np^2)*Lambda;
-%scaling to choose gamma lambda at t=0
+% scaling to choose gamma lambda at t=0
 x00=sqrt(gamma0/Gamma)*x00;
 v00=sqrt(lambda0/Lambda)*v00;
 Gammap=0;
@@ -600,10 +630,11 @@ if solver == "RK4" || solver == "rk4"
             end
 
 end
-        
+end        
 toc
-save('x1','x1')
-save('x2','x2')
+save('x1.txt','x1')
+save('x2.txt','x2')
+save('x.txt','x')
 % trabajo_titulo
         col = jet(1);
         hold on
@@ -2045,7 +2076,7 @@ function uitable10_CellEditCallback(hObject, eventdata, handles)
 % --- Executes on selection change in popupmenu4.
 function popupmenu4_Callback(hObject, eventdata, handles)
 %%Menu desplegable para figuras de agentes %%%%
-global cuadrado bandada poligon elegir circulo triangulo creativo
+global cuadrado bandada poligon elegir circulo triangulo creativo cargar
 elegir = 0;
 cuadrado = 0;
 bandada = 0;
@@ -2053,6 +2084,7 @@ poligon = 0;
 circulo = 0;
 triangulo = 0;
 creativo = 0;
+cargar = 0;
 v=get(handles.popupmenu4,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -2071,6 +2103,8 @@ switch v
         triangulo = 1;
     case 7
         creativo = 1;
+    case 8
+        cargar  = 1;
         set(handles.text28,'Visible','on')
         set(handles.edit12,'Visible','on')
         set(handles.edit13,'Visible','on')
@@ -2240,7 +2274,7 @@ end
 
 % --- Executes on selection change in popupmenu7.
 function popupmenu7_Callback(hObject, eventdata, handles)
-global cuadrado paredes circulo elegir bandada poligon olympic piramide creativo
+global cuadrado paredes circulo elegir bandada poligon olympic piramide creativo cargar
 elegir = 0;
 cuadrado = 0;
 paredes = 0;
@@ -2249,6 +2283,7 @@ bandada = 0;
 olympic = 0;
 piramide = 0;
 creativo = 0;
+cargar = 0;
 v=get(handles.popupmenu7,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -2271,6 +2306,8 @@ switch v
         olympic=1;
     case 9
         creativo=1;
+    case 10
+        cargar = 1;
         set(handles.text28,'Visible','on')
         set(handles.edit12,'Visible','on')
         set(handles.edit13,'Visible','on')
