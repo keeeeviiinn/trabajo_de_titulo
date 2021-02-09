@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 17-Jan-2021 15:37:42
+% Last Modified by GUIDE v2.5 03-Feb-2021 21:09:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,8 +59,9 @@ function Slider_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
- global vectoresAgentes vector;
+ global vectoresAgentes vector grabar;
  vectoresAgentes = [];
+ grabar = 0;
 
  vector = 1;
  
@@ -106,10 +107,11 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo vectoresAgentes vector refreshOn
+ global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo cargar vectoresAgentes vector refreshOn grabar cargarzdes
  % reestablece nombre boton stop
 % clear all
 % clc
+
 refreshOn = 1;
 set(handles.popupmenu6,'Visible','on')
 set(handles.text22,'Visible','on')
@@ -341,8 +343,16 @@ for i=1:np
     for kk=1:ndim
         x00(i,kk)=10*rand-1;
         v00(i,kk)=2*rand-1;
+       
     end
 end
+
+% x00=[10*0.5 10*0.5;5*0.5 5*0.5;2*0.5 2*0.5;7*0.5 7*0.5];
+% v00=[0.5 0.5;0.6 0.6;0.3 0.3;0.7 0.7];
+
+
+
+
 vbar0=1/np*sum(v00,1);
 vbar2=1/np*sum(v00,1);
 zdes=zeros(np-1,ndim);
@@ -368,7 +378,19 @@ if triangulo == 1
 %     zdes=[0 -2.5;0 -2.5;0 -5;-1.5 2.5;-1.5 2.5;-1.5 0;-2.5 -5;0 5;0 2.5;0 2.5];%letra M
 %     zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25];% letra UT
 %     zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25;-5 -10;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0];% letra UTE
-    zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25;-5 -10;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;-2 0;0 -2.5;0 -2.5;0 -5;-1.5 2.5;-1.5 2.5;-1.5 0;-2.5 -5;0 5;0 2.5;0 2.5;-23 10];% letra UTEM
+%     zdes=[0 2.5;0 5;0 2.5;-1 1.25;-1 1.25; -1 -1.25;-1 -1.25;0 -2.5;0 -2.5;0 -2.5;-0.5 0;-1.25 0;-1.25 0;-1.2 0;-1.25 -2.5;2.5 5;0 2.5;0 2.5;0 1.25;0 1.25;-5 -10;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;-2 0;0 -2.5;0 -2.5;0 -5;-1.5 2.5;-1.5 2.5;-1.5 0;-2.5 -5;0 5;0 2.5;0 2.5;-23 10];% letra UTEM
+% zdes = [-6 0;6 -2.5;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;4.5 2.5;-3 0;1.5 2.5] %M
+
+%palabra utem completa
+% zdes=[1 -1.25;-2 0;3 -1.25;-4 0;4 -2.5;-4 0;4 -2.5;-4 0;4 -2.5;-4 0;-5 10;0 -2.5;0 -2.5;0 -2.5;0 -2.5;1.25 0;-2.5 0;3.75 0;-5 0;-2.5 0;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;-2 0;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;4.5 2.5;-3 0;1.5 2.5];% letra UTEM
+filename = 'zdes.txt';
+[zdes,delimiterOut]=importdata(filename);
+zdes
+% delimiterIn = ' ';
+% headerlinesIn = 1;
+% zdes = importdata(filename,delimiterIn,headerlinesIn)
+
+
 end
 %%%%%%% CIRCULO2D %%%%%%%%%%%%%%%
 if circulo == 1
@@ -431,6 +453,12 @@ if creativo == 1
 
     zdes = [vectoresAgentes];
 end
+
+if cargarzdes == 1
+filename = 'zdes.txt';
+[zdes,delimiterOut]=importdata(filename);
+zdes
+end
 %%
 %%%%%%% bird-like flocking %%%%%%%%%%%%%%%
 if bandada == 1;
@@ -486,6 +514,35 @@ while kk<=np-1
 end
 zdes
 end
+
+if cargar == 1;
+% x1 = load ('x1.mat')
+% x2 = load ('x2.mat')
+% x = load('x.mat') 
+% x1 = load ('x1.txt')
+% x2 = load ('x2.txt')
+% x = load('x.txt') 
+cargarArchivotxt = get(handles.edit18,'String');
+archivo1 = strcat(cargarArchivotxt,'1.txt')
+archivo2 = strcat(cargarArchivotxt,'2.txt')
+archivo3 = strcat(cargarArchivotxt,'.txt')
+% filename = 'x1.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x1 = importdata(archivo1,delimiterIn,headerlinesIn);
+% filename = 'x2.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x2 = importdata(archivo2,delimiterIn,headerlinesIn);
+% filename = 'x.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x = importdata(archivo3,delimiterIn,headerlinesIn);
+% delimiterIn = ' ';
+% headerlinesIn = 1;
+% solver = importdata('solver.txt',delimiterIn,headerlinesIn);
+
+else
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Initial energies and gamma lambda
@@ -502,7 +559,7 @@ end
 
 Gamma=1/(2*np^2)*Gamma;
 Lambda=1/(2*np^2)*Lambda;
-%scaling to choose gamma lambda at t=0
+% scaling to choose gamma lambda at t=0
 x00=sqrt(gamma0/Gamma)*x00;
 v00=sqrt(lambda0/Lambda)*v00;
 Gammap=0;
@@ -614,10 +671,23 @@ if solver == "RK4" || solver == "rk4"
 
             end
 end
-        
+end        
 toc
-save('x1','x1');
-save('x2','x2');
+
+if grabar == 1
+palabra = get(handles.edit17,'String')
+palabra1 = strcat(palabra,'1.txt')
+palabra2 = strcat(palabra,'2.txt')
+palabra3 = strcat(palabra,'.txt')
+
+save(palabra1,'x1')
+save(palabra2,'x2')
+save(palabra3,'x')
+save('solver.txt','solver')
+% save('x2.txt','x2')
+% save('x.txt','x')
+end
+grabar = 0;
 % trabajo_titulo
         col = jet(1);
         hold on
@@ -1263,6 +1333,63 @@ end
 % recibido=get(handles.uitable10,'data');
 % stringsolver = recibido(10,2);
 % solver = eval(stringsolver{1});
+if cargar == 1;
+% x1 = load ('x1.mat')
+% x2 = load ('x2.mat')
+% x = load('x.mat') 
+% x1 = load ('x1.txt')
+% x2 = load ('x2.txt')
+% x = load('x.txt') 
+filename = 'solver.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+solver = importdata(filename,delimiterIn,headerlinesIn);
+if solver == "RK4" || solver == "rk4"
+% filename = 'x1.txt';
+% delimiterIn = ' ';
+% headerlinesIn = 1;
+% x1 = importdata(filename,delimiterIn,headerlinesIn);
+% filename = 'x2.txt';
+% delimiterIn = ' ';
+% headerlinesIn = 1;
+% x2 = importdata(filename,delimiterIn,headerlinesIn);
+% filename = 'x.txt';
+% delimiterIn = ' ';
+% headerlinesIn = 1;
+% x = importdata(filename,delimiterIn,headerlinesIn);
+cargarArchivotxt = get(handles.edit18,'String');
+archivo1 = strcat(cargarArchivotxt,'-x1.txt')
+archivo2 = strcat(cargarArchivotxt,'-x2.txt')
+archivo3 = strcat(cargarArchivotxt,'-x3.txt')
+archivo4 = strcat(cargarArchivotxt,'-v1.txt')
+archivo5 = strcat(cargarArchivotxt,'-v2.txt')
+archivo6 = strcat(cargarArchivotxt,'-v3.txt')
+% solver = strcat(cargarArchivotxt,'.txt')
+% filename = 'x1.txt';
+delimiterIn = ' ';
+headerlinesIn = 1;
+x1 = importdata(archivo1,delimiterIn,headerlinesIn);
+delimiterIn = ' ';
+headerlinesIn = 1;
+x2 = importdata(archivo2,delimiterIn,headerlinesIn);
+delimiterIn = ' ';
+headerlinesIn = 1;
+x3 = importdata(archivo3,delimiterIn,headerlinesIn);
+delimiterIn = ' ';
+headerlinesIn = 1;
+v1 = importdata(archivo4,delimiterIn,headerlinesIn);
+delimiterIn = ' ';
+headerlinesIn = 1;
+v2 = importdata(archivo5,delimiterIn,headerlinesIn);
+delimiterIn = ' ';
+headerlinesIn = 1;
+v3 = importdata(archivo6,delimiterIn,headerlinesIn);
+delimiterIn = ' ';
+headerlinesIn = 1;
+solver = importdata('solver.txt',delimiterIn,headerlinesIn);
+end
+
+else
 
 if solver == "ode23s"
 
@@ -1296,6 +1423,37 @@ end
 end
 
 toc
+end
+if grabar == 1
+    palabra = get(handles.edit17,'String')
+    if solver == "RK4" || solver== "rk4"
+        palabra1 = strcat(palabra,'-x.txt')
+        palabra2 = strcat(palabra,'-v.txt')        
+        save(palabra1,'x0')
+        save(palabra2,'v0')        
+        save('solver.txt','solver')
+    end
+    if solver == "ode23s"
+        palabra1 = strcat(palabra,'-x1.txt')
+        palabra2 = strcat(palabra,'-x2.txt')
+        palabra3 = strcat(palabra,'-x3.txt')
+        palabra4 = strcat(palabra,'-v1.txt')
+        palabra5 = strcat(palabra,'-v2.txt')
+        palabra6 = strcat(palabra,'-v3.txt')
+
+        save(palabra1,'x1')
+        save(palabra2,'x2')
+        save(palabra3,'x3')
+        save(palabra4,'v1')
+        save(palabra5,'v2')
+        save(palabra6,'v3')
+        save('solver.txt','solver')
+    end
+% save('x1.txt','x1')
+% save('x2.txt','x2')
+% save('x.txt','x')
+end
+grabar = 0;
 
 
 axes(handles.axes1)
@@ -1337,8 +1495,8 @@ end
 
 if solver == "RK4" || solver == "rk4"
     [xx,yy,zz] = size(x);
-    xx
-    yy
+    xx;
+    yy;
     zz;
 
     if zz <= slider
@@ -1350,6 +1508,8 @@ if solver == "RK4" || solver == "rk4"
     end
 end
 
+
+%while3d
   while dd ==0
 
 %Menu2 es para mostrar en una lista las posiciones de los agentes
@@ -2067,7 +2227,7 @@ function uitable10_CellEditCallback(hObject, eventdata, handles)
 % --- Executes on selection change in popupmenu4.
 function popupmenu4_Callback(hObject, eventdata, handles)
 %%Menu desplegable para figuras de agentes %%%%
-global cuadrado bandada poligon elegir circulo triangulo creativo
+global cuadrado bandada poligon elegir circulo triangulo creativo grabar cargar cargarzdes
 elegir = 0;
 cuadrado = 0;
 bandada = 0;
@@ -2075,6 +2235,8 @@ poligon = 0;
 circulo = 0;
 triangulo = 0;
 creativo = 0;
+cargar = 0;
+cargarzdes = 0;
 v=get(handles.popupmenu4,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -2083,16 +2245,76 @@ switch v
         
     case 2
         cuadrado = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 3
         bandada = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 4
         poligon = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 5
         circulo = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 6
         triangulo = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 7
-        creativo = 1;
+        creativo = 1;    
         set(handles.text28,'Visible','on')
         set(handles.edit12,'Visible','on')
         set(handles.edit13,'Visible','on')
@@ -2104,6 +2326,38 @@ switch v
         set(handles.text27,'Visible','off')
         set(handles.text28,'String','Ingrese Vectores')
         set(handles.pushbutton17,'Visible','on')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
+    case 8
+        cargarzdes = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
+    case 9
+        cargar  = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton17,'Visible','off')
+        set(handles.pushbutton30,'Visible','off')
+        set(handles.pushbutton31,'Visible','on')
+        set(handles.edit17,'Visible','off')
+        set(handles.edit18,'Visible','on')
     otherwise
         
     elegir = 1;
@@ -2262,7 +2516,7 @@ end
 
 % --- Executes on selection change in popupmenu7.
 function popupmenu7_Callback(hObject, eventdata, handles)
-global cuadrado paredes circulo elegir bandada poligon olympic piramide creativo
+global cuadrado paredes circulo elegir bandada poligon olympic piramide creativo grabar cargar cargarzdes
 elegir = 0;
 cuadrado = 0;
 paredes = 0;
@@ -2271,6 +2525,8 @@ bandada = 0;
 olympic = 0;
 piramide = 0;
 creativo = 0;
+cargar = 0;
+cargarzdes = 0;
 v=get(handles.popupmenu7,'Value');
 %bandada = get(handles.popupmenu4,'Value');
 
@@ -2279,20 +2535,97 @@ switch v
         
     case 2
         cuadrado = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 3
         paredes = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 4
         circulo = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 5
         piramide=1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 6
         bandada=1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 7   
         poligon=1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 8
         olympic=1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
     case 9
-        creativo=1;
+        creativo=1;    
         set(handles.text28,'Visible','on')
         set(handles.edit12,'Visible','on')
         set(handles.edit13,'Visible','on')
@@ -2304,7 +2637,40 @@ switch v
         set(handles.text26,'String','y')
         set(handles.text27,'String','z')
         set(handles.text28,'String','Ingrese Vectores')
-        set(handles.pushbutton17,'Visible','on')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
+    case 10
+        cargarzdes = 1;
+        set(handles.text28,'Visible','on')
+        set(handles.edit12,'Visible','on')
+        set(handles.edit13,'Visible','on')
+        set(handles.edit14,'Visible','on')
+        set(handles.text25,'Visible','on')
+        set(handles.text26,'Visible','on')
+        set(handles.text27,'Visible','on')
+        set(handles.text25,'String','x')
+        set(handles.text26,'String','y')
+        set(handles.text27,'String','z')
+        set(handles.text28,'String','Ingrese Vectores')
+        set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton31,'Visible','off')
+        set(handles.edit17,'Visible','on')
+        set(handles.edit18,'Visible','off')
+    case 11
+        cargar = 1;
+        set(handles.edit12,'Visible','off')
+        set(handles.edit13,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text25,'Visible','off')
+        set(handles.text26,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text28,'Visible','off')
+        set(handles.pushbutton30,'Visible','off')
+        set(handles.pushbutton31,'Visible','on')
+        set(handles.edit17,'Visible','off')
+        set(handles.edit18,'Visible','on')
         
     otherwise
         
@@ -3110,4 +3476,69 @@ recibido=get(handles.uitable10,'data');
   
 
 %   set(handles.pull,'String','Refresh')
+end
+
+
+% --- Executes on button press in pushbutton30.
+function pushbutton30_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton30 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global grabar archivo
+grabar = 1;
+archivo = 0;
+
+% --- Executes on button press in pushbutton31.
+function pushbutton31_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton31 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global archivo grabar
+archivo = 1;
+grabar = 0;
+
+
+
+function edit18_Callback(hObject, eventdata, handles)
+% hObject    handle to edit18 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit18 as text
+%        str2double(get(hObject,'String')) returns contents of edit18 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit18_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit18 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit17_Callback(hObject, eventdata, handles)
+% hObject    handle to edit17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit17 as text
+%        str2double(get(hObject,'String')) returns contents of edit17 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit17_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
 end
