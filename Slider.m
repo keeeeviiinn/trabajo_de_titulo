@@ -1484,13 +1484,14 @@ if solver == "ode23s"
     xx;
     yy;
     zz;
-
+    yydividido = yy/79;
     if yy <= slider
-        yydividido = yy/79;
+        
         set(handles.slider2,'MIN',0,'MAX',yydividido);
         set(handles.slider7,'MIN',0,'MAX',yydividido);
 
     end
+    
 end
 
 if solver == "RK4" || solver == "rk4"
