@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 03-Feb-2021 21:09:12
+% Last Modified by GUIDE v2.5 10-Feb-2021 00:12:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,11 +59,16 @@ function Slider_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
- global vectoresAgentes vector grabar;
+ global vectoresAgentes vector grabar velocidadAgentes vector2;
  vectoresAgentes = [];
  grabar = 0;
 
  vector = 1;
+ 
+ velocidadAgentes = [];
+ 
+
+ vector2 = 1;
  
 % UIWAIT makes Slider wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -107,11 +112,24 @@ function axes1_CreateFcn(hObject, eventdata, handles)
 function pushbutton1_Callback(hObject, eventdata, handles)
  
  global np ndim tf sigma K beta pp flag alpha M zdes cuadrado bandada poligon elegir
- global paredes str2 distance pow circulo str3 str4 triangulo piramide olympic dt str1 original deseado creativo cargar vectoresAgentes vector refreshOn grabar cargarzdes
+ global paredes str2 distance pow circulo velocidadAgentes str3 str4 triangulo piramide olympic dt str1 original deseado creativo cargar vectoresAgentes vector vector2 refreshOn grabar cargarzdes
+ %%% ocultar menu de zoom personal al apretar run sin apretar stop
+ set(handles.salirzoom,'String','Salir zoom')
+set(handles.pushbutton6,'String','Zoom personal')
+set(handles.popupmenu3,'visible','off')
+set(handles.text13,'visible','off')
+set(handles.uibuttongroup3,'visible','off')
+set(handles.radiobutton11,'Value',0)
+set(handles.pushbutton6,'visible','on')
+set(handles.salirzoom,'visible','off')
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+ 
+ 
  % reestablece nombre boton stop
 % clear all
 % clc
-
+iniciales = get(handles.iniciales,'Value');
 refreshOn = 1;
 set(handles.popupmenu6,'Visible','on')
 set(handles.text22,'Visible','on')
@@ -133,6 +151,28 @@ for i=1:fila
 %         conta3 = conta(j,1)
         if isnan(conta2)
             contador = 1;
+        end
+    end
+end
+
+if iniciales == 1
+    velocidadAgentes;
+    tamanio2 = size(velocidadAgentes);
+    fila2 = tamanio2(1,1);
+    columna2 =tamanio2(1,2);
+    restr2 = tamanio2(1,1);
+    contav = [];
+    contav2 = [];
+    contav3 = [];
+    contador2 = 0;
+    for i=1:fila
+        contav = velocidadAgentes(i,:);
+        for j=1:columna2
+            contav2 = contav(1,j);
+    %         conta3 = conta(j,1)
+            if isnan(contav2)
+                contador2 = 1;
+            end
         end
     end
 end
@@ -336,20 +376,34 @@ nsteps=length(t);
 gamma0=14;
 lambda0=42.3;
 
+
 x00=zeros(np,ndim);
 v00=zeros(np,ndim);
+iniciales = get(handles.iniciales,'Value');
 
-for i=1:np
-    for kk=1:ndim
-        x00(i,kk)=10*rand-1;
-        v00(i,kk)=2*rand-1;
-       
+if iniciales == 0
+    for i=1:np
+        for kk=1:ndim
+            x00(i,kk)=10*rand-1;
+            v00(i,kk)=2*rand-1;
+
+        end
     end
 end
 
-% x00=[10*0.5 10*0.5;5*0.5 5*0.5;2*0.5 2*0.5;7*0.5 7*0.5];
-% v00=[0.5 0.5;0.6 0.6;0.3 0.3;0.7 0.7];
-
+if iniciales == 1
+    
+  x00=[vectoresAgentes]; 
+  v00=[velocidadAgentes];
+% x00=[vectoresAgentes];
+% for i=1:np
+%         for kk=1:ndim
+% 
+%             v00(i,kk)=2*rand-1;
+% 
+%         end
+%     end
+end
 
 
 
@@ -546,50 +600,52 @@ else
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Initial energies and gamma lambda
-Gamma=0;
-Lambda=0;
-Ec0=0;
-for i=1:np
-    Ec0=Ec0+norm(v00(i,:),2).^2;
-    for j=1:np
-        Gamma=Gamma+norm(x00(i,:)-x00(j,:),2).^2;
-        Lambda=Lambda+norm(v00(i,:)-v00(j,:),2).^2;
+iniciales = get(handles.iniciales,'Value');
+if iniciales == 0 
+    Gamma=0;
+    Lambda=0;
+    Ec0=0;
+    for i=1:np
+        Ec0=Ec0+norm(v00(i,:),2).^2;
+        for j=1:np
+            Gamma=Gamma+norm(x00(i,:)-x00(j,:),2).^2;
+            Lambda=Lambda+norm(v00(i,:)-v00(j,:),2).^2;
+        end
     end
-end
 
-Gamma=1/(2*np^2)*Gamma;
-Lambda=1/(2*np^2)*Lambda;
-% scaling to choose gamma lambda at t=0
-x00=sqrt(gamma0/Gamma)*x00;
-v00=sqrt(lambda0/Lambda)*v00;
-Gammap=0;
-Lambdap=0;
-Ec0p=0;
-D0=0;
-set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
-for i=1:np
-    Ec0p=Ec0p+norm(v00(i,:),2).^2; %kinetic
-    for j=1:np
-        Gammap=Gammap+norm(x00(i,:)-x00(j,:),2).^2;
-        Lambdap=Lambdap+norm(v00(i,:)-v00(j,:),2).^2;
-    if original == 1
-        D0=D0+0.5*(K/np)*str2(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
-    end
-    
-    if deseado == 1
-       D0=D0+0.5*(K/np)*str4(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
-    end
-    end
-end
-Ep0=0;
-for i=2:np
-    t=norm(x00(i-1,:)-x00(i,:)-zdes(i-1,:),2).^2;
-    Ep0=Ep0+M*(sqrt(t+1)-sqrt(1)); %potential for beta=0.5
-end
+    Gamma=1/(2*np^2)*Gamma;
+    Lambda=1/(2*np^2)*Lambda;
+    % scaling to choose gamma lambda at t=0
+    x00=sqrt(gamma0/Gamma)*x00;
+    v00=sqrt(lambda0/Lambda)*v00;
+    Gammap=0;
+    Lambdap=0;
+    Ec0p=0;
+    D0=0;
+    set (handles.pushbutton16, 'BackgroundColor' , 'yellow' )
+    for i=1:np
+        Ec0p=Ec0p+norm(v00(i,:),2).^2; %kinetic
+        for j=1:np
+            Gammap=Gammap+norm(x00(i,:)-x00(j,:),2).^2;
+            Lambdap=Lambdap+norm(v00(i,:)-v00(j,:),2).^2;
+        if original == 1
+            D0=D0+0.5*(K/np)*str2(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
+        end
 
-Gammap=1/(2*np^2)*Gammap;
-Lambdap=1/(2*np^2)*Lambdap;
+        if deseado == 1
+           D0=D0+0.5*(K/np)*str4(norm(x00(i,:)-x00(j,:),2),alpha)*norm(v00(i,:)-v00(j,:),2)^2;
+        end
+        end
+    end
+    Ep0=0;
+    for i=2:np
+        t=norm(x00(i-1,:)-x00(i,:)-zdes(i-1,:),2).^2;
+        Ep0=Ep0+M*(sqrt(t+1)-sqrt(1)); %potential for beta=0.5
+    end
 
+    Gammap=1/(2*np^2)*Gammap;
+    Lambdap=1/(2*np^2)*Lambdap;
+end
 
 x=zeros(2*np,ndim,nsteps);
 x(:,:,1)=[x00;v00];
@@ -1037,12 +1093,15 @@ nsteps=length(t);
 gamma0=5;
 lambda0=0.3;
 %generate random ic
-for i=1:np
-    for kk=1:ndim
-            x00(i,kk)=2*rand-1;
-            v00(i,kk)=2*rand-1;
+
+
+    for i=1:np
+        for kk=1:ndim
+                x00(i,kk)=2*rand-1;
+                v00(i,kk)=2*rand-1;
+        end
     end
-end
+
 vbar0=1/np*sum(v00,1);
 %make initial vbar=0  comment next 3 lines for vbar!=0
 v00(:,1)=-vbar0(1)+v00(:,1);
@@ -1884,9 +1943,11 @@ end
 function text6_CreateFcn(hObject, eventdata, handles)
 %
 function stop_Callback(hObject, eventdata, handles)
-global cuadrado bandada poligon vector vectoresAgentes;
+global cuadrado bandada poligon vector vectoresAgentes vector2 velocidadAgentes;
 vectoresAgentes = [];
 vector = 1;
+velocidadAgentes = [];
+vector2 = 1;
 refreshOn = 1;
 set(handles.text28,'Visible','off')
 set(handles.edit12,'Visible','off')
@@ -1895,12 +1956,22 @@ set(handles.edit14,'Visible','off')
 set(handles.text25,'Visible','off')
 set(handles.text26,'Visible','off')
 set(handles.text27,'Visible','off')
+
+set(handles.text29,'Visible','off')
+set(handles.edit19,'Visible','off')
+set(handles.edit20,'Visible','off')
+set(handles.edit21,'Visible','off')
+set(handles.text30,'Visible','off')
+set(handles.text31,'Visible','off')
+set(handles.text32,'Visible','off')
+
 set(handles.text13,'visible','off')
 set(handles.cabeza,'visible','off'); 
 set(handles.cabezano,'visible','off');
 set(handles.pushbutton6,'visible','on');
 set(handles.uitable10,'Visible','off')
 set(handles.pushbutton17,'Visible','off')
+set(handles.iniciales,'Value',0)
 set(handles.slider15,'Visible','off');
 set(handles.slider16,'Visible','off');
 set(handles.slider16,'Visible','off');
@@ -1910,10 +1981,19 @@ set(handles.uibuttongroup3,'visible','off')
 % set(handles.salir,'visible','off');
 set(handles.popupmenu3,'visible','off')
 
-
+set(handles.edit1,'String',' ')
 set(handles.edit12,'String',' ')
 set(handles.edit13,'String',' ')
 set(handles.edit14,'String',' ')
+set(handles.edit19,'String',' ')
+set(handles.edit20,'String',' ')
+set(handles.edit21,'String',' ')
+set(handles.text25,'String',' ')
+set(handles.text26,'String',' ')
+set(handles.text27,'String',' ')
+set(handles.text30,'String',' ')
+set(handles.text31,'String',' ')
+set(handles.text32,'String',' ')
 set(handles.stop,'String','Stop.')
 set(handles.cabeza,'String','Cabeza');
 set(handles.popupmenu6,'String','Agent position')
@@ -2720,6 +2800,27 @@ function radiobutton26_Callback(hObject, eventdata, handles)
 set(handles.popupmenu4,'Visible','on')
 set(handles.popupmenu7,'Visible','off')
 set(handles.original,'Value',1);
+set(handles.iniciales,'Value',0);
+
+%ocultar menu de ingreso de x y v iniciales cunado se cambia de dim
+
+set(handles.text28,'String','Ingrese Vectores')
+    set(handles.text28,'Visible','off')
+    set(handles.text25,'Visible','off')
+    set(handles.text26,'Visible','off')
+    set(handles.text29,'Visible','off')
+    set(handles.text30,'Visible','off')
+    set(handles.text31,'Visible','off')
+    set(handles.pushbutton17,'Visible','off')
+    set(handles.edit12,'Visible','off')
+    set(handles.edit13,'Visible','off')
+    set(handles.edit19,'Visible','off')
+    set(handles.edit20,'Visible','off')
+    set(handles.edit21,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text32,'Visible','off')
+
 original=get(handles.original,'Value');
 
 if original == 1
@@ -2733,6 +2834,26 @@ set(handles.popupmenu4,'Visible','off')
 set(handles.popupmenu7,'Visible','on')
 set(handles.original,'Value',1); 
 original=get(handles.original,'Value');
+
+
+set(handles.iniciales,'Value',0);
+%si se cambia de dim, se oculte el menu de ingreso de x y v iniciales
+set(handles.text28,'String','Ingrese Vectores')
+    set(handles.text28,'Visible','off')
+    set(handles.text25,'Visible','off')
+    set(handles.text26,'Visible','off')
+    set(handles.text29,'Visible','off')
+    set(handles.text30,'Visible','off')
+    set(handles.text31,'Visible','off')
+    set(handles.pushbutton17,'Visible','off')
+    set(handles.edit12,'Visible','off')
+    set(handles.edit13,'Visible','off')
+    set(handles.edit19,'Visible','off')
+    set(handles.edit20,'Visible','off')
+    set(handles.edit21,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text32,'Visible','off')
 
 if original == 1
    set(handles.uitable10,'Visible','off') 
@@ -3084,8 +3205,8 @@ function pushbutton17_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton17 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global vectoresAgentes  vector;
-
+global vectoresAgentes  vector velocidadAgentes vector2;
+iniciales = get(handles.iniciales,'Value');
 vectorx = get(handles.edit12,'String');
 vectory = get(handles.edit13,'String');
 vectorz = get(handles.edit14,'String');
@@ -3096,9 +3217,9 @@ if dim == 1
     cont = 2;
 end
 
-vectorx;
-vectory;
-vectorz;
+vectorx
+vectory
+vectorz
 
 vectoresAgentes (vector,1)= [str2double(vectorx)];
 set(handles.text25,'String',vectoresAgentes(vector,1));
@@ -3113,11 +3234,50 @@ vectoresAgentes (vector,3)= [str2double(vectorz)];
 set(handles.text27,'String',vectoresAgentes(vector,3));
 set(handles.pushbutton17,'Value',0);
 end 
-vectoresAgentes;
+vectoresAgentes
 vector ;
-set(handles.text28,'String',"Ingresado Vector "+vector)
+set(handles.text28,'String',"Ingresado Vector Xi "+vector)
 
 vector=vector+1;
+
+
+%%%%%%%%%velocidades
+
+if iniciales == 1
+velocidadx = get(handles.edit19,'String');
+velocidady = get(handles.edit20,'String');
+velocidadz = get(handles.edit21,'String');
+
+contv1 = 3;
+dim = get(handles.radiobutton26,'Value');
+if dim == 1
+    contv1 = 2;
+end
+
+velocidadx;
+velocidady;
+velocidadz;
+
+velocidadAgentes (vector2,1)= [str2double(velocidadx)];
+set(handles.text30,'String',velocidadAgentes(vector2,1));
+set(handles.pushbutton17,'Value',0);
+
+velocidadAgentes (vector2,2)= [str2double(velocidady)];
+set(handles.text31,'String',velocidadAgentes(vector2,2));
+set(handles.pushbutton17,'Value',0);
+
+if contv1 == 3
+velocidadAgentes (vector2,3)= [str2double(velocidadz)];
+set(handles.text32,'String',velocidadAgentes(vector2,3));
+set(handles.pushbutton17,'Value',0);
+end 
+velocidadAgentes;
+vector2 ;
+set(handles.text29,'String',"Ingresado Vector Vi "+vector2)
+
+vector2=vector2+1;
+    
+end
 
 
 
@@ -3543,3 +3703,133 @@ function edit17_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function edit19_Callback(hObject, eventdata, handles)
+% hObject    handle to edit19 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit19 as text
+%        str2double(get(hObject,'String')) returns contents of edit19 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit19_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit19 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit20_Callback(hObject, eventdata, handles)
+% hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit20 as text
+%        str2double(get(hObject,'String')) returns contents of edit20 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit20_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit21_Callback(hObject, eventdata, handles)
+% hObject    handle to edit21 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit21 as text
+%        str2double(get(hObject,'String')) returns contents of edit21 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit21_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit21 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in iniciales.
+function iniciales_Callback(hObject, eventdata, handles)
+iniciales = get(handles.iniciales,'Value');
+dimension = get(handles.radiobutton26,'Value');
+if iniciales == 1
+    set(handles.text28,'String','Ingrese Vectores Posición')
+    set(handles.edit12,'String','x')
+    set(handles.edit13,'String','y')
+    set(handles.edit14,'String','z')
+    set(handles.edit19,'String','x')
+    set(handles.edit20,'String','y')
+    set(handles.edit21,'String','z')
+    set(handles.text28,'Visible','on')
+    set(handles.text25,'Visible','on')
+    set(handles.text26,'Visible','on')
+    set(handles.text29,'Visible','on')
+    set(handles.text30,'Visible','on')
+    set(handles.text31,'Visible','on')
+    set(handles.pushbutton17,'Visible','on')
+    set(handles.edit12,'Visible','on')
+    set(handles.edit13,'Visible','on')
+    set(handles.edit19,'Visible','on')
+    set(handles.edit20,'Visible','on')
+    
+    if dimension == 0
+        set(handles.edit21,'Visible','on')
+        set(handles.edit14,'Visible','on')
+        set(handles.text27,'Visible','on')
+        set(handles.text32,'Visible','on')
+    end
+    
+    if dimension == 1
+        set(handles.edit21,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text32,'Visible','off')
+        
+    end
+end
+
+if iniciales == 0
+    set(handles.text28,'String','Ingrese Vectores')
+    set(handles.text28,'Visible','off')
+    set(handles.text25,'Visible','off')
+    set(handles.text26,'Visible','off')
+    set(handles.text29,'Visible','off')
+    set(handles.text30,'Visible','off')
+    set(handles.text31,'Visible','off')
+    set(handles.pushbutton17,'Visible','off')
+    set(handles.edit12,'Visible','off')
+    set(handles.edit13,'Visible','off')
+    set(handles.edit19,'Visible','off')
+    set(handles.edit20,'Visible','off')
+    set(handles.edit21,'Visible','off')
+        set(handles.edit14,'Visible','off')
+        set(handles.text27,'Visible','off')
+        set(handles.text32,'Visible','off')
+end
+    
