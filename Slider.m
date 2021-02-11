@@ -1093,21 +1093,29 @@ nsteps=length(t);
 gamma0=5;
 lambda0=0.3;
 %generate random ic
-
-
+iniciales = get(handles.iniciales,'Value');
+if iniciales == 0
     for i=1:np
         for kk=1:ndim
                 x00(i,kk)=2*rand-1;
                 v00(i,kk)=2*rand-1;
         end
     end
+end
 
+if iniciales == 1
+    x00=[vectoresAgentes];
+    v00=[velocidadAgentes];
+end
 vbar0=1/np*sum(v00,1);
 %make initial vbar=0  comment next 3 lines for vbar!=0
 v00(:,1)=-vbar0(1)+v00(:,1);
 v00(:,2)=-vbar0(2)+v00(:,2);
 v00(:,3)=-vbar0(3)+v00(:,3);
 vbar2=1/np*sum(v00,1);
+
+
+if iniciales == 0
 Gamma=0;
 Lambda=0;
 %scaling of ics for having gamma0 and lambda0
@@ -1123,7 +1131,7 @@ Lambda=1/(2*np^2)*Lambda;
 
 x00=sqrt(gamma0/Gamma)*x00;
 v00=sqrt(lambda0/Lambda)*v00;
-
+end
 
 
 
@@ -1558,7 +1566,7 @@ if solver == "RK4" || solver == "rk4"
     xx;
     yy;
     zz;
-
+    zzdividido=zz/79;
     if zz <= slider
         
         zzdividido=zz/79;
@@ -1981,6 +1989,7 @@ set(handles.uibuttongroup3,'visible','off')
 % set(handles.salir,'visible','off');
 set(handles.popupmenu3,'visible','off')
 
+set(handles.text22,'String',' ')
 set(handles.edit1,'String',' ')
 set(handles.edit12,'String',' ')
 set(handles.edit13,'String',' ')
@@ -2249,10 +2258,13 @@ tres=get(handles.radiobutton27,'Value');
 refresh = get(handles.pull,'String');
 A = get(handles.uitable10,'data');
 vectores = size(A);
-    
 
-if refresh == "Push" || vectores(1,1)
+%%borre esto del if refresh
+%%|| vectores(1,1)
+
+if refresh == "Push" 
 if dos==1
+    
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; 'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
     B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';'ode23s';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';frontRefresh;ejeyRefresh;ejexRefresh;zoomRefresh};
@@ -2272,7 +2284,7 @@ set(handles.pull,'String','Refresh')
 
 else
         
-   if dos==1
+if dos==1
     set(handles.uitable10,'Visible','on');
     A = {'Alpha';'Beta';'Sigma';'K';'PP';'Flag';'M';'Tiempo Final';'Dif. tiempo'; 'Solver'; 'Influence';'Influenceu';'Limit Front Control';'y';'x';'zoom'};
     B = {'1.1';'0.4';'0';'100';'2';'0';'50';'20';'.001';'ode23s';'1./((0+distance).^pow)';'1./((1+distance.^2).^pow)';'20001';'100';'100';'100' };
