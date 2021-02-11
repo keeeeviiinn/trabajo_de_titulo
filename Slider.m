@@ -2000,6 +2000,8 @@ set(handles.edit21,'String',' ')
 set(handles.text25,'String',' ')
 set(handles.text26,'String',' ')
 set(handles.text27,'String',' ')
+set(handles.text28,'String',' ')
+set(handles.text29,'String',' ')
 set(handles.text30,'String',' ')
 set(handles.text31,'String',' ')
 set(handles.text32,'String',' ')
@@ -3792,6 +3794,7 @@ iniciales = get(handles.iniciales,'Value');
 dimension = get(handles.radiobutton26,'Value');
 if iniciales == 1
     set(handles.text28,'String','Ingrese Vectores Posición')
+    set(handles.text29,'String','Ingrese Vectores Velocidad')
     set(handles.edit12,'String','x')
     set(handles.edit13,'String','y')
     set(handles.edit14,'String','z')
