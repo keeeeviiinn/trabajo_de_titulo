@@ -1699,7 +1699,7 @@ if solver == "RK4" | solver == "rk4"
             plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
             if ss > 10
                 
-                avanzando = ss-7;
+                avanzando = ss-5;
                 set(handles.slider7,'Value',avanzando);
             end
             if ss <10
@@ -1727,31 +1727,21 @@ end
 
 if solver == "ode23s"
          if estela == 0
-            plot3(squeeze(x1(kk,ss2:1:ss)),squeeze(x2(kk,ss2:1:ss)),squeeze(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+             plot3(x1(kk,ss2:1:ss),x2(kk,ss2:1:ss),x3(kk,ss2:1:ss),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
          end
         
         if estela == 1
-            
-            plot3(squeeze(x1(kk,ss2:1:ss)),squeeze(x2(kk,ss2:1:ss)),squeeze(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-            if ss > 10
+            if ss > 100
+                  plot3((x1(kk,ss-100:50:ss)),(x2(kk,ss-100:50:ss)),(x3(kk,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+            else
                 
-                avanzando = ss-7;
-                set(handles.slider7,'Value',avanzando);
+                if ss<20
+                    plot3((x1(kk,ss2:1:ss)),(x2(kk,ss2:1:ss)),(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
+                if ss > 20
+                    plot3((x1(kk,ss-20:10:ss)),(x2(kk,ss-20:10:ss)),(x3(kk,ss-20:10:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+                end
             end
-            if ss <10
-                set(handles.slider7,'Value',0);
-            end
-%             if ss > 100
-%                   plot3((x1(kk,ss-100:50:ss)),(x2(kk,ss-100:50:ss)),(x3(kk,ss-100:50:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-%             else
-%                 
-%                 if ss<20
-%                     plot3((x1(kk,ss2:1:ss)),(x2(kk,ss2:1:ss)),(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-%                 end
-%                 if ss > 20
-%                     plot3((x1(kk,ss-20:10:ss)),(x2(kk,ss-20:10:ss)),(x3(kk,ss-20:10:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-%                 end
-%             end
             
         
         end 
@@ -1864,13 +1854,11 @@ end
 %%%%%    CON ode23s   %%%%%%
 if solver == "ode23s"
     
-    if estela == 0
-        
-       plot3(squeeze(x1(kk,ss2:1:ss)),squeeze(x2(kk,ss2:1:ss)),squeeze(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
-    end
     if estela == 1
-
-            plot3(squeeze(x1(kk,ss2:1:ss)),squeeze(x2(kk,ss2:1:ss)),squeeze(x3(kk,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
+        
+        if estela == 1
+            
+            plot3(squeeze(x(kk,1,ss2:1:ss)),squeeze(x(kk,2,ss2:1:ss)),squeeze(x(kk,3,ss2:1:ss)),'Color',col(kk,:),'LineWidth',2','LineStyle','-')
             if ss > 10
                 
                 avanzando = ss-7;
