@@ -1585,7 +1585,8 @@ end
 menu2 = [1:np];
     set(handles.popupmenu6,'string',menu2) 
 %Menu3 almacenara las posiciones espaciales de cada agente    
-menu3=[];      
+menu3=[];  
+ menu3=zeros(np,3);
       
 %el if stop detiene la simulacion en 3D   
     stop=get(handles.stop,'String');
@@ -1819,7 +1820,7 @@ set(handles.cabezano,'visible','on');
 
 a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
-  
+
  for  kk=1:np 
      
  
@@ -1856,7 +1857,9 @@ if solver == "RK4" | solver =="rk4"
         end
         
     plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
+    
     menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
+   
     
     
 end 
