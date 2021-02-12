@@ -1585,9 +1585,9 @@ end
 menu2 = [1:np];
     set(handles.popupmenu6,'string',menu2) 
 %Menu3 almacenara las posiciones espaciales de cada agente    
-menu3=[];  
- menu3=zeros(np,3);
-      
+menu3=[];      
+menu3 = zeros(np,3);   
+
 %el if stop detiene la simulacion en 3D   
     stop=get(handles.stop,'String');
     if stop == "Stop."
