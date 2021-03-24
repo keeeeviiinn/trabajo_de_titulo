@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 10-Feb-2021 00:12:01
+% Last Modified by GUIDE v2.5 18-Feb-2021 12:33:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1587,7 +1587,6 @@ menu2 = [1:np];
 %Menu3 almacenara las posiciones espaciales de cada agente    
 menu3=[];      
 menu3 = zeros(np,3);   
-
 %el if stop detiene la simulacion en 3D   
     stop=get(handles.stop,'String');
     if stop == "Stop."
@@ -1820,7 +1819,7 @@ set(handles.cabezano,'visible','on');
 
 a=[-zoom+ejey zoom+ejey];b=[-zoom zoom];c=[-zoom+ejex zoom+ejex];
   axis([a b c])
-
+  
  for  kk=1:np 
      
  
@@ -1857,9 +1856,7 @@ if solver == "RK4" | solver =="rk4"
         end
         
     plot3(squeeze(x(kk,1,ss)),squeeze(x(kk,2,ss)),squeeze(x(kk,3,ss)),'Marker','o','MarkerSize',10,'MarkerFaceColor',col(kk,:))
-    
     menu3(kk,:)=[x(kk,1,ss) x(kk,2,ss) x(kk,3,ss)];
-   
     
     
 end 
@@ -2037,7 +2034,7 @@ set(handles.pushbutton9,'visible','off')
 set(handles.uibuttongroup3,'visible','off')
 % set(handles.salir,'visible','off');
 set(handles.popupmenu3,'visible','off')
-
+set(handles.popupmenu3,'String',' ')
 set(handles.text22,'String',' ')
 set(handles.edit1,'String',' ')
 set(handles.edit12,'String',' ')
@@ -3477,14 +3474,51 @@ web https://www.utem.cl/ -browser
 
 
 % --------------------------------------------------------------------
-function guardar_Callback(hObject, eventdata, handles)
-% hObject    handle to guardar (see GCBO)
+function guardar_figura_Callback(hObject, eventdata, handles)
+% hObject    handle to guardar_figura (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% exportgraphics(,'Agentes.png','Resolution',300)
+% ax = gca;
+% exportgraphics(ax,'Agentes.png')
 % t = tiledlayout(2,1);
 % exportgraphics(gcf,'vectorfig.pdf','ContentType','vector')
+% saveas(gca,'Agentes.png')
+ 
+%     t.FontSize = 10;%alpha beta flag M sigma K pp   ;'Alpha' ;'Beta' ; 'Flag';'M' ;'Sigma' ;'K' ;'PP'
+%     t.ColumnName = {'Datos'};
+%     t.RowName = {'Agentes' 'Dimensión' 'Alpha' 'Beta' 'Flag' 'M' 'Sigma' 'K' 'PP' 'Tiempo final'};
+%     t.Position = [50 50 195 205];
+
+% axes(handles.axes1)
+% 
+% 
+% xlabel('xlabel')
+% ylabel('ylabel')
+% F = getframe(gca,[-40 -40 700 500 ]);
+% imwrite(F.cdata,'guardar_figuras_axis2_2.jpg');
+f = uifigure('Position', [600 400 300 265],'Color','White','Name','Guardar Figura');
+% pb = uicontrol(f,'Style','pushbutton','String','Guardar','Position',[10 10 60 40]);
+pb = UIControl(f,'Style','pushbutton');
+pb.Position = [10 10 40 30]
+% t = uitable(f,'Data',[np;ndim;alpha;beta;flag;M;sigma;K;pp;tf]);
+
+
+% % palabra = get(handles.edit17,'String')
+% % palabra1 = strcat(palabra,'1.txt')
+% % palabra2 = strcat(palabra,'2.txt')
+% % palabra3 = strcat(palabra,'.txt')
+% % 
+% % save(palabra1,'x1')
+% % save(palabra2,'x2')
+% % save(palabra3,'x')
+% % save('solver.txt','solver')
+% % % save('x2.txt','x2')
+% % % save('x.txt','x')
+% % end
+
+
+
 
 
 % --- Executes on button press in pushbutton19.
@@ -3897,3 +3931,10 @@ if iniciales == 0
         set(handles.text32,'Visible','off')
 end
     
+
+
+% --------------------------------------------------------------------
+function cargar_figura_Callback(hObject, eventdata, handles)
+% hObject    handle to cargar_figura (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
