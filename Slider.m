@@ -25,7 +25,7 @@ function varargout = Slider(varargin)
 
 % Edit the above text to modify the response to help Slider
 
-% Last Modified by GUIDE v2.5 18-Feb-2021 12:33:50
+% Last Modified by GUIDE v2.5 13-Apr-2021 18:14:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,6 +59,14 @@ function Slider_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
+
+% axes(handles.axes2);
+%  [x,map] = imread('logoutem.png');
+%  image(x)
+%  colormap(map);
+%  axis off
+%  hold on
+ 
  global vectoresAgentes vector grabar velocidadAgentes vector2;
  vectoresAgentes = [];
  grabar = 0;
@@ -69,6 +77,10 @@ guidata(hObject, handles);
  
 
  vector2 = 1;
+ 
+ 
+ 
+ 
  
 % UIWAIT makes Slider wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -237,10 +249,6 @@ deseado= get(handles.deseado,'Value');
 if original == 1
 str1=@(distance,pow)1./((1+distance.^2).^pow); 
 
-% if distance == 0
-%     
-%     str2 = @(distance,pow)0;
-% else
 str2 =@(distance,pow)1./((0+distance).^pow);
 
 % end
@@ -437,12 +445,59 @@ if triangulo == 1
 
 %palabra utem completa
 % zdes=[1 -1.25;-2 0;3 -1.25;-4 0;4 -2.5;-4 0;4 -2.5;-4 0;4 -2.5;-4 0;-5 10;0 -2.5;0 -2.5;0 -2.5;0 -2.5;1.25 0;-2.5 0;3.75 0;-5 0;-2.5 0;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;3 2.5;0 2.5;-1.5 0;-1.5 0;-2 0;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;6 -2.5;-6 0;4.5 2.5;-3 0;1.5 2.5];% letra UTEM
-filename = 'zdes.txt';
-[zdes,delimiterOut]=importdata(filename);
-zdes
+% filename = 'zdes.txt';
+% [zdes,delimiterOut]=importdata(filename);
+% zdes
 % delimiterIn = ' ';
 % headerlinesIn = 1;
 % zdes = importdata(filename,delimiterIn,headerlinesIn)
+conta = 1;
+contador = 0;
+val1 = 5;
+val2 = 10;
+val3 =7.5;
+val4 = 2.5;
+while conta < np
+    
+    if contador == 0
+        
+        zdes(conta,:) = [-val2 0];
+        conta = conta +1;
+        contador = +1;
+        
+    elseif contador == 1
+        
+        zdes(conta,:) = [val1 -val2];
+        conta = conta+1;
+        contador = contador +1;
+        
+    elseif contador == 2
+            
+            zdes(conta,:)= [val4 val1];
+            conta = conta+1;
+            contador = contador +1;
+            
+    elseif contador == 3
+        
+        zdes(conta,:) = [-val1 0];
+        conta = conta+1;
+        contador = contador+1;
+        
+    elseif contador == 4
+        
+        zdes(conta,:) = [val4 val1];
+        conta = conta+1;
+        contador = contador+1;
+        
+    else
+         zdess=+1;    
+        zdes(conta,:) = [-10 10];
+%         zdes(conta,:) = [ -3 uno];
+        conta=conta+1;
+        contador = 0
+      
+    end
+end
 
 
 end
@@ -3938,3 +3993,6 @@ function cargar_figura_Callback(hObject, eventdata, handles)
 % hObject    handle to cargar_figura (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
