@@ -1136,6 +1136,8 @@ set(handles.pushbutton9,'visible','on')
 set(handles.slider15,'Visible','on');
 set(handles.slider16,'Visible','on');
 set(handles.text21,'Visible','on');
+set(handles.text33,'Visible','on');
+set(handles.text34,'Visible','on');
 movimiento = 0;%Movimiento automatico de los agentes mediante boton
  
 
@@ -2106,6 +2108,8 @@ set(handles.text29,'String',' ')
 set(handles.text30,'String',' ')
 set(handles.text31,'String',' ')
 set(handles.text32,'String',' ')
+set(handles.text33,'String',' ');
+set(handles.text34,'String','');
 set(handles.stop,'String','Stop.')
 set(handles.cabeza,'String','Cabeza');
 set(handles.popupmenu6,'String','Agent position')
