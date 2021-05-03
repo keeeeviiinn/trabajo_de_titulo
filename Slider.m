@@ -2838,6 +2838,7 @@ switch v
         set(handles.text27,'String','z')
         set(handles.text28,'String','Ingrese Vectores')
         set(handles.pushbutton30,'Visible','on')
+        set(handles.pushbutton17,'Visible','on')
         set(handles.pushbutton31,'Visible','off')
         set(handles.edit17,'Visible','on')
         set(handles.edit18,'Visible','off')
